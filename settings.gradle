@@ -15,5 +15,5 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "SimpleStore"
+rootProject.name = "DesiMall Pro"
 include ':app'
