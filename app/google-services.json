@@ -1,0 +1,155 @@
+{
+  "project_info": {
+    "project_number": "765821840528",
+    "project_id": "desi-mall-fc808",
+    "storage_bucket": "desi-mall-fc808.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765821840528:android:226d00e5331f3940c13c15",
+        "android_client_info": {
+          "package_name": "com.add.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2F7iZYrRLm0RxsxO6Qti5fyitYTdgpP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765821840528:android:6eee70c61c015146c13c15",
+        "android_client_info": {
+          "package_name": "com.desimall.live"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2F7iZYrRLm0RxsxO6Qti5fyitYTdgpP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765821840528:android:ac72d5566f1dd3b4c13c15",
+        "android_client_info": {
+          "package_name": "com.gurugram.basai.desimall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2F7iZYrRLm0RxsxO6Qti5fyitYTdgpP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765821840528:android:90e3a4407ad8bb79c13c15",
+        "android_client_info": {
+          "package_name": "com.jaipur.vaishali.desimall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2F7iZYrRLm0RxsxO6Qti5fyitYTdgpP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765821840528:android:f137c765e6591975c13c15",
+        "android_client_info": {
+          "package_name": "com.test.google"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2F7iZYrRLm0RxsxO6Qti5fyitYTdgpP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

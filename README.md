@@ -1,4 +1,4 @@
-# DesiMall-pro
+# simplestore
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/aashutosh29/desimall-pro.git
+git remote add origin https://gitlab.com/aashutosh29/simplestore.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/aashutosh29/desimall-pro/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/aashutosh29/simplestore/-/settings/integrations)
 
 ## Collaborate with your team
 

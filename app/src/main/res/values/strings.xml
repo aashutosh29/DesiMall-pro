@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">LIVE DESI MALL</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dummy_text"><![CDATA[Dabur Baby Super Pants is a natural skin protection diaper exclusive for baby sensitive skin. It is infused with Aloe-vera, Shea butter & Vitamin E to keep redness & rashes away. The diaper is designed with new Insta Absorb technology for high absorbency & 12 hrs zero leakage that help baby have a sound sleep all night long. The magic gel locks wetness & keeps skin dry overnight. The diaper enables a comfortable fit with its 360 stretch fit design for easy wear & movement. Available in sizes small diaper pants, medium diaper pants & large size diaper pants.]]></string>
+    <string name="title_onboarding_1">Fast Doorstep Deliveries</string>
+    <string name="description_onboarding_1">Our Delivery executive will deliver your order in under 24 hours</string>
+
+    <string name="title_onboarding_2">Shop your Daily Needs in Your Ease</string>
+    <string name="description_onboarding_2">Set you delivery location. Choose your groceries from wide range of your required products.</string>
+
+    <string name="title_onboarding_3">Code beautiful apps</string>
+    <string name="description_onboarding_3">Our mission is to make useful &amp; subtle apps. We love help people to save time with open-source stuffs, but we also make life easier by creating new things. Good Coding!</string>
+
+    <string name="start_text_advice">By continuing on this application you agree to our Terms of Use and Privacy Policy</string>
+
+    <string name="start">start</string>
+    <string name="skip">Skip</string>
+    <string name="finish">finish</string>
+    <string name="permission_rationale">Location permission is needed to perform accurately</string>
+    <string name="ok">Okay</string>
+
+    <string name="next">next</string>
+    <string name="back">back</string>
+    <string name="title_onboarding_5">Easy Shopping</string>
+    <string name="description_onboarding_5">Add you product to cart and be ready to checkout.</string>
+    <string name="your_web_client_id">AIzaSyD0dFaVBHhwkN4v8mxCDWxDNR3LBalEOas</string>
+
+    <string name="facebook_app_id">710341780663680</string>
+    <string name="fb_login_protocol_scheme">fb710341780663680</string>
+    <string name="facebook_client_token">7c22f4b564d6cffee11e32a037e00811</string>
+    <string name="title_activity_empty">EmptyActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_maps">MapsActivity</string>
+</resources>

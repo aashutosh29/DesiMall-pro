@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StyleableToast">
+        <attr name="stTextBold" format="boolean" />
+        <attr name="stTextColor" format="color" />
+        <attr name="stFont" format="reference" />
+        <attr name="stTextSize" format="dimension" />
+        <attr name="stColorBackground" format="color" />
+        <attr name="stSolidBackground" format="boolean" />
+        <attr name="stRadius" format="dimension" />
+        <attr name="stStrokeWidth" format="dimension" />
+        <attr name="stStrokeColor" format="color" />
+        <attr name="stIconStart" format="reference" />
+        <attr name="stIconEnd" format="reference" />
+        <attr name="stLength" format="integer">
+            <enum name="LONG" value="1" />
+            <enum name="SHORT" value="0" />
+        </attr>
+        <attr name="stGravity" format="integer">
+            <enum name="center" value="1" />
+            <enum name="top" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+
+
+    <attr name="SpinKitViewStyle" format="reference" />
+
+    <declare-styleable name="SpinKitView">
+        <attr name="SpinKit_Style">
+            <enum name="RotatingPlane" value="0" />
+            <enum name="DoubleBounce" value="1" />
+            <enum name="Wave" value="2" />
+            <enum name="WanderingCubes" value="3" />
+            <enum name="Pulse" value="4" />
+            <enum name="ChasingDots" value="5" />
+            <enum name="ThreeBounce" value="6" />
+            <enum name="Circle" value="7" />
+            <enum name="CubeGrid" value="8" />
+            <enum name="FadingCircle" value="9" />
+            <enum name="FoldingCube" value="10" />
+            <enum name="RotatingCircle" value="11" />
+            <enum name="MultiplePulse" value="12" />
+            <enum name="PulseRing" value="13" />
+            <enum name="MultiplePulseRing" value="14" />
+        </attr>
+        <attr name="SpinKit_Color" format="color" />
+    </declare-styleable>
+
+<!--    <declare-styleable name="CardSlider">-->
+<!--        &lt;!&ndash; Active card offset from start of RecyclerView. Default value is 50dp. &ndash;&gt;-->
+<!--        <attr name="activeCardLeftOffset" format="dimension"/>-->
+<!--        &lt;!&ndash; Card width. Default value is 148dp. &ndash;&gt;-->
+<!--        <attr name="cardWidth" format="dimension"/>-->
+<!--        &lt;!&ndash; Distance between cards. Default value is 12dp. &ndash;&gt;-->
+<!--        <attr name="cardsGap" format="dimension"/>-->
+<!--        &lt;!&ndash; ViewUpdater implementation class. If not set, DefaultViewUpdater class is used. &ndash;&gt;-->
+<!--        <attr name="viewUpdater" format="string"/>-->
+<!--    </declare-styleable>-->
+
+
+</resources>
