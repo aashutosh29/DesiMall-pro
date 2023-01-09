@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -162,7 +163,7 @@ class CategoryBasedProductsActivity : AppCompatActivity() {
         } else {
             Toast.makeText(
                 this@CategoryBasedProductsActivity,
-                "${productItem.sku_name} ALREADY ADDED",
+                "This product is already added please check the cart.",
                 Toast.LENGTH_SHORT
             ).show()
         }

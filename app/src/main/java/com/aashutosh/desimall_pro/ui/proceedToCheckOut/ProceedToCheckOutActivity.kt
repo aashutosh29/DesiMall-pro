@@ -1,40 +1,35 @@
 package com.aashutosh.desimall_pro.ui.proceedToCheckOut
 
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import butterknife.OnClick
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.CartAdapter
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
+import com.aashutosh.desimall_pro.databinding.ActivityProceedToCheckOutBinding
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.models.DeliveryDetails
 import com.aashutosh.desimall_pro.models.makeOrder.Billing
 import com.aashutosh.desimall_pro.models.makeOrder.LineItem
-import com.aashutosh.desimall_pro.models.makeOrder.Order
+import com.aashutosh.desimall_pro.models.makeOrder.OrderPlace
 import com.aashutosh.desimall_pro.models.makeOrder.Shipping
 import com.aashutosh.desimall_pro.ui.CartInterface
 import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.deliveryAddress.DeliveryAddressActivity
+import com.aashutosh.desimall_pro.ui.mapActivity.MapsActivity
+import com.aashutosh.desimall_pro.ui.phoneVerification.EnterNumberActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpDecimal
+import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpString
+import com.aashutosh.desimall_pro.utils.Constant.Companion.setProgressDialog
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -51,74 +46,76 @@ import java.util.*
 @AndroidEntryPoint
 class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
 
-    lateinit var tvAddress: TextView
-    lateinit var tvName: TextView
+
     lateinit var progressDialog: AlertDialog
     lateinit var cartAdapter: CartAdapter
-
-    @BindView(R.id.tvSubTotal)
-    lateinit var tvSubTotal: TextView
-
-    @BindView(R.id.tvDiscount)
-    lateinit var tvDiscount: TextView
-
-    @BindView(R.id.tvTotal)
-    lateinit var tvTotal: TextView
-
-    @BindView(R.id.llDetails)
-    lateinit var llDetails: LinearLayoutCompat
-
-    @BindView(R.id.btOrder)
-    lateinit var btOrder: Button
-
-
-    @BindView(R.id.recyclerview)
-    lateinit var recyclerView: RecyclerView
-
-    @BindView(R.id.acbShopNow)
-    lateinit var acbShopNow: AppCompatButton
-
-
-    @BindView(R.id.llEmpty)
-    lateinit var llEmpty: LinearLayout
-
-    @BindView(R.id.btEditPayment)
-    lateinit var btEditPayment: AppCompatButton
-
-    @BindView(R.id.tvContact)
-    lateinit var tvContact: TextView
-
+    lateinit var binding: ActivityProceedToCheckOutBinding
     var deliveryDetails: List<DeliveryDetails> = arrayListOf()
     var cartProductList: List<CartProduct> = arrayListOf()
-
-    lateinit var sharePreHelper: SharedPrefHelper
-
-
+    lateinit var sharedPrefHelper: SharedPrefHelper
     private lateinit var mainViewModel: StoreViewModel
+    var total = 0.00
 
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_proceed_to_check_out)
-        ButterKnife.bind(this)
-        sharePreHelper = SharedPrefHelper
-        sharePreHelper.init(this@ProceedToCheckOutActivity)
+        binding = ActivityProceedToCheckOutBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        sharedPrefHelper = SharedPrefHelper
+        sharedPrefHelper.init(this@ProceedToCheckOutActivity)
         mainViewModel = ViewModelProvider(this)[StoreViewModel::class.java]
-
         initView()
         initRecyclerView()
         GlobalScope.launch(Dispatchers.Main) {
             deliveryDetails = mainViewModel.getProfileDetails()
             if (deliveryDetails.isNotEmpty()) {
-                tvAddress.text = deliveryDetails[0].address
-                tvName.text = deliveryDetails[0].name
-                tvContact.text = deliveryDetails[0].mobileNum
+                binding.tvAddress.text = deliveryDetails[0].address
+                binding.tvName.text = deliveryDetails[0].name
+                binding.tvContact.text = deliveryDetails[0].mobileNum
+            }
+            else {
+                if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
+                    val i = Intent(this@ProceedToCheckOutActivity, EnterNumberActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(i)
+                } else if (!sharedPrefHelper[Constant.VERIFIED_LOCATION, false]) {
+                    val i = Intent(this@ProceedToCheckOutActivity, MapsActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                    startActivity(i)
+                } else if (!sharedPrefHelper[Constant.DETAIlS_VERIFED, false]) {
+                    val i = Intent(this@ProceedToCheckOutActivity, DeliveryAddressActivity::class.java)
+                    i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                    i.putExtra(Constant.DETAILS, true)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(i)
+                } else {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        if (mainViewModel.createDelivery(
+                                DeliveryDetails(
+                                    5,
+                                    name = sharedPrefHelper[Constant.NAME, ""],
+                                    mobileNum = sharedPrefHelper[Constant.PHONE_NUMBER, ""],
+                                    address = sharedPrefHelper[Constant.LAT_LON],
+                                    landMark = "n/a",
+                                    zipCode = sharedPrefHelper[Constant.ZIP,""]
+                                )
+                            ) > 1
+                        ) {
+                            val newDeliveryDetails: List<DeliveryDetails> = mainViewModel.getProfileDetails()
+                            binding.tvAddress.text = newDeliveryDetails[0].address
+                            binding.tvName.text = newDeliveryDetails[0].name
+                            binding.tvContact.text = newDeliveryDetails[0].mobileNum
 
+                        }
+
+                    }
+
+
+                }
             }
         }
-
-
     }
 
     @OnClick(R.id.ivBack)
@@ -140,43 +137,47 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
     private fun initRecyclerView() {
         GlobalScope.launch(Dispatchers.Main) {
             cartProductList = mainViewModel.getDummyCart()
-            recyclerView.layoutManager = LinearLayoutManager(this@ProceedToCheckOutActivity)
-            recyclerView.isNestedScrollingEnabled = false
+            binding.recyclerView.layoutManager = LinearLayoutManager(this@ProceedToCheckOutActivity)
+            binding.recyclerView.isNestedScrollingEnabled = false
             cartAdapter = CartAdapter(
                 cartProductList, this@ProceedToCheckOutActivity, this@ProceedToCheckOutActivity
             )
-            recyclerView.adapter = cartAdapter
+            binding.recyclerView.adapter = cartAdapter
             if (cartProductList.isEmpty()) {
-                llDetails.visibility = View.INVISIBLE
-                btOrder.visibility = View.INVISIBLE
-                recyclerView.visibility = View.INVISIBLE
-                llEmpty.visibility = View.VISIBLE
+                binding.llDetails.visibility = View.INVISIBLE
+                binding.btOrder.visibility = View.INVISIBLE
+                binding.recyclerView.visibility = View.INVISIBLE
+                binding.llEmpty.visibility = View.VISIBLE
             } else {
-                llDetails.visibility = View.VISIBLE
-                btOrder.visibility = View.VISIBLE
-                recyclerView.visibility = View.VISIBLE
-                llEmpty.visibility = View.INVISIBLE
+                binding.llDetails.visibility = View.VISIBLE
+                binding.btOrder.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.llEmpty.visibility = View.INVISIBLE
             }
-            var total = 0.0
             var subTotal = 0.0
             for (product in cartProductList) {
                 total = (total + (product.price * product.quantity))
                 subTotal = (subTotal + (product.mrp * product.quantity))
             }
-            tvTotal.text = "₹ ${roundUpDecimal(total)}"
-            tvSubTotal.text = "₹ ${roundUpDecimal(subTotal)}"
-            tvDiscount.text = "₹ ${roundUpDecimal((subTotal - total))}"
+            binding.tvTotal.text = "₹ ${roundUpString(total.toString())}"
+            binding.tvSubTotal.text = "₹ ${roundUpString(subTotal.toString())}"
+            binding.tvDiscount.text = "₹ ${roundUpString((subTotal - total).toString())}"
+
+            if (total < 1000) {
+                binding.tvDeliveryCharge.text = "₹ 50"
+                total += 50
+                binding.tvTotal.text = "₹ ${roundUpString(total.toString())}"
+            }else{
+                binding.tvDeliveryCharge.text = "free"
+                binding.tvTotal.text = "₹ ${roundUpString(total.toString())}"
+            }
 
         }
 
     }
 
-
     private fun initView() {
-        tvAddress = findViewById(R.id.tvAddress)
-        tvName = findViewById(R.id.tvName)
-        btOrder = findViewById(R.id.btOrder)
-        btOrder.setOnClickListener(View.OnClickListener {
+        binding.btOrder.setOnClickListener(View.OnClickListener {
             btOrder()
         })
     }
@@ -209,51 +210,6 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
         )
     }
 
-    private fun setProgressDialog(context: Context, message: String): AlertDialog {
-        val llPadding = 30
-        val ll = LinearLayout(context)
-        ll.orientation = LinearLayout.HORIZONTAL
-        ll.setPadding(llPadding, llPadding, llPadding, llPadding)
-        ll.gravity = Gravity.START
-        var llParam = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        llParam.gravity = Gravity.START
-        ll.layoutParams = llParam
-
-        val progressBar = ProgressBar(context)
-        progressBar.isIndeterminate = true
-        progressBar.setPadding(0, 0, llPadding, 0)
-        progressBar.layoutParams = llParam
-
-        llParam = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        llParam.gravity = Gravity.CENTER
-        val tvText = TextView(context)
-        tvText.text = message
-        tvText.setTextColor(Color.parseColor("#000000"))
-        tvText.textSize = 16.toFloat()
-        tvText.layoutParams = llParam
-
-        ll.addView(progressBar)
-        ll.addView(tvText)
-
-        val builder = AlertDialog.Builder(context)
-        builder.setCancelable(true)
-        builder.setView(ll)
-
-        val dialog = builder.create()
-        val window = dialog.window
-        if (window != null) {
-            val layoutParams = WindowManager.LayoutParams()
-            layoutParams.copyFrom(dialog.window?.attributes)
-            layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
-            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
-            dialog.window?.attributes = layoutParams
-        }
-        return dialog
-    }
 
     private fun initProgressDialog(): AlertDialog {
         progressDialog = setProgressDialog(this, "Processing checkout..")
@@ -304,7 +260,7 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
             itemList.add(item)
 
         }
-        val order = com.aashutosh.desimall_pro.models.makeOrder.Order(
+        val order = OrderPlace(
             billing = billing,
             line_items = lineItemList,
             payment_method = "COD",
@@ -320,9 +276,12 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
             "address" to order.billing.address_1 + " Near by " + order.billing.address_2,
             "phone" to order.billing.phone,
             "zip" to order.billing.postcode,
-            "branchCode" to sharePreHelper[Constant.BRANCH_CODE],
+            "branchCode" to sharedPrefHelper[Constant.BRANCH_CODE],
             "date" to dateFormat.format(date),
-            "status" to "0"
+            "status" to "0",
+            "totalPrice" to roundUpString(total.toString()),
+            "totalProduct" to "${cartProductList.size}"
+
         )
         addStoreToFireBase(store, itemString, order)
     }
@@ -331,7 +290,7 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
     private fun addStoreToFireBase(
         order: HashMap<String, String>,
         itemString: ArrayList<String>,
-        order1: Order
+        order1: OrderPlace
     ) {
         GlobalScope.launch(Dispatchers.Default) {
 
@@ -351,14 +310,6 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
                                 "0"
                             ).string()
                         )
-
-                        /*Toast.makeText(
-                            this@ProceedToCheckOutActivity,
-                            "Notification sent",
-                            Toast.LENGTH_SHORT
-                        ).show()*/
-
-
                     }
                     Toast.makeText(
                         this@ProceedToCheckOutActivity,

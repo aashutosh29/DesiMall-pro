@@ -9,10 +9,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.OnboardingViewPagerAdapter
 import com.aashutosh.desimall_pro.databinding.ActivityOnBoardingBinding
+import com.aashutosh.desimall_pro.ui.SplashOldActivity
 import com.aashutosh.desimall_pro.utils.Animatoo
 import com.google.android.material.tabs.TabLayoutMediator
 
-class OnBoarding : AppCompatActivity() {
+class OnBoardingActivity : AppCompatActivity() {
 
     private lateinit var mViewPager: ViewPager2
     private lateinit var textSkip: TextView
@@ -32,7 +33,7 @@ class OnBoarding : AppCompatActivity() {
         textSkip.setOnClickListener {
             finish()
             val intent =
-                Intent(applicationContext, OnboardFinishActivity::class.java)
+                Intent(applicationContext, SplashOldActivity::class.java)
             startActivity(intent)
             Animatoo.animateSlideLeft(this)
         }
@@ -43,7 +44,7 @@ class OnBoarding : AppCompatActivity() {
             if (getItem() > mViewPager.childCount-1) {
                 finish()
                 val intent =
-                    Intent(applicationContext, OnboardFinishActivity::class.java)
+                    Intent(applicationContext, SplashOldActivity::class.java)
                 startActivity(intent)
                 Animatoo.animateSlideLeft(this)
             } else {

@@ -14,7 +14,7 @@ import com.aashutosh.desimall_pro.models.DeliveryDetails
 import com.aashutosh.desimall_pro.models.category.CategoryResponse
 import com.aashutosh.desimall_pro.models.desimallApi.DesiCategory
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
-import com.aashutosh.desimall_pro.models.makeOrder.Order
+import com.aashutosh.desimall_pro.models.makeOrder.OrderPlace
 import com.aashutosh.desimall_pro.models.product.Products
 import com.aashutosh.desimall_pro.repository.ProductRepository
 import com.aashutosh.desimall_pro.sealed.StateResponse
@@ -132,7 +132,7 @@ class StoreViewModel @Inject constructor(private val repository: ProductReposito
         return repository.getSliderImage()
     }
 
-    suspend fun createOrder(order: Order): retrofit2.Response<Any> {
+    suspend fun createOrder(order: OrderPlace): retrofit2.Response<Any> {
         val gson = Gson()
         Log.d(TAG, "createOrder: " + gson.toJson(order).toString())
 

@@ -23,6 +23,8 @@ import com.aashutosh.desimall_pro.ui.CartInterface
 import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.deliveryAddress.DeliveryAddressActivity
 import com.aashutosh.desimall_pro.ui.proceedToCheckOut.ProceedToCheckOutActivity
+import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpDecimal
+import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpString
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -60,6 +62,9 @@ class CartActivity : AppCompatActivity(), CartInterface {
     @BindView(R.id.acbShopNow)
     lateinit var acbShopNow: AppCompatButton
 
+    @BindView(R.id.tvDeliveryCharge)
+    lateinit var tvDeliveryCharge: TextView
+
 
     @BindView(R.id.llEmpty)
     lateinit var llEmpty: LinearLayout
@@ -85,11 +90,7 @@ class CartActivity : AppCompatActivity(), CartInterface {
     }
 
 
-    private fun roundUpDecimal(number: Double): Double {
-        val df = DecimalFormat("#.##")
-        df.roundingMode = RoundingMode.CEILING
-        return df.format(number).toDouble()
-    }
+
 
 
     override suspend fun deleteProduct(cartProduct: CartProduct) {
@@ -140,9 +141,18 @@ class CartActivity : AppCompatActivity(), CartInterface {
                 total = (total + (product.price * product.quantity))
                 subTotal = (subTotal + (product.mrp * product.quantity))
             }
-            tvTotal.text = "₹ ${roundUpDecimal(total)}"
-            tvSubTotal.text = "₹ ${roundUpDecimal(subTotal)}"
-            tvDiscount.text = "₹ ${roundUpDecimal((subTotal - total))}"
+            tvTotal.text = "₹ ${roundUpString(total.toString())}"
+            tvSubTotal.text = "₹ ${roundUpString(subTotal.toString())}"
+            tvDiscount.text = "₹ ${roundUpString((subTotal - total).toString())}"
+
+            if (total < 1000) {
+                tvDeliveryCharge.text = "₹ 50"
+                total += 50
+                tvTotal.text = "₹ ${roundUpString(total.toString())}"
+            }else{
+                tvDeliveryCharge.text = "free"
+                tvTotal.text = "₹ ${roundUpString(total.toString())}"
+            }
 
         }
     }

@@ -38,4 +38,27 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+    <string name="title">Select Your City</string>
+    <string name="change">Change</string>
+    <string name="confirm_location_and_proceed">Confirm location and Proceed</string>
+    <string name="enter_your_name">Enter Your Full Name</string>
+    <string name="enter_you_email_address">Enter you Email Address</string>
+    <string name="confirm_details_and_proceed">Confirm details and proceed</string>
+    <string name="enter_your_zip_code">Enter your area zip code</string>
+    <!--package com.aashutosh.desimall_pro.ui.myProfileActivity-->
+    <string name="file_provider" translatable="false">com.aashutosh.desimall_pro.fileprovider</string>
+    <string name="pick_single">Please select your image</string>
+
+    <plurals name="pick_multi">
+        <item quantity="one">One image selected</item>
+        <item quantity="other">%1$d images selected</item>
+    </plurals>
+    <plurals name="pick_multi_more">
+        <item quantity="one">Please select one more image…</item>
+        <item quantity="other">Please select %1$d more images…</item>
+    </plurals>
+    <string name="pick_multi_limit">You have more than %1$d images selected…</string>
+    <string name="enter_your_detail_address">Enter Your Detail Address</string>
+    <string name="enter_your_landmark_address">Enter your landmark address</string>
 </resources>

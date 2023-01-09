@@ -141,17 +141,28 @@
                 app:layout_constraintEnd_toStartOf="@id/tvProductPrice"
                 app:layout_constraintTop_toTopOf="@id/tvProductPrice" />
 
+            <TextView
+                android:id="@+id/tvShip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvProductName"
+                app:layout_constraintStart_toStartOf="@id/tvProductName"
+                android:text="Delivery charge"
+                android:layout_marginVertical="@dimen/_12sdp"
+                android:textColor="@color/md_grey_600"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clFreeShip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/_12sdp"
+              android:layout_marginTop="@dimen/_8sdp"
                 android:background="@drawable/rounded_cl_search"
                 android:backgroundTint="@color/md_red_600"
                 app:layout_constraintStart_toStartOf="@id/tvProductName"
-                app:layout_constraintTop_toBottomOf="@id/tvProductName">
+                app:layout_constraintTop_toBottomOf="@id/tvShip">
 
                 <TextView
+                    android:id="@+id/tvShipping"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingHorizontal="@dimen/_8sdp"
@@ -162,6 +173,7 @@
 
 
             <TextView
+                android:visibility="invisible"
                 android:id="@+id/tvD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -175,6 +187,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/clFreeShip" />
 
             <ImageView
+                android:visibility="invisible"
                 android:id="@+id/ivDown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -194,6 +207,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp"
                 android:textStyle="normal"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@id/tvProductPrice"
                 app:layout_constraintStart_toStartOf="@id/tvProductName"
                 app:layout_constraintTop_toBottomOf="@+id/tvD" />

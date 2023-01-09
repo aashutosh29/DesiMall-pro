@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.aashutosh.desimall_pro.databinding.ActivityBarCodeBinding
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.ui.productScreen.ProductActivity
 import com.aashutosh.desimall_pro.utils.Constant
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class BarCodeActivity : AppCompatActivity() {
     lateinit var mainViewModel: StoreViewModel
+    lateinit var binding: ActivityBarCodeBinding
     private lateinit var codeScanner: CodeScanner
     lateinit var progressDialog: AlertDialog
     lateinit var cartProduct: CartProduct
@@ -41,17 +43,18 @@ class BarCodeActivity : AppCompatActivity() {
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bar_code)
+        binding = ActivityBarCodeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         handlePermissions(
             arrayOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
         )
-        val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
+
         mainViewModel = ViewModelProvider(this@BarCodeActivity)[StoreViewModel::class.java]
 
-        codeScanner = CodeScanner(this, scannerView)
+        codeScanner = CodeScanner(this, binding.scannerView)
 
         // Parameters (default values)
         codeScanner.camera = CodeScanner.CAMERA_BACK // or CAMERA_FRONT or specific camera id
@@ -80,7 +83,7 @@ class BarCodeActivity : AppCompatActivity() {
 
 
 
-        scannerView.setOnClickListener {
+        binding.scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
 
@@ -102,23 +105,6 @@ class BarCodeActivity : AppCompatActivity() {
             intent.putExtra(Constant.DESCRIPTION, it.sku_description)
             startActivity(intent)
             this.finish()
-            /*cartProduct = CartProduct(
-                it.id,
-                it.name,
-                if (it.images.isEmpty()) "" else (it.images[0].src),
-                it.description,
-                1,
-                it.price.toDouble(),
-                it.regular_price.toDouble()
-            )
-            val imageList: ArrayList<String> = ArrayList()
-            for (image in it.images) {
-                imageList.add(image.src)
-            }
-            progressDialog.dismiss()
-            GlobalScope.launch(Dispatchers.Main) {
-                mainViewModel.insertToCart(cartProduct)
-            }*/
         })
     }
 

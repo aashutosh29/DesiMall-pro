@@ -62,6 +62,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
         ButterKnife.bind(this)
         initialization()
         checkAllStuff()
+
     }
 
     private fun checkAllStuff() {
@@ -114,10 +115,10 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
             alertDialog =
                 AlertDialog.Builder(this).setMessage("Location is turned off").setPositiveButton(
                     "Turn on location"
-                ) { paramDialogInterface, paramInt -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+                ) { _, _ -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
                     .setNegativeButton(
                         "Cancel"
-                    ) { dialog, which ->
+                    ) { _, _ ->
                         startWebView(
                             Constant.GMAIL,
                             branchCode = null
@@ -133,6 +134,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
         if (alertDialog != null && alertDialog!!.isShowing) alertDialog!!.dismiss()
         db = FirebaseFirestore.getInstance()
         storeList = ArrayList()
+
     }
 
     private fun subscribeToTopic(
@@ -294,7 +296,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
         }
     }
 
-    val location: Unit
+    private val location: Unit
         get() {
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -312,8 +314,14 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                     R.string.ok
                 ) { requestPermissions() }.show()
             }
+            //final change will be NETWORK_PROVIDER
             locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-            locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0L, 0f, this)
+            locationManager!!.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                0L,
+                0f,
+                this@SplashActivity2
+            )
             var myLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             if (myLocation == null) {
                 myLocation =
@@ -405,6 +413,8 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 }
             }
         } else {
+
+            //code must not come here
             startWebView(Constant.GMAIL, branchCode = null)
         }
     }
@@ -419,12 +429,13 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
         if (locationManager != null) locationManager!!.removeUpdates(this)
     }
 
-    override fun onLocationChanged(location: Location) {
-        getDataFromFireBase(location)
-
-    }
 
     companion object {
         const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+    }
+
+    override fun onLocationChanged(p0: Location) {
+        getDataFromFireBase(p0)
+        if (locationManager != null) locationManager!!.removeUpdates(this)
     }
 }

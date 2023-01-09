@@ -4,13 +4,13 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
     <uses-permission
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
@@ -20,23 +20,45 @@
         android:required="false" />
 
     <application
-        android:allowBackup="false"
         android:name=".utils.SimpleStore"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SimpleStore"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ui.detailsVerificationPage.DetailsVerificationActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.orderHistoryActivity.orderHistoryDetails.OrderHistoryDetailsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.orderHistoryActivity.OrderHistoryActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCUv2fbdlv58etw4imT6bW-gx_UGTAKnJE" />
 
+        <activity android:name=".ui.myProfileActivity.MyProfileActivity" />
         <activity
             android:name=".ui.mapActivity.MapsActivity"
             android:exported="false"
@@ -50,6 +72,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <service
             android:name=".utils.PushNotificationService"
             android:exported="false">
@@ -57,6 +80,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".splash.test.SplashActivity2"
             android:exported="true">
@@ -87,7 +111,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".ui.barCodeActivity.BarCodeActivity"
             android:exported="false">
@@ -110,6 +133,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name=".ui.phoneVerification.EnterNumberActivity" />
+        <activity android:name=".ui.phoneVerification.VerifyNumberActivity" />
         <activity
             android:name=".ui.profile.SignIn"
             android:exported="false" />
@@ -134,7 +159,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.onBoarding.OnBoarding"
+            android:name=".ui.onBoarding.OnBoardingActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

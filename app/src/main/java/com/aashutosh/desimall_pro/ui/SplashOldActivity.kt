@@ -9,7 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
-import com.aashutosh.desimall_pro.ui.onBoarding.OnBoarding
+import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
+import com.aashutosh.desimall_pro.ui.mapActivity.MapsActivity
+import com.aashutosh.desimall_pro.ui.onBoarding.OnBoardingActivity
+import com.aashutosh.desimall_pro.ui.phoneVerification.EnterNumberActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,14 +39,11 @@ class SplashOldActivity : AppCompatActivity() {
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper[Constant.GMAIL] = intent.getStringExtra(Constant.GMAIL)
         sharedPrefHelper[Constant.BRANCH_CODE] = intent.getStringExtra(Constant.BRANCH_CODE)
+        sharedPrefHelper[Constant.VERIFIED_LOCATION] = true
         Log.d(TAG, "gmail: ${intent.getStringExtra(Constant.GMAIL)}")
         mainViewModel =
             ViewModelProvider(this@SplashOldActivity)[StoreViewModel::class.java]
 
-       /* if (intent.getStringExtra(Constant.BRANCH_CODE) == Constant.BRANCH_CODE) {
-            startActivity(Intent(this@SplashOldActivity, HomeActivity::class.java))
-
-        } else {*/
             GlobalScope.launch(Dispatchers.Main) {
                 if (sharedPrefHelper[Constant.FIRST_LOAD, true]) {
                     mainViewModel.getDesiProduct(
@@ -56,14 +56,44 @@ class SplashOldActivity : AppCompatActivity() {
             Timer().schedule(object : TimerTask() {
                 override fun run() {
                     sharedPrefHelper.init(applicationContext)
-                    if (sharedPrefHelper[Constant.FIRST_LOAD, true]) {
-                        sharedPrefHelper[Constant.FIRST_LOAD] = false
-                        startActivity(Intent(this@SplashOldActivity, OnBoarding::class.java))
+                    if (!sharedPrefHelper[Constant.FIRST_LOAD, false]) {
+                        sharedPrefHelper[Constant.FIRST_LOAD] = true
+                        val i = Intent(this@SplashOldActivity, OnBoardingActivity::class.java)
+                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
+                    } else if (sharedPrefHelper[Constant.USER_SKIPPED, false]) {
+                        val i = Intent(this@SplashOldActivity, HomeActivity::class.java)
+                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
+                    } else if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
+                        val i = Intent(this@SplashOldActivity, EnterNumberActivity::class.java)
+                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
+                    } else if (!sharedPrefHelper[Constant.VERIFIED_LOCATION, false]) {
+                        val i = Intent(this@SplashOldActivity, MapsActivity::class.java)
+                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                        startActivity(i)
+                    } else if (!sharedPrefHelper[Constant.DETAIlS_VERIFED, false]) {
+                        val i = Intent(this@SplashOldActivity, DetailsVerificationActivity::class.java)
+                        i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                        i.putExtra(Constant.DETAILS, true)
+                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
                     } else {
-                        startActivity(Intent(this@SplashOldActivity, HomeActivity::class.java))
+                        val i = Intent(this@SplashOldActivity, HomeActivity::class.java)
+                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
                     }
                 }
             }, 1500)
         }
     }
 //}
+
+/*else if (!sharedPrefHelper[Constant.VERIFIED_LOCATION, false]) {
+                        val i = Intent(this@SplashOldActivity, MapsActivity::class.java)
+                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                        startActivity(i)
+                    }*/

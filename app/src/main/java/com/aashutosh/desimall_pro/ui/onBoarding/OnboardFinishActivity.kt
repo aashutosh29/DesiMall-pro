@@ -42,11 +42,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.*
 
 
 open class OnboardFinishActivity : AppCompatActivity() {
@@ -228,10 +227,16 @@ open class OnboardFinishActivity : AppCompatActivity() {
     }
 
     private fun updateUi(account: GoogleSignInAccount) {
-        initProgressDialog().dismiss()
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                val user: FirebaseUser = Objects.requireNonNull(task.result).user!!
+                user.getIdToken(true).addOnSuccessListener { result: GetTokenResult ->
+                    val idToken = result.token
+                    //Do whatever
+                    Log.d(TAG, "GetTokenResult result = $idToken")
+                }
+                progressDialog.dismiss()
                 sharedPrefHelper[Constant.LOGIN] = true
                 sharedPrefHelper[Constant.NAME] = account.displayName.toString()
                 sharedPrefHelper[Constant.EMAIL] = account.email.toString()
@@ -245,6 +250,13 @@ open class OnboardFinishActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+        }.addOnFailureListener {
+            Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+            Log.d(
+                TAG,
+                "UpdateUI: $it"
+            )
+
         }
     }
 

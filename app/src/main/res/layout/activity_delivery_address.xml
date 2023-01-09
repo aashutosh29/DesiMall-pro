@@ -110,6 +110,7 @@
                 app:layout_constraintTop_toTopOf="@id/etMobileNumber" />
 
             <EditText
+                android:focusable="false"
                 android:textAlignment="textEnd"
                 android:id="@+id/etMobileNumber"
                 android:layout_width="wrap_content"
@@ -137,7 +138,7 @@
         android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/white"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/llDetails">
 
 
@@ -185,42 +186,7 @@
             android:layout_marginHorizontal="@dimen/_8sdp"
             android:background="@color/line" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_4sdp"
-            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/_4sdp"
-                android:layout_marginStart="10dp"
-                android:alpha="0.67"
-                android:text="Land Mark"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/etLandMark"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/etLandMark" />
-
-            <EditText
-                android:textAlignment="textEnd"
-                android:id="@+id/etLandMark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginVertical="@dimen/_4sdp"
-                android:layout_marginEnd="15dp"
-                android:alpha="0.80"
-                android:hint="E.g beside train station"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -237,6 +203,82 @@
         app:layout_constraintTop_toBottomOf="@id/llDetails2">
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_4sdp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_4sdp"
+                android:layout_marginStart="10dp"
+                android:alpha="0.67"
+                android:text="Address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+
+                app:layout_constraintBottom_toBottomOf="@id/etAddress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/etAddress" />
+
+            <EditText
+                android:id="@+id/etAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginVertical="@dimen/_4sdp"
+                android:layout_marginEnd="15dp"
+                android:alpha="0.80"
+                android:hint="enter your full address"
+                android:textAlignment="textEnd"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.6" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_4sdp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_4sdp"
+                android:layout_marginStart="10dp"
+                android:alpha="0.67"
+                android:text="LandMark"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+
+                app:layout_constraintBottom_toBottomOf="@id/etLandMark"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/etLandMark" />
+
+            <EditText
+                android:id="@+id/etLandMark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginVertical="@dimen/_4sdp"
+                android:layout_marginEnd="15dp"
+                android:alpha="0.80"
+                android:hint="eg. near desimall"
+                android:textAlignment="textEnd"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.6" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -275,6 +317,7 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

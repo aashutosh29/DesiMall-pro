@@ -1,5 +1,6 @@
 package com.aashutosh.desimall_pro.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -20,8 +22,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 
 class ProductPagingAdapter(
@@ -31,6 +31,7 @@ class ProductPagingAdapter(
     PagingDataAdapter<DesiDataResponseSubListItem, ProductPagingAdapter.ViewHolder>(COMPARATOR) {
 
 
+    @SuppressLint("SetTextI18n")
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val productItem = getItem(position)
@@ -40,12 +41,17 @@ class ProductPagingAdapter(
                 .load(if (productItem.sku == null) " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png")
                 .error(R.drawable.app_icon)
                 .placeholder(R.drawable.app_icon)
-                .into(holder.ivLogo);
+                .into(holder.ivLogo)
 
             // sets the text to the textview from our itemHolder class
-            holder.tvPrice.text = "₹ ${productItem.variant_sale_price}"
-            holder.tvMrp.text = "₹ ${productItem.variant_mrp}"
+            holder.tvPrice.text = "₹ ${Constant.roundUpString(productItem.variant_sale_price.toString())}"
+            holder.tvMrp.text = "₹ ${Constant.roundUpString(productItem.variant_mrp.toString())}"
             holder.tvMrp.paintFlags = holder.tvMrp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+
+            if ((productItem.variant_sale_price.toDouble() - productItem.variant_mrp.toDouble()) == 0.0) {
+                holder.tvMrp.visibility = View.INVISIBLE
+                holder.clDiscount.visibility = View.INVISIBLE
+            }
 
             val discount =
                 Constant.roundUpDecimal(((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100)
@@ -62,11 +68,6 @@ class ProductPagingAdapter(
         }
     }
 
-    fun roundOffDecimal(number: Double): Double {
-        val df = DecimalFormat("#.##")
-        df.roundingMode = RoundingMode.CEILING
-        return df.format(number).toDouble()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -101,6 +102,7 @@ class ProductPagingAdapter(
         val tvMrp: TextView = itemView.findViewById(R.id.tvMrp)
         val tvDiscountPercent: TextView = itemView.findViewById(R.id.tvDiscountPercent)
         val ivAddToCart: ImageView = itemView.findViewById(R.id.ivAddToCart)
+        val clDiscount: ConstraintLayout = itemView.findViewById(R.id.clDiscount)
 
     }
 }

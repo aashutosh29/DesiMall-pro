@@ -10,10 +10,12 @@
         android:id="@+id/clTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/md_red_100"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
+            android:visibility="visible"
             android:id="@+id/cvImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,33 +32,60 @@
                 android:id="@+id/ivProfile"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="@dimen/_32sdp"
-                android:src="@drawable/ic_profile"
+                android:src="@drawable/app_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.cardview.widget.CardView>
 
         <TextView
+            android:text="DESI MALL"
+            android:layout_marginStart="@dimen/_8sdp"
             android:id="@+id/tvLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
             android:alpha="0.87"
-            android:text="Login"
+            android:visibility="visible"
             android:textAllCaps="true"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/tvCreateAccount"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintBottom_toBottomOf="@id/cvImage"
             app:layout_constraintStart_toEndOf="@id/cvImage"
             app:layout_constraintTop_toTopOf="@id/cvImage" />
 
-        <TextView
-            android:id="@+id/tvCreateAccount"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvVerify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/_8sdp"
+            android:shape="ring"
+            android:thicknessRatio="1.9"
+            android:visibility="visible"
+            app:cardCornerRadius="40dp"
             android:layout_marginStart="@dimen/_8sdp"
-            android:text="Create a account"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvLogin"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:background="@color/md_blue_600"
+                android:id="@+id/ivVerify"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/ic_baseline_check_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:text="click here to verify contact"
+            android:id="@+id/tvCreateAccount"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:textColor="@color/black"
             android:textSize="@dimen/_11sdp"
             app:layout_constraintBottom_toBottomOf="@id/cvImage"
@@ -67,7 +96,7 @@
             android:id="@+id/clCart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_6sdp"
+            android:padding="@dimen/_4sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -103,7 +132,7 @@
             android:id="@+id/clNoti"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_6sdp"
+            android:padding="@dimen/_4sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/clCart"
             app:layout_constraintTop_toTopOf="parent">
@@ -160,7 +189,6 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
     <ScrollView
         android:id="@+id/nsvMain"
         android:layout_width="match_parent"

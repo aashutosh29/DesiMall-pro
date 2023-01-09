@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.ui.CartInterface
-import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpDecimal
+import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpString
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -51,8 +51,8 @@ class CartAdapter(
         holder.tvName.text = cartItem.name
         holder.tvDetail.text = cartItem.name
         holder.tvQuantity.text = cartItem.quantity.toString()
-        holder.tvPrice.text = "₹ ${roundUpDecimal((cartItem.quantity * cartItem.price))}"
-        holder.tvMrp.text = "₹ ${roundUpDecimal((cartItem.mrp * cartItem.quantity))}"
+        holder.tvPrice.text = "₹ ${roundUpString((cartItem.quantity * cartItem.price).toString())}"
+        holder.tvMrp.text = "₹ ${roundUpString((cartItem.mrp * cartItem.quantity).toString())}"
         holder.tvMrp.paintFlags = holder.tvMrp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         holder.ivPlus.setOnClickListener(View.OnClickListener {
             GlobalScope.launch(Dispatchers.Main) {

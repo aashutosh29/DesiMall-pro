@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.models.product.ProductItem
 import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
+import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpDecimal
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -69,11 +70,7 @@ class PostsAdapter : RecyclerView.Adapter<PostsAdapter.ViewHolder>() {
     }
 
 
-    private fun roundUpDecimal(number: Double): Double {
-        val df = DecimalFormat("#.##")
-        df.roundingMode = RoundingMode.CEILING
-        return df.format(number).toDouble()
-    }
+
 
     override fun getItemCount(): Int {
         return products.size

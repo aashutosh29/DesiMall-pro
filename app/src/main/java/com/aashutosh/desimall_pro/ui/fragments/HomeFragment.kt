@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -23,6 +23,7 @@ import com.aashutosh.desimall_pro.adapter.CategoryAdapter
 import com.aashutosh.desimall_pro.adapter.ImageSlideAdapter
 import com.aashutosh.desimall_pro.adapter.ProductPagingAdapter
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
+import com.aashutosh.desimall_pro.databinding.HomeFragmentBinding
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.models.category.CategoryResponse
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
@@ -30,53 +31,27 @@ import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.barCodeActivity.BarCodeActivity
 import com.aashutosh.desimall_pro.ui.cartActivity.CartActivity
 import com.aashutosh.desimall_pro.ui.categoryWithItsProduct.CategoryBasedProductsActivity
-import com.aashutosh.desimall_pro.ui.onBoarding.OnboardFinishActivity
 import com.aashutosh.desimall_pro.ui.productScreen.ProductActivity
 import com.aashutosh.desimall_pro.ui.searchActivity.SearchActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
-import com.bumptech.glide.Glide
 import com.drakeet.multitype.MultiTypeAdapter
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import me.relex.circleindicator.CircleIndicator
 
 
 class HomeFragment : Fragment() {
     private lateinit var mainViewModel: StoreViewModel
-    private lateinit var tvViewAll: TextView
-    lateinit var recyclerView: RecyclerView
+    lateinit var binding: HomeFragmentBinding
     lateinit var pagingAdapter: ProductPagingAdapter
-    lateinit var nsvMain: ScrollView
-
-    lateinit var tvCartNo: TextView
-    lateinit var clCart: ConstraintLayout
-
-    lateinit var clBarcode: ConstraintLayout
-
-    lateinit var viewPagerAdapter: ImageSlideAdapter
-    lateinit var indicator: CircleIndicator
-
-    lateinit var clSearch: ConstraintLayout
-    lateinit var ivFilter: ImageView
-
     private lateinit var sharedPrefHelper: SharedPrefHelper
-
-
-    lateinit var viewpager: ViewPager
-    lateinit var etSearch: EditText
-
+    lateinit var viewPagerAdapter: ImageSlideAdapter
     @VisibleForTesting
     internal lateinit var items: MutableList<Any>
-
     @VisibleForTesting
     internal lateinit var adapter: MultiTypeAdapter
-
-
-    lateinit var ivDefaultImage: ImageView
-
     lateinit var categoryList: CategoryResponse
 
     companion object {
@@ -91,7 +66,8 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        binding = HomeFragmentBinding.inflate(inflater, container, false)
         mainViewModel = ViewModelProvider(requireActivity())[StoreViewModel::class.java]
         mainViewModel.getBannerList()
 
@@ -111,77 +87,39 @@ class HomeFragment : Fragment() {
             Log.d(TAG, "onCreateView: $id")
 
         }
-        return inflater.inflate(R.layout.home_fragment, container, false)
+        return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val ivProfile = requireView().findViewById<ImageView>(R.id.ivProfile)
-        val tvLogin = requireView().findViewById<TextView>(R.id.tvLogin)
-        val tvCreateAccount = requireView().findViewById<TextView>(R.id.tvCreateAccount)
-        ivDefaultImage = requireView().findViewById(R.id.ivDefaultImage)
-        viewpager = requireView().findViewById(R.id.viewpager)
-        indicator = requireView().findViewById<CircleIndicator>(R.id.indicator)
-        clCart = requireView().findViewById(R.id.clCart)
-        etSearch = requireView().findViewById(R.id.etSearch)
-        tvCartNo = requireView().findViewById(R.id.tvCartNo)
-        clBarcode = requireView().findViewById(R.id.clBarCode)
-        nsvMain = requireView().findViewById(R.id.nsvMain)
-        ivFilter = requireView().findViewById(R.id.ivFilter)
-        recyclerView = requireView().findViewById(R.id.list)
-        clSearch = requireView().findViewById(R.id.clSearch)
-
-
-        /*checking the shared pref working or not*/
-
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(requireActivity().applicationContext)
 
-        etSearch.setOnClickListener(View.OnClickListener {
+        binding.etSearch.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, SearchActivity::class.java)
             intent.putExtra(Constant.IS_SEARCH_FOCUS, true)
             startActivity(intent)
 
         })
 
-        clBarcode.setOnClickListener(View.OnClickListener {
+        binding.clBarCode.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, BarCodeActivity::class.java)
             startActivity(intent)
         })
-        ivFilter.setOnClickListener(View.OnClickListener {
+        binding.ivFilter.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, SearchActivity::class.java)
             intent.putExtra(Constant.IS_SEARCH_FOCUS, false)
             startActivity(intent)
 
         })
 
-        if (sharedPrefHelper[Constant.LOGIN, false]) {
-            Glide.with(requireContext())
-                .load(sharedPrefHelper[Constant.PHOTO, ""])
-                .placeholder(R.drawable.app_icon)
-                .into(ivProfile)
-            tvLogin.text = sharedPrefHelper[Constant.NAME, ""]
-            tvLogin.textSize = 14.0F
-            tvCreateAccount.visibility = View.GONE
 
-            ivProfile.setOnClickListener(View.OnClickListener {
-                val intent = Intent(context, HomeActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                intent.putExtra(Constant.IS_PROFILE, true)
-                startActivity(intent)
-            })
-        } else {
-            ivProfile.setOnClickListener(View.OnClickListener {
-                startActivity(Intent(requireActivity(), OnboardFinishActivity::class.java))
-            })
-        }
-        recyclerView = requireView().findViewById(R.id.list)
+
 
 
         /*ends at here*/
-        tvViewAll = requireView().findViewById(R.id.tvViewAll)
+
 
         val clNoti: ConstraintLayout = requireView().findViewById(R.id.clNoti)
         clNoti.setOnClickListener(View.OnClickListener {
@@ -190,19 +128,19 @@ class HomeFragment : Fragment() {
             intent.putExtra(Constant.IS_NOTIFICATION, true)
             startActivity(intent)
         })
-        tvViewAll.setOnClickListener(View.OnClickListener {
+        binding.tvViewAll.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, HomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(Constant.IS_VIEW_ALL, true)
             startActivity(intent)
         })
-        clCart.setOnClickListener(View.OnClickListener {
+        binding.clCart.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, CartActivity::class.java)
             startActivity(intent)
         })
         mainViewModel.categoryItem.observe(viewLifecycleOwner, Observer {
-            it?.let { it1 -> initRecyclerViewForCategory(it) }
-            Log.d(TAG, "fetchDataFromServer: ${it.toString()}");
+            it?.let { initRecyclerViewForCategory(it) }
+            Log.d(TAG, "fetchDataFromServer: $it");
 
         })
 
@@ -210,10 +148,10 @@ class HomeFragment : Fragment() {
         initSlider()
         mainViewModel.cartSize.observe(viewLifecycleOwner, Observer {
             if (it == 0) {
-                tvCartNo.visibility = View.INVISIBLE
+                binding.tvCartNo.visibility = View.INVISIBLE
             } else {
-                tvCartNo.visibility = View.VISIBLE
-                tvCartNo.text = it.toString()
+                binding.tvCartNo.visibility = View.VISIBLE
+                binding.tvCartNo.text = it.toString()
             }
         })
 
@@ -221,27 +159,27 @@ class HomeFragment : Fragment() {
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
                 pagingAdapter.submitData(lifecycle, it)
             })
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.list.layoutManager = GridLayoutManager(requireContext(), 2)
         pagingAdapter = ProductPagingAdapter(
             requireContext(),
             this@HomeFragment
         )
-        recyclerView.adapter = pagingAdapter
+        binding.list.adapter = pagingAdapter
     }
 
 
     private fun initSlider() {
         mainViewModel.bannerList.observe(viewLifecycleOwner, Observer {
             if (it.isEmpty()) {
-                ivDefaultImage.visibility = View.VISIBLE
+                binding.ivDefaultImage.visibility = View.VISIBLE
             } else {
-                ivDefaultImage.visibility = View.INVISIBLE
+                binding.ivDefaultImage.visibility = View.INVISIBLE
                 it.let {
                     viewPagerAdapter =
                         ImageSlideAdapter(requireContext(), it as ArrayList<String>)
-                    viewpager.adapter = viewPagerAdapter
-                    viewpager.autoScroll(3000)
-                    indicator.setViewPager(viewpager)
+                    binding.viewpager.adapter = viewPagerAdapter
+                    binding.viewpager.autoScroll(3000)
+                    binding.indicator.setViewPager(binding.viewpager)
                 }
             }
         })
@@ -358,7 +296,7 @@ class HomeFragment : Fragment() {
         } else {
             Toast.makeText(
                 requireContext(),
-                "${productItem.sku_name} ALREADY ADDED",
+                "This product is already added please check the cart.",
                 Toast.LENGTH_SHORT
             ).show()
         }

@@ -37,6 +37,9 @@ class ProductActivity : AppCompatActivity() {
     @BindView(R.id.tvProductName)
     lateinit var tvProductName: TextView
 
+    @BindView(R.id.tvShipping)
+    lateinit var tvShipping: TextView
+
     @BindView(R.id.tvProductPrice)
     lateinit var tvProductPrice: TextView
 
@@ -102,6 +105,20 @@ class ProductActivity : AppCompatActivity() {
                 }
             })
 
+            if (intent.getStringExtra(Constant.PRODUCT_PRICE)!!.toDouble() -
+                intent.getStringExtra(Constant.MRP_PRICE)!!.toDouble() == 0.0
+            ) {
+                tvMrp.visibility = View.GONE
+            }
+
+
+
+            if (intent.getStringExtra(Constant.PRODUCT_PRICE)!!.toDouble() < 1000) {
+                tvShipping.text = "₹ 50"
+            } else {
+                tvShipping.text = "FREE"
+            }
+
             populateView(
                 intent.getStringExtra(Constant.PRODUCT_NAME)!!,
                 intent.getStringExtra(Constant.PRODUCT_PRICE)!!,
@@ -135,15 +152,22 @@ class ProductActivity : AppCompatActivity() {
 
             if (quantitiy < 100) {
                 quantitiy++
+
+                if (intent.getStringExtra(Constant.PRODUCT_PRICE)!!.toDouble()*quantitiy < 1000) {
+                    tvShipping.text = "₹ 50"
+                } else {
+                    tvShipping.text = "FREE"
+                }
+
                 tvQuantity.text = quantitiy.toString()
                 tvMrp.text = "₹ ${
-                    Constant.roundUpDecimal(
-                        intent.getStringExtra(Constant.MRP_PRICE)!!.toDouble() * quantitiy
+                    Constant.roundUpString(
+                        (intent.getStringExtra(Constant.MRP_PRICE)!!.toDouble() * quantitiy).toString()
                     )
                 }"
                 tvProductPrice.text = "₹ ${
-                    Constant.roundUpDecimal(
-                        intent.getStringExtra(Constant.PRODUCT_PRICE)!!.toDouble() * quantitiy
+                    Constant.roundUpString(
+                        (intent.getStringExtra(Constant.PRODUCT_PRICE)!!.toDouble() * quantitiy).toString()
                     )
                 }"
             }
@@ -151,8 +175,16 @@ class ProductActivity : AppCompatActivity() {
         })
 
         ivMinus.setOnClickListener(View.OnClickListener {
+
             if (quantitiy > 1) {
                 quantitiy--
+
+                if (intent.getStringExtra(Constant.PRODUCT_PRICE)!!.toDouble()*quantitiy < 1000) {
+                    tvShipping.text = "₹ 50"
+                } else {
+                    tvShipping.text = "FREE"
+                }
+
                 tvQuantity.text = quantitiy.toString()
                 tvMrp.text = "₹ ${
                     Constant.roundUpDecimal(
@@ -207,8 +239,8 @@ class ProductActivity : AppCompatActivity() {
         }
         tvDetails.text = productDescription
         tvProductName.text = productName
-        tvProductPrice.text = "₹ $productPrice"
-        tvMrp.text = "₹ $mrp"
+        tvProductPrice.text = "₹ ${Constant.roundUpString(productPrice)}"
+        tvMrp.text = "₹ ${Constant.roundUpString(mrp)}"
 
     }
 }

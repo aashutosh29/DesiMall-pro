@@ -6,33 +6,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
+import com.aashutosh.desimall_pro.databinding.ProfileFragmentBinding
 import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.deliveryAddress.DeliveryAddressActivity
+import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
 import com.aashutosh.desimall_pro.ui.mapActivity.MapsActivity
-import com.aashutosh.desimall_pro.ui.onBoarding.OnboardFinishActivity
-import com.aashutosh.desimall_pro.ui.profile.MyDetailsActivity
+import com.aashutosh.desimall_pro.ui.myProfileActivity.MyProfileActivity
+import com.aashutosh.desimall_pro.ui.orderHistoryActivity.OrderHistoryActivity
+import com.aashutosh.desimall_pro.ui.phoneVerification.EnterNumberActivity
 import com.aashutosh.desimall_pro.utils.Constant
-import com.bumptech.glide.Glide
 
 class ProfileFragment : Fragment() {
 
-    lateinit var rlProfile: RelativeLayout
-    lateinit var clNameAndPhoto: ConstraintLayout
-    lateinit var ivBack: ImageView
-    lateinit var llLogin: LinearLayout
+
     private lateinit var sharedPrefHelper: SharedPrefHelper
-    lateinit var rlDelivery: RelativeLayout
-    lateinit var rlPromoCard: RelativeLayout
-    lateinit var rlPaymentMethod: RelativeLayout
-    lateinit var rlContactUs: RelativeLayout
-    lateinit var rlHelps: RelativeLayout
-    lateinit var rlOrderHistory: RelativeLayout
-    lateinit var rlNotification: RelativeLayout
+    lateinit var binding: ProfileFragmentBinding
 
     companion object {
         fun newInstance(): HomeFragment {
@@ -44,106 +35,76 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.profile_fragment, container, false)
+    ): View {
+        binding = ProfileFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rlProfile = requireView().findViewById(R.id.rlProfile)
-        clNameAndPhoto = requireView().findViewById(R.id.clNameAndPhoto)
-        ivBack = requireView().findViewById(R.id.ivBack)
-        llLogin = requireView().findViewById(R.id.llLogin)
-        rlDelivery = requireView().findViewById(R.id.rlDelivery)
-        rlPromoCard = requireView().findViewById(R.id.rlPromoCard)
-        rlPaymentMethod = requireView().findViewById(R.id.rlPaymentMethod)
-        rlContactUs = requireView().findViewById(R.id.rlContactUs)
-        rlHelps = requireView().findViewById(R.id.rlHelps)
-        rlOrderHistory = requireView().findViewById(R.id.rlOrderHistory)
-        rlNotification = requireView().findViewById(R.id.rlNotification)
-        val ivProfile = requireView().findViewById<ImageView>(R.id.ivProfile)
-        val tvName = requireView().findViewById<TextView>(R.id.tvName)
-        val rlLogout = requireView().findViewById<RelativeLayout>(R.id.rlLogout)
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(requireActivity().applicationContext)
-        if (sharedPrefHelper[Constant.LOGIN, false]) {
-            llLogin.visibility = View.GONE
-            clNameAndPhoto.visibility = View.VISIBLE
-            Glide.with(requireContext()).load(sharedPrefHelper[Constant.PHOTO, ""])
-                .placeholder(R.drawable.ic_profile).into(ivProfile)
-            tvName.text = sharedPrefHelper[Constant.NAME, ""]
-            tvName.textSize = 14.0F
-            rlLogout.visibility = View.VISIBLE
-            //  rlProfile.visibility = View.VISIBLE
-            rlLogout.setOnClickListener(View.OnClickListener {
-                sharedPrefHelper[Constant.LOGIN] = false
-                val intent = Intent(context, HomeActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
+        binding.rlProfile.setOnClickListener(View.OnClickListener {
+            if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
+                val i = Intent(requireActivity(), EnterNumberActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            } else if (!sharedPrefHelper[Constant.VERIFIED_LOCATION, false]) {
+                val i = Intent(requireActivity(), MapsActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                startActivity(i)
+            } else if (!sharedPrefHelper[Constant.DETAIlS_VERIFED, false]) {
+                val i = Intent(requireActivity(), DetailsVerificationActivity::class.java)
+                i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                i.putExtra(Constant.DETAILS, true)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            } else {
+                val i = Intent(requireActivity(), MyProfileActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            }
 
-            })
-        } else {
-            rlLogout.visibility = View.GONE
-            llLogin.visibility = View.VISIBLE
-            clNameAndPhoto.visibility = View.GONE
-            rlProfile.visibility = View.GONE
+        })
 
-        }
-
-        rlNotification.setOnClickListener(View.OnClickListener {
+        binding.rlNotification.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, HomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(Constant.IS_NOTIFICATION, true)
             startActivity(intent)
         })
-        rlPaymentMethod.setOnClickListener(View.OnClickListener {
+        binding.rlPaymentMethod.setOnClickListener(View.OnClickListener {
             Toast.makeText(
                 context,
                 "Default set as Cash On Delivery, other option will be available soon ",
                 Toast.LENGTH_SHORT
             ).show()
         })
-        rlDelivery.setOnClickListener(View.OnClickListener {
+        binding.rlDelivery.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, DeliveryAddressActivity::class.java)
             startActivity(intent)
         })
 
-        rlOrderHistory.setOnClickListener(View.OnClickListener {
+        binding.rlOrderHistory.setOnClickListener(View.OnClickListener {
+            val intent = Intent(context, OrderHistoryActivity::class.java)
+            startActivity(intent)
+        })
+
+        binding.rlPromoCard.setOnClickListener(View.OnClickListener {
             Toast.makeText(
                 context,
-                "Check your order history in Website or contact Store.",
+                "Promo card will be available soon ",
                 Toast.LENGTH_SHORT
             ).show()
         })
-
-        rlPromoCard.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(context, MapsActivity::class.java))
-        })
-        ivBack.setOnClickListener(View.OnClickListener {
+        binding.ivBack.setOnClickListener(View.OnClickListener {
 
             val intent = Intent(context, HomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         })
-        clNameAndPhoto.setOnClickListener(View.OnClickListener {
-            startActivity(
-                Intent(
-                    requireActivity(), MyDetailsActivity::class.java
-                )
-            )
-        })
-        rlContactUs.setOnClickListener(View.OnClickListener {
-            val browserIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://keybrains.xyz/contact")
-            )
-            startActivity(browserIntent)
-        })
-        rlProfile.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(requireActivity(), MyDetailsActivity::class.java))
-        })
-
-        rlHelps.setOnClickListener(View.OnClickListener {
+        binding.rlContactUs.setOnClickListener(View.OnClickListener {
             val browserIntent = Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse("http://keybrains.xyz/contact")
@@ -151,8 +112,14 @@ class ProfileFragment : Fragment() {
             startActivity(browserIntent)
         })
 
-        llLogin.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(requireActivity(), OnboardFinishActivity::class.java))
+
+        binding.rlHelps.setOnClickListener(View.OnClickListener {
+            val browserIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://keybrains.xyz/contact")
+            )
+            startActivity(browserIntent)
         })
+
     }
 }

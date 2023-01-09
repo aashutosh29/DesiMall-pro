@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "com.jaipur.vaishali.desimall"
-        minSdk 23
+        minSdk 26
         targetSdk 33
         versionCode 5
         versionName "1.4"
@@ -47,9 +47,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
-    implementation 'com.google.android.gms:play-services-auth:20.4.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
@@ -106,14 +103,27 @@ dependencies {
 
     //java firebase
 
-    implementation 'com.google.firebase:firebase-messaging:23.1.1'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:20.2.0'
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
-    implementation 'com.google.firebase:firebase-firestore:24.4.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.4.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
 
     implementation 'com.sun.mail:android-mail:1.6.4'
 
     //barcode
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
+
+    //bottom sheet image picker
+    implementation 'com.kroegerama:bottomsheet-imagepicker:1.1.2'
+    implementation 'id.zelory:compressor:3.0.1'
+
+
+    //country code picker
+    implementation 'com.hbb20:ccp:2.6.0'
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
+
+    implementation 'androidx.browser:browser:1.4.0'
+
 
 }
