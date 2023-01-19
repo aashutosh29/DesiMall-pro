@@ -11,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -97,7 +96,11 @@ class CategoryBasedProductsActivity : AppCompatActivity() {
         rvMain = findViewById(R.id.rvMain)
         tvEmpty = findViewById(R.id.tvEmpty)
         tvToolbar = findViewById(R.id.tvToolbarTitle)
-        tvToolbar.text = intent.getStringExtra(Constant.CATEGORY_NAME)
+        if (intent.getStringExtra(Constant.CATEGORY_NAME)!!.toString().length <= 1) {
+            tvToolbar.text = "Products"
+        } else {
+            tvToolbar.text = intent.getStringExtra(Constant.CATEGORY_NAME)
+        }
         ivBack = findViewById(R.id.ivBack)
         clSearch = findViewById(R.id.clSearch)
         clSearch.setOnClickListener(View.OnClickListener {
@@ -136,7 +139,7 @@ class CategoryBasedProductsActivity : AppCompatActivity() {
 
 
     @OptIn(DelicateCoroutinesApi::class)
-    suspend fun addToCart(productItem: DesiDataResponseSubListItem) {
+    suspend fun addToCart(productItem: DesiDataResponseSubListItem,quantity:Int) {
 
         if (mainViewModel.insertToCart(
                 CartProduct(
@@ -144,7 +147,7 @@ class CategoryBasedProductsActivity : AppCompatActivity() {
                     productItem.sku_name,
                     (if (productItem.sku == "") " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png"),
                     productItem.sku_description,
-                    1,
+                    quantity,
                     productItem.variant_sale_price.toDouble(),
                     productItem.variant_mrp.toDouble()
                 )

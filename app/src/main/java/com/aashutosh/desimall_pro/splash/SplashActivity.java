@@ -140,7 +140,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    startWebView(Constant.GMAIL, Constant.BRANCH_CODE);
+                    startWebView(Constant.BRANCH_NAME, Constant.BRANCH_CODE);
                 }
             }).show();
             return false;
@@ -172,7 +172,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
                     public void onComplete(@NonNull Task<String> task) {
                         if (!task.isSuccessful()) {
                             System.out.println("fetching failed");
-                            startWebView(Constant.GMAIL, Constant.BRANCH_CODE);
+                            startWebView(Constant.BRANCH_NAME, Constant.BRANCH_CODE);
                             return;
                         }
                         String token = task.getResult();
@@ -182,7 +182,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        startWebView(Constant.GMAIL, Constant.BRANCH_CODE);
+                        startWebView(Constant.BRANCH_NAME, Constant.BRANCH_CODE);
                     }
                 });
                 String msg = "Successful";
@@ -193,7 +193,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                startWebView(Constant.GMAIL, Constant.BRANCH_CODE);
+                startWebView(Constant.BRANCH_NAME, Constant.BRANCH_CODE);
             }
         });
 
@@ -201,7 +201,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
 
     void startWebView(String gmail, String branchCode) {
         Intent intent = new Intent(SplashActivity.this, SplashOldActivity.class);
-        intent.putExtra(Constant.GMAIL, gmail);
+        intent.putExtra(Constant.BRANCH_NAME, gmail);
         intent.putExtra(Constant.BRANCH_CODE, branchCode);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -373,7 +373,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
                 }
             }
         } else {
-            startWebView(Constant.GMAIL, Constant.BRANCH_CODE);
+            startWebView(Constant.BRANCH_NAME, Constant.BRANCH_CODE);
         }
     }
 

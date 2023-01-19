@@ -34,10 +34,16 @@ class CategoryAdapter(
         val categoryItem = mList[position]
         // sets the image to the imageview from our itemHolder class
         // sets the text to the textview from our itemHolder class
-        holder.tvName.text = categoryItem
-        holder.tvLogo.text = categoryItem.trim()[0].toString()
+        holder.tvName.visibility = View.INVISIBLE
+        if (categoryItem.trim() == "") {
+            holder.tvLogo.text = "A"
+            holder.tvName.text = "ALL"
+        } else {
+            holder.tvName.text = categoryItem
+            holder.tvLogo.text = categoryItem.trim()[0].toString()
+        }
         holder.clMain.setOnClickListener(View.OnClickListener {
-              homeFragment.getCategoryClicked(categoryItem)
+            homeFragment.getCategoryClicked(categoryItem)
         })
 
     }

@@ -120,8 +120,8 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                         "Cancel"
                     ) { _, _ ->
                         startWebView(
-                            Constant.GMAIL,
-                            branchCode = null
+                            Constant.BRANCH_NAME,
+                            branchCode = ""
                         )
                     }.show()
             false
@@ -141,7 +141,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
         notificationTopic: String,
         url: String,
         name: String,
-        gmail: String,
+        branchName: String,
         branchCode: String
     ) {
         FirebaseMessaging.getInstance().subscribeToTopic(notificationTopic).addOnCompleteListener(
@@ -154,14 +154,14 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         println("fetching failed")
-                        startWebView(Constant.GMAIL, branchCode)
+                        startWebView(name, branchCode)
                     }
                     val token = task.result
                     Log.d("TAG", "onComplete: $token")
-                    startWebView(gmail, branchCode)
+                    startWebView(name, branchCode)
                 }).addOnFailureListener {
                     startWebView(
-                        Constant.GMAIL,
+                        name,
                         branchCode
                     )
                 }
@@ -171,15 +171,15 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 }
             }).addOnFailureListener {
             startWebView(
-                Constant.GMAIL,
+                name,
                 branchCode
             )
         }
     }
 
-    private fun startWebView(gmail: String?, branchCode: String?) {
+    private fun startWebView(branchName: String?, branchCode: String?) {
         val intent = Intent(this@SplashActivity2, SplashOldActivity::class.java)
-        intent.putExtra(Constant.GMAIL, gmail)
+        intent.putExtra(Constant.BRANCH_NAME, branchName)
         intent.putExtra(Constant.BRANCH_CODE, branchCode)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -317,7 +317,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
             //final change will be NETWORK_PROVIDER
             locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
             locationManager!!.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER,
+                LocationManager.GPS_PROVIDER,
                 0L,
                 0f,
                 this@SplashActivity2
@@ -415,7 +415,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
         } else {
 
             //code must not come here
-            startWebView(Constant.GMAIL, branchCode = null)
+            startWebView(Constant.BRANCH_NAME, branchCode = "")
         }
     }
 

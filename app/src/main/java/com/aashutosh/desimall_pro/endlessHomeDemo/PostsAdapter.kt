@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.models.product.ProductItem
 import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
+import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpDecimal
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +56,7 @@ class PostsAdapter : RecyclerView.Adapter<PostsAdapter.ViewHolder>() {
             holder.tvMrp.paintFlags = holder.tvMrp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
             val discount =
-                roundUpDecimal(((productItem.regular_price.toDouble() - productItem.price.toDouble()) / productItem.regular_price.toDouble()) * 100)
+                Constant.roundUpString((((productItem.regular_price.toDouble() - productItem.price.toDouble()) / productItem.regular_price.toDouble()) * 100).toString())
             holder.tvDiscountPercent.text = "$discount % off"
             holder.tvName.text = productItem.name
             holder.clMain.setOnClickListener(View.OnClickListener {

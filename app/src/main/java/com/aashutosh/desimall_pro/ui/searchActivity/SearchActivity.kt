@@ -237,7 +237,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     @OptIn(DelicateCoroutinesApi::class)
-    suspend fun addToCart(productItem: DesiDataResponseSubListItem) {
+    suspend fun addToCart(productItem: DesiDataResponseSubListItem,quantity:Int) {
 
         if (mainViewModel.insertToCart(
                 CartProduct(
@@ -245,7 +245,7 @@ class SearchActivity : AppCompatActivity() {
                     productItem.sku_name,
                     (if (productItem.sku == "") " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png"),
                     productItem.sku_description,
-                    1,
+                    quantity,
                     productItem.variant_sale_price.toDouble(),
                     productItem.variant_mrp.toDouble()
                 )

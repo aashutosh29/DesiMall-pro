@@ -24,6 +24,7 @@ import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
+
 class ProductRepository @Inject constructor(
     private val cdsService: CDSService,
     private val databaseHelper: DatabaseHelper,
@@ -116,8 +117,9 @@ class ProductRepository @Inject constructor(
             val catC = catList.distinct()
             for (cat in catC) {
                 catE.add(DesiCategory(cat))
+
             }
-            databaseHelper.allProduct().addDesiCategory(catE)
+            databaseHelper.allProduct().addDesiCategory(catE.sortedBy { it.name })
             //categoryItem.postValue(catList.distinct() as ArrayList<String>)
         }
     }
@@ -126,7 +128,7 @@ class ProductRepository @Inject constructor(
         databaseHelper.allProduct().addDesiCategory(cat)
     }
 
-    suspend fun desiProduct(branchCode: Int, first: Boolean) {
+    suspend fun desiProduct(branchCode: Int, locationChanged: Boolean) {
         try {
             val result = cdsService.getDesiProduct("DSM", branchCode.toString())
             databaseHelper.allProduct().addDesiProduct(result[0])
@@ -137,8 +139,8 @@ class ProductRepository @Inject constructor(
 
     }
 
-    suspend fun allCat(): List<DesiCategory> {
 
+    suspend fun allCat(): List<DesiCategory> {
         return databaseHelper.allProduct().getAllCategory();
     }
 

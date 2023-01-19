@@ -36,8 +36,14 @@ class ProductCategoryAdapter(
         // sets the image to the imageview from our itemHolder class
 
         // sets the text to the textview from our itemHolder class
-        holder.tvCategory.text = categoryItem
-        holder.tvProduct.text = categoryItem[0].toString()
+
+        if (categoryItem.trim() == "") {
+            holder.tvProduct.text = "A"
+            holder.tvCategory.text = "ALL"
+        } else {
+            holder.tvCategory.text = categoryItem
+            holder.tvProduct.text = categoryItem.trim()[0].toString()
+        }
         holder.clMain.setOnClickListener(View.OnClickListener {
             categoryFragment.getCategoryClicked(categoryItem)
         })

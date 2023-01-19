@@ -37,14 +37,22 @@ class SplashOldActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         sharedPrefHelper = SharedPrefHelper
-        sharedPrefHelper[Constant.GMAIL] = intent.getStringExtra(Constant.GMAIL)
-        sharedPrefHelper[Constant.BRANCH_CODE] = intent.getStringExtra(Constant.BRANCH_CODE)
+        sharedPrefHelper[Constant.BRANCH_NAME] = intent.getStringExtra(Constant.BRANCH_NAME)
+        sharedPrefHelper[Constant.BRANCH_NAME] = intent.getStringExtra(Constant.BRANCH_NAME)
+
         sharedPrefHelper[Constant.VERIFIED_LOCATION] = true
-        Log.d(TAG, "gmail: ${intent.getStringExtra(Constant.GMAIL)}")
+        Log.d(TAG, "gmail: ${intent.getStringExtra(Constant.BRANCH_NAME)}")
         mainViewModel =
             ViewModelProvider(this@SplashOldActivity)[StoreViewModel::class.java]
 
             GlobalScope.launch(Dispatchers.Main) {
+                sharedPrefHelper[Constant.BRANCH_CODE] =
+                    intent.getStringExtra(Constant.BRANCH_CODE)
+                /*if (sharedPrefHelper[Constant.BRANCH_CODE, ""] != intent.getStringExtra(Constant.BRANCH_CODE)) {
+                    sharedPrefHelper[Constant.LOCATION_CHANGED] = true
+                    sharedPrefHelper[Constant.BRANCH_CODE] =
+                        intent.getStringExtra(Constant.BRANCH_CODE)
+                }*/
                 if (sharedPrefHelper[Constant.FIRST_LOAD, true]) {
                     mainViewModel.getDesiProduct(
                         intent.getStringExtra(Constant.BRANCH_CODE)!!.toInt(),

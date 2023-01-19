@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import butterknife.ButterKnife
+import butterknife.OnClick
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.CategoryAdapter
 import com.aashutosh.desimall_pro.adapter.ImageSlideAdapter
@@ -80,7 +82,8 @@ class HomeFragment : Fragment() {
             for (cat in catL) {
                 catF.add(cat.name)
             }
-            initRecyclerViewForCategory(catF)
+            initRecyclerViewForCategory(alphas())
+            // initRecyclerViewForCategory(catF)
             mainViewModel.getCartSize()
             val id: String = sharedPrefHelper[Constant.BRANCH_CODE]
             mainViewModel.getDesiProduct(id.toInt(), false)
@@ -94,8 +97,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPrefHelper = SharedPrefHelper
+        ButterKnife.bind(this, view)
         sharedPrefHelper.init(requireActivity().applicationContext)
-
+        binding.tvLogin.text = sharedPrefHelper[Constant.BRANCH_NAME, ""]
         binding.etSearch.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, SearchActivity::class.java)
             intent.putExtra(Constant.IS_SEARCH_FOCUS, true)
@@ -115,9 +119,6 @@ class HomeFragment : Fragment() {
         })
 
 
-
-
-
         /*ends at here*/
 
 
@@ -128,12 +129,7 @@ class HomeFragment : Fragment() {
             intent.putExtra(Constant.IS_NOTIFICATION, true)
             startActivity(intent)
         })
-        binding.tvViewAll.setOnClickListener(View.OnClickListener {
-            val intent = Intent(context, HomeActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra(Constant.IS_VIEW_ALL, true)
-            startActivity(intent)
-        })
+
         binding.clCart.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, CartActivity::class.java)
             startActivity(intent)
@@ -167,6 +163,13 @@ class HomeFragment : Fragment() {
         binding.list.adapter = pagingAdapter
     }
 
+    @OnClick(R.id.tvViewAll)
+    fun tvViewALlClicked() {
+        val i = Intent(requireActivity(), HomeActivity::class.java)
+        i.putExtra(Constant.IS_VIEW_ALL, true)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        requireActivity().startActivity(i)
+    }
 
     private fun initSlider() {
         mainViewModel.bannerList.observe(viewLifecycleOwner, Observer {
@@ -269,7 +272,7 @@ class HomeFragment : Fragment() {
 
 
     @OptIn(DelicateCoroutinesApi::class)
-    suspend fun addToCart(productItem: DesiDataResponseSubListItem) {
+    suspend fun addToCart(productItem: DesiDataResponseSubListItem, quantity: Int) {
 
         if (mainViewModel.insertToCart(
                 CartProduct(
@@ -277,7 +280,7 @@ class HomeFragment : Fragment() {
                     productItem.sku_name,
                     (if (productItem.sku == "") " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png"),
                     productItem.sku_description,
-                    1,
+                    quantity,
                     productItem.variant_sale_price.toDouble(),
                     productItem.variant_mrp.toDouble()
                 )
@@ -310,6 +313,38 @@ class HomeFragment : Fragment() {
         )
 
         startActivity(intent)
+
+    }
+
+    private fun alphas(): List<String> {
+        val alphabet: ArrayList<String> = arrayListOf()
+        alphabet.add("A")
+        alphabet.add("B")
+        alphabet.add("C")
+        alphabet.add("D")
+        alphabet.add("E")
+        alphabet.add("F")
+        alphabet.add("G")
+        alphabet.add("H")
+        alphabet.add("I")
+        alphabet.add("J")
+        alphabet.add("K")
+        alphabet.add("L")
+        alphabet.add("M")
+        alphabet.add("N")
+        alphabet.add("O")
+        alphabet.add("P")
+        alphabet.add("Q")
+        alphabet.add("R")
+        alphabet.add("S")
+        alphabet.add("T")
+        alphabet.add("U")
+        alphabet.add("V")
+        alphabet.add("W")
+        alphabet.add("X")
+        alphabet.add("Y")
+        alphabet.add("Z")
+        return alphabet
 
     }
 }

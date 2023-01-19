@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ class CategorizedProductPagingAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        var quantity = 1
         val productItem = getItem(position)
         if (productItem != null) {
             // sets the image to the imageview from our itemHolder class
@@ -45,17 +47,35 @@ class CategorizedProductPagingAdapter(
             holder.tvPrice.text = "₹ ${productItem.variant_sale_price}"
             holder.tvMrp.text = "₹ ${productItem.variant_mrp}"
             holder.tvMrp.paintFlags = holder.tvMrp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-
+            if ((productItem.variant_sale_price.toDouble() - productItem.variant_mrp.toDouble()) == 0.0) {
+                holder.tvMrp.visibility = View.INVISIBLE
+                holder.clDiscount.visibility = View.INVISIBLE
+            }
             val discount =
-                Constant.roundUpDecimal(((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100)
+                Constant.roundUpString((((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100).toString())
             holder.tvDiscountPercent.text = "$discount % off"
             holder.tvName.text = productItem.sku_name
             holder.clMain.setOnClickListener(View.OnClickListener {
                 categoryBasedProductsActivity.getItemClicked(productItem)
             })
+            holder.ivPlus.setOnClickListener(View.OnClickListener {
+                if (quantity < 100) {
+                    quantity++
+                    holder.tvQuantity.text = quantity.toString()
+
+                }
+            })
+            holder.ivMinus.setOnClickListener(View.OnClickListener {
+                if (quantity > 1) {
+                    quantity--
+                    holder.tvQuantity.text = quantity.toString()
+                }
+            })
             holder.ivAddToCart.setOnClickListener(View.OnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
-                    categoryBasedProductsActivity.addToCart(productItem)
+                    categoryBasedProductsActivity.addToCart(productItem,quantity)
+                    holder.tvQuantity.text = "1"
+                    quantity = 1
                 }
             })
         }
@@ -95,6 +115,10 @@ class CategorizedProductPagingAdapter(
         val tvMrp: TextView = itemView.findViewById(R.id.tvMrp)
         val tvDiscountPercent: TextView = itemView.findViewById(R.id.tvDiscountPercent)
         val ivAddToCart: ImageView = itemView.findViewById(R.id.ivAddToCart)
+        val clDiscount: ConstraintLayout = itemView.findViewById(R.id.clDiscount)
+        val ivPlus: ImageView = itemView.findViewById(R.id.ivPlus)
+        val ivMinus: ImageView = itemView.findViewById(R.id.ivMinus)
+        val tvQuantity: TextView = itemView.findViewById(R.id.tvQuantity)
 
     }
 }

@@ -13,6 +13,7 @@ import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.models.product.ProductItem
 import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
 import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpDecimal
+import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpString
 import com.bumptech.glide.Glide
 import com.drakeet.multitype.ItemViewBinder
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +57,7 @@ class PostViewBinder(
             tvMrp.paintFlags = tvMrp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
             val discount =
-                roundUpDecimal(((post.regular_price.toDouble() - post.price.toDouble()) / post.regular_price.toDouble()) * 100)
+                roundUpString((((post.regular_price.toDouble() - post.price.toDouble()) / post.regular_price.toDouble()) * 100).toString())
             tvDiscountPercent.text = "$discount % off"
             tvName.text = post.name
             clMain.setOnClickListener(View.OnClickListener {

@@ -21,11 +21,12 @@ class Constant {
         const val ADDRESS = "address"
         const val LAND_MARK = "landmark"
 
+        const val LOCATION_CHANGED = "location_changed"
         //java
         const val WEB = "web"
         const val APP_NAME = "app_name"
         const val URL = "URL"
-        const val GMAIL = "gmail"
+        const val BRANCH_NAME = "branch_name"
         const val BRANCH_CODE = "2"
         const val IS_FAV = "is_fav"
         const val DETAILS = "details"

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,7 @@ class SearchProductAdapter(
     @SuppressLint("SetTextI18n")
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        var quantity = 1
         val productItem = getItem(position)
         if (productItem != null) {
             // sets the image to the imageview from our itemHolder class
@@ -41,15 +42,34 @@ class SearchProductAdapter(
                 .load(if (productItem.sku == null) " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png")
                 .error(R.drawable.app_icon)
                 .placeholder(R.drawable.app_icon)
-                .into(holder.ivLogo);
+                .into(holder.ivLogo)
 
+            if ((productItem.variant_sale_price.toDouble() - productItem.variant_mrp.toDouble()) == 0.0) {
+                holder.tvMrp.visibility = View.INVISIBLE
+                holder.clDiscount.visibility = View.INVISIBLE
+            }
             // sets the text to the textview from our itemHolder class
             holder.tvPrice.text = "₹ ${Constant.roundUpString(productItem.variant_sale_price.toString())}"
             holder.tvMrp.text = "₹ ${Constant.roundUpString(productItem.variant_mrp.toString())}"
             holder.tvMrp.paintFlags = holder.tvMrp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
+            holder.ivPlus.setOnClickListener(View.OnClickListener {
+                if (quantity < 100) {
+                    quantity++
+                    holder.tvQuantity.text = quantity.toString()
+
+                }
+            })
+            holder.ivMinus.setOnClickListener(View.OnClickListener {
+                if (quantity > 1) {
+                    quantity--
+                    holder.tvQuantity.text = quantity.toString()
+                }
+            })
+
+
             val discount =
-                Constant.roundUpDecimal(((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100)
+                Constant.roundUpString((((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100).toString())
             holder.tvDiscountPercent.text = "$discount % off"
             holder.tvName.text = productItem.sku_name
             holder.clMain.setOnClickListener(View.OnClickListener {
@@ -57,7 +77,9 @@ class SearchProductAdapter(
             })
             holder.ivAddToCart.setOnClickListener(View.OnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
-                    searchActivity.addToCart(productItem)
+                    searchActivity.addToCart(productItem,quantity)
+                    holder.tvQuantity.text = "1"
+                    quantity = 1
                 }
             })
         }
@@ -97,6 +119,11 @@ class SearchProductAdapter(
         val tvMrp: TextView = itemView.findViewById(R.id.tvMrp)
         val tvDiscountPercent: TextView = itemView.findViewById(R.id.tvDiscountPercent)
         val ivAddToCart: ImageView = itemView.findViewById(R.id.ivAddToCart)
+        val clDiscount: ConstraintLayout = itemView.findViewById(R.id.clDiscount)
+        val ivPlus: ImageView = itemView.findViewById(R.id.ivPlus)
+        val ivMinus: ImageView = itemView.findViewById(R.id.ivMinus)
+        val tvQuantity: TextView = itemView.findViewById(R.id.tvQuantity)
+
 
     }
 }

@@ -56,8 +56,8 @@ class StoreViewModel @Inject constructor(private val repository: ProductReposito
         repository.getProductDetails(productId);
     }
 
-    suspend fun getDesiProduct(branchCode: Int, first: Boolean) {
-        repository.desiProduct(branchCode, first)
+    suspend fun getDesiProduct(branchCode: Int, locationChanged: Boolean) {
+        repository.desiProduct(branchCode, locationChanged)
 
     }
 

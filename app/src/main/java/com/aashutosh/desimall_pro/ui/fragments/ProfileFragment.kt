@@ -67,7 +67,11 @@ class ProfileFragment : Fragment() {
             }
 
         })
-
+        binding.ivBack.setOnClickListener(View.OnClickListener {
+            val intent = Intent(context, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        })
         binding.rlNotification.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, HomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK

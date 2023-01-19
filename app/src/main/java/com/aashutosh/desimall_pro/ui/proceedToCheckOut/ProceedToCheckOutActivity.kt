@@ -27,7 +27,6 @@ import com.aashutosh.desimall_pro.ui.deliveryAddress.DeliveryAddressActivity
 import com.aashutosh.desimall_pro.ui.mapActivity.MapsActivity
 import com.aashutosh.desimall_pro.ui.phoneVerification.EnterNumberActivity
 import com.aashutosh.desimall_pro.utils.Constant
-import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpDecimal
 import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpString
 import com.aashutosh.desimall_pro.utils.Constant.Companion.setProgressDialog
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
@@ -118,20 +117,6 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
         }
     }
 
-    @OnClick(R.id.ivBack)
-    fun ivBackClicked() {
-        this.finish()
-    }
-
-    @OnClick(R.id.btEditPayment)
-    fun btEditPaymentClicked() {
-        Toast.makeText(
-            this@ProceedToCheckOutActivity,
-            "Other method will be available soon",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun initRecyclerView() {
@@ -177,6 +162,23 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
     }
 
     private fun initView() {
+        binding.ivBack.setOnClickListener(View.OnClickListener {
+            this.finish()
+        })
+        binding.btEdit.setOnClickListener(View.OnClickListener {
+            startActivity(
+                Intent(
+                    this@ProceedToCheckOutActivity, DeliveryAddressActivity::class.java
+                )
+            )
+        })
+        binding.btEditPayment.setOnClickListener(View.OnClickListener {
+            Toast.makeText(
+                this@ProceedToCheckOutActivity,
+                "Other method will be available soon",
+                Toast.LENGTH_SHORT
+            ).show()
+        })
         binding.btOrder.setOnClickListener(View.OnClickListener {
             btOrder()
         })
@@ -199,15 +201,6 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
         if (mainViewModel.updateQty(cartItem) == 1) {
             initRecyclerView()
         }
-    }
-
-    @OnClick(R.id.btEdit)
-    fun btEditClicked() {
-        startActivity(
-            Intent(
-                this@ProceedToCheckOutActivity, DeliveryAddressActivity::class.java
-            )
-        )
     }
 
 

@@ -45,6 +45,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_4sdp"
@@ -74,7 +75,7 @@
                 android:alpha="0.87"
                 android:gravity="center"
                 android:text="n/a"
-                android:textColor="@color/black"
+                android:textColor="@color/md_red_600"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/tvName"
@@ -94,8 +95,56 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/tvPrice"
                 app:layout_constraintStart_toStartOf="@id/tvName"
-                app:layout_constraintTop_toBottomOf="@id/tvPrice"
-                 />
+                app:layout_constraintTop_toBottomOf="@id/tvPrice" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clControl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_cl_search"
+            android:backgroundTint="#E8F5E9"
+            android:layout_margin="@dimen/_6sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivAddToCart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clBody">
+
+            <ImageView
+                android:id="@+id/ivPlus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_baseline_add_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_8sdp"
+                android:text="1"
+                android:textColor="@color/md_red_600"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivPlus"
+                app:layout_constraintStart_toEndOf="@id/ivMinus"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivMinus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_baseline_minus_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

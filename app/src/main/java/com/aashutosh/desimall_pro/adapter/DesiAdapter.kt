@@ -53,7 +53,7 @@ class DesiAdapter(
             holder.tvMrp.paintFlags = holder.tvMrp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
             val discount =
-                Constant.roundUpDecimal(((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100)
+                Constant.roundUpString((((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100).toString())
             holder.tvDiscountPercent.text = "$discount % off"
             holder.tvName.text = productItem.sku_name
             holder.clMain.setOnClickListener(View.OnClickListener {
@@ -61,7 +61,7 @@ class DesiAdapter(
             })
             holder.ivAddToCart.setOnClickListener(View.OnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
-                    homeFragment.addToCart(productItem)
+                   // homeFragment.addToCart(productItem)
                 }
             })
         }

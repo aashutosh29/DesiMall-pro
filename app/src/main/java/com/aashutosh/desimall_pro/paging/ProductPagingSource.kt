@@ -27,6 +27,7 @@ class ProductPagingSource(
                     )
                 } else {
 
+
                     val entities = databaseHelper.allProduct()
                         .getSearchedProduct(params.loadSize, page * params.loadSize, value)
                     if (page != 0) delay(100)
@@ -38,14 +39,25 @@ class ProductPagingSource(
                 }
 
             } else {
-                val entities = databaseHelper.allProduct()
-                    .getCategoryBasedProduct(params.loadSize, page * params.loadSize, value)
-                if (page != 0) delay(100)
-                LoadResult.Page(
-                    data = entities,
-                    prevKey = if (page == 0) null else page - 1,
-                    nextKey = if (entities.isEmpty()) null else page + 1
-                )
+                if (value.length == 1) {
+                    val entities = databaseHelper.allProduct()
+                        .getAlphaProduct(params.loadSize, page * params.loadSize, value)
+                    if (page != 0) delay(100)
+                    LoadResult.Page(
+                        data = entities,
+                        prevKey = if (page == 0) null else page - 1,
+                        nextKey = if (entities.isEmpty()) null else page + 1
+                    )
+                } else {
+                    val entities = databaseHelper.allProduct()
+                        .getCategoryBasedProduct(params.loadSize, page * params.loadSize, value)
+                    if (page != 0) delay(100)
+                    LoadResult.Page(
+                        data = entities,
+                        prevKey = if (page == 0) null else page - 1,
+                        nextKey = if (entities.isEmpty()) null else page + 1
+                    )
+                }
             }
         } catch (e: Exception) {
             LoadResult.Error(e)

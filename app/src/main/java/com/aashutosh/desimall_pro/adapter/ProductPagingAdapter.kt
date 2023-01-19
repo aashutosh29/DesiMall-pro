@@ -35,16 +35,42 @@ class ProductPagingAdapter(
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val productItem = getItem(position)
+        var quantity = 1
         if (productItem != null) {
             // sets the image to the imageview from our itemHolder class
             Glide.with(context)
                 .load(if (productItem.sku == null) " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png")
+                /* .listener(object : RequestListener<Drawable> {
+                     override fun onLoadFailed(
+                         e: GlideException?,
+                         model: Any?,
+                         target: com.bumptech.glide.request.target.Target<Drawable>?,
+                         isFirstResource: Boolean
+                     ): Boolean {
+                         Log.d(TAG, "onLoadFailed: $productItem")
+                         return true
+                     }
+
+                     override fun onResourceReady(
+                         resource: Drawable?,
+                         model: Any?,
+                         target: com.bumptech.glide.request.target.Target<Drawable>?,
+                         dataSource: DataSource?,
+                         isFirstResource: Boolean
+                     ): Boolean {
+                         //TODO use "resource" as the photo for your ImageView
+                         return true
+                     }
+
+                 })*/
                 .error(R.drawable.app_icon)
                 .placeholder(R.drawable.app_icon)
                 .into(holder.ivLogo)
 
+
             // sets the text to the textview from our itemHolder class
-            holder.tvPrice.text = "₹ ${Constant.roundUpString(productItem.variant_sale_price.toString())}"
+            holder.tvPrice.text =
+                "₹ ${Constant.roundUpString(productItem.variant_sale_price.toString())}"
             holder.tvMrp.text = "₹ ${Constant.roundUpString(productItem.variant_mrp.toString())}"
             holder.tvMrp.paintFlags = holder.tvMrp.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
@@ -53,8 +79,22 @@ class ProductPagingAdapter(
                 holder.clDiscount.visibility = View.INVISIBLE
             }
 
+            holder.ivPlus.setOnClickListener(View.OnClickListener {
+                if (quantity < 100) {
+                    quantity++
+                    holder.tvQuantity.text = quantity.toString()
+
+                }
+            })
+            holder.ivMinus.setOnClickListener(View.OnClickListener {
+                if (quantity > 1) {
+                    quantity--
+                    holder.tvQuantity.text = quantity.toString()
+                }
+            })
+
             val discount =
-                Constant.roundUpDecimal(((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100)
+                Constant.roundUpString((((productItem.variant_mrp.toDouble() - productItem.variant_sale_price.toDouble()) / productItem.variant_mrp.toDouble()) * 100).toString())
             holder.tvDiscountPercent.text = "$discount % off"
             holder.tvName.text = productItem.sku_name
             holder.clMain.setOnClickListener(View.OnClickListener {
@@ -62,7 +102,9 @@ class ProductPagingAdapter(
             })
             holder.ivAddToCart.setOnClickListener(View.OnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
-                    homeFragment.addToCart(productItem)
+                    homeFragment.addToCart(productItem,quantity)
+                    holder.tvQuantity.text = "1"
+                    quantity = 1
                 }
             })
         }
@@ -103,6 +145,10 @@ class ProductPagingAdapter(
         val tvDiscountPercent: TextView = itemView.findViewById(R.id.tvDiscountPercent)
         val ivAddToCart: ImageView = itemView.findViewById(R.id.ivAddToCart)
         val clDiscount: ConstraintLayout = itemView.findViewById(R.id.clDiscount)
+        val ivPlus: ImageView = itemView.findViewById(R.id.ivPlus)
+        val ivMinus: ImageView = itemView.findViewById(R.id.ivMinus)
+        val tvQuantity: TextView = itemView.findViewById(R.id.tvQuantity)
+
 
     }
 }
