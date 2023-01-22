@@ -14,11 +14,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.CategorizedProductPagingAdapter
+import com.aashutosh.desimall_pro.adapter.CategoryAdapter
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
+import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.cartActivity.CartActivity
 import com.aashutosh.desimall_pro.ui.productScreen.ProductActivity
 import com.aashutosh.desimall_pro.ui.searchActivity.SearchActivity
@@ -31,7 +34,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CategoryBasedProductsActivity : AppCompatActivity() {
+class CategoryBasedProductsActivity : AppCompatActivity(), CategoryView {
     lateinit var mainViewModel: StoreViewModel
     lateinit var rvMain: RecyclerView
     lateinit var tvEmpty: TextView
@@ -60,7 +63,7 @@ class CategoryBasedProductsActivity : AppCompatActivity() {
             })
 
 
-
+        initRecyclerViewForCategory(Constant.alphas())
 
         GlobalScope.launch(Dispatchers.Main) {
             mainViewModel.getCartSize()
@@ -78,6 +81,24 @@ class CategoryBasedProductsActivity : AppCompatActivity() {
             startActivity(intent)
         })
 
+    }
+
+    private fun initRecyclerViewForCategory(categoryResponse: List<String>) {
+        val recyclerview = findViewById<RecyclerView>(R.id.rvCategory)
+        // this creates a vertical layout Manager
+        recyclerview?.layoutManager =
+            LinearLayoutManager(
+                this@CategoryBasedProductsActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        val adapter = CategoryAdapter(
+            categoryResponse,
+            this@CategoryBasedProductsActivity,
+            this@CategoryBasedProductsActivity
+        )
+        // Setting the Adapter with the recyclerview
+        recyclerview?.adapter = adapter
     }
 
     private fun intRecyclerView() {
@@ -170,6 +191,16 @@ class CategoryBasedProductsActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    override fun getCategoryClicked(categoryItem: String) {
+        mainViewModel.getCatBasedDesiProduct(
+            categoryItem
+        )
+            .observe(this, androidx.lifecycle.Observer {
+                pagingAdapter.submitData(lifecycle, it)
+            })
+
     }
 
 }

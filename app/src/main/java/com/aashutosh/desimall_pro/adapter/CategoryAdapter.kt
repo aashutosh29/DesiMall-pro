@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
-import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
+import com.aashutosh.desimall_pro.ui.CategoryView
 
 class CategoryAdapter(
     private val mList: List<String>,
     private val context: Context,
-    private val homeFragment: HomeFragment
+    private val categoryView: CategoryView
 ) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     // create new views
@@ -34,7 +34,7 @@ class CategoryAdapter(
         val categoryItem = mList[position]
         // sets the image to the imageview from our itemHolder class
         // sets the text to the textview from our itemHolder class
-        holder.tvName.visibility = View.INVISIBLE
+        holder.tvName.visibility = View.GONE
         if (categoryItem.trim() == "") {
             holder.tvLogo.text = "A"
             holder.tvName.text = "ALL"
@@ -43,7 +43,7 @@ class CategoryAdapter(
             holder.tvLogo.text = categoryItem.trim()[0].toString()
         }
         holder.clMain.setOnClickListener(View.OnClickListener {
-            homeFragment.getCategoryClicked(categoryItem)
+            categoryView.getCategoryClicked(categoryItem)
         })
 
     }

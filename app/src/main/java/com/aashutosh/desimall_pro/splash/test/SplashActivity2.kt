@@ -405,8 +405,8 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                             storeList[i].notificationTopic,
                             storeList[i].url,
                             storeList[i].name,
-                            storeList[0].gmail,
-                            storeList[0].branchCode
+                            storeList[i].gmail,
+                            storeList[i].branchCode
                         )
                         break
                     }

@@ -6,12 +6,15 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/_8sdp"
     app:cardCornerRadius="@dimen/_4sdp"
+
     app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@color/app_background">
+        android:layout_height="wrap_content"
+        android:background="@color/app_background"
+        android:paddingVertical="@dimen/_4sdp"
+       >
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvImage"
@@ -26,6 +29,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+
                 android:id="@+id/tvProduct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -45,6 +49,7 @@
             android:alpha="0.80"
             android:gravity="center"
             android:maxLines="2"
+            android:visibility="gone"
             android:text="Testing product"
             android:textColor="@color/black"
             android:textSize="@dimen/_9sdp"

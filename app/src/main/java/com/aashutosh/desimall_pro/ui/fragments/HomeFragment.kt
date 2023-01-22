@@ -29,6 +29,7 @@ import com.aashutosh.desimall_pro.databinding.HomeFragmentBinding
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.models.category.CategoryResponse
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
+import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.barCodeActivity.BarCodeActivity
 import com.aashutosh.desimall_pro.ui.cartActivity.CartActivity
@@ -36,6 +37,7 @@ import com.aashutosh.desimall_pro.ui.categoryWithItsProduct.CategoryBasedProduct
 import com.aashutosh.desimall_pro.ui.productScreen.ProductActivity
 import com.aashutosh.desimall_pro.ui.searchActivity.SearchActivity
 import com.aashutosh.desimall_pro.utils.Constant
+import com.aashutosh.desimall_pro.utils.Constant.Companion.alphas
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import com.drakeet.multitype.MultiTypeAdapter
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -44,14 +46,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), CategoryView {
     private lateinit var mainViewModel: StoreViewModel
     lateinit var binding: HomeFragmentBinding
     lateinit var pagingAdapter: ProductPagingAdapter
     private lateinit var sharedPrefHelper: SharedPrefHelper
     lateinit var viewPagerAdapter: ImageSlideAdapter
+
     @VisibleForTesting
     internal lateinit var items: MutableList<Any>
+
     @VisibleForTesting
     internal lateinit var adapter: MultiTypeAdapter
     lateinit var categoryList: CategoryResponse
@@ -305,7 +309,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun getCategoryClicked(categoryItem: String) {
+    override fun getCategoryClicked(categoryItem: String) {
         val intent = Intent(context, CategoryBasedProductsActivity::class.java)
 
         intent.putExtra(
@@ -316,35 +320,5 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun alphas(): List<String> {
-        val alphabet: ArrayList<String> = arrayListOf()
-        alphabet.add("A")
-        alphabet.add("B")
-        alphabet.add("C")
-        alphabet.add("D")
-        alphabet.add("E")
-        alphabet.add("F")
-        alphabet.add("G")
-        alphabet.add("H")
-        alphabet.add("I")
-        alphabet.add("J")
-        alphabet.add("K")
-        alphabet.add("L")
-        alphabet.add("M")
-        alphabet.add("N")
-        alphabet.add("O")
-        alphabet.add("P")
-        alphabet.add("Q")
-        alphabet.add("R")
-        alphabet.add("S")
-        alphabet.add("T")
-        alphabet.add("U")
-        alphabet.add("V")
-        alphabet.add("W")
-        alphabet.add("X")
-        alphabet.add("Y")
-        alphabet.add("Z")
-        return alphabet
 
-    }
 }

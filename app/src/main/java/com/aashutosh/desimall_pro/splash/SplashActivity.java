@@ -327,7 +327,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
         if (location != null) {
             for (int i = 0; i < storeList.size(); i++) {
                 float distance = distFrom((float) location.getLatitude(), (float) location.getLongitude(), Float.parseFloat(storeList.get(i).getLat()), Float.parseFloat(storeList.get(i).getLon()));
-                if (distance <= 15.1) {
+                if (distance <= 5.1) {
                     store = new Store();
                     store.setId(storeList.get(i).getId());
                     store.setLat(storeList.get(i).getLat());
