@@ -44,6 +44,8 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(requireActivity().applicationContext)
+
+
         binding.rlProfile.setOnClickListener(View.OnClickListener {
             if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
                 val i = Intent(requireActivity(), EnterNumberActivity::class.java)

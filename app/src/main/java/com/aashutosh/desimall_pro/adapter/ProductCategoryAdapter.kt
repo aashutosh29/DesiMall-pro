@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
-import com.aashutosh.desimall_pro.ui.fragments.CategoryFragment
+import com.aashutosh.desimall_pro.ui.CategoryView
 
 class ProductCategoryAdapter(
     private val mList: List<String>,
     private val context: Context,
-    private val categoryFragment: CategoryFragment
+    private val categoryView: CategoryView
 ) :
     RecyclerView.Adapter<ProductCategoryAdapter.ViewHolder>() {
     // create new views
@@ -44,8 +44,9 @@ class ProductCategoryAdapter(
             holder.tvCategory.text = categoryItem
             holder.tvProduct.text = categoryItem.trim()[0].toString()
         }
+
         holder.clMain.setOnClickListener(View.OnClickListener {
-            categoryFragment.getCategoryClicked(categoryItem)
+            categoryView.getCategoryClicked(categoryItem)
         })
 
     }

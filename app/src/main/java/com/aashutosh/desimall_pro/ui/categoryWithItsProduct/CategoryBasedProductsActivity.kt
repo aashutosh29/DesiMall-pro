@@ -1,27 +1,19 @@
 package com.aashutosh.desimall_pro.ui.categoryWithItsProduct
 
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.CategorizedProductPagingAdapter
-import com.aashutosh.desimall_pro.adapter.CategoryAdapter
+import com.aashutosh.desimall_pro.databinding.ActivityCategoryBasedProductsBinding
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
-import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.cartActivity.CartActivity
 import com.aashutosh.desimall_pro.ui.productScreen.ProductActivity
 import com.aashutosh.desimall_pro.ui.searchActivity.SearchActivity
@@ -34,103 +26,71 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CategoryBasedProductsActivity : AppCompatActivity(), CategoryView {
+class CategoryBasedProductsActivity : AppCompatActivity(), CategoryBasedProductView {
     lateinit var mainViewModel: StoreViewModel
-    lateinit var rvMain: RecyclerView
-    lateinit var tvEmpty: TextView
-    lateinit var tvToolbar: TextView
-    lateinit var ivBack: ImageView
+    lateinit var binding: ActivityCategoryBasedProductsBinding
     lateinit var pagingAdapter: CategorizedProductPagingAdapter
-    lateinit var tvCartNo: TextView
-    lateinit var clCart: ConstraintLayout
-    lateinit var clSearch: ConstraintLayout
+
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_category_based_products)
-        findView()
+        binding = ActivityCategoryBasedProductsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
         mainViewModel =
             ViewModelProvider(this@CategoryBasedProductsActivity)[StoreViewModel::class.java]
-
         intRecyclerView()
-        Log.d(TAG, "categoryname: ${intent.getStringExtra(Constant.CATEGORY_NAME).toString()}")
-        mainViewModel.getCatBasedDesiProduct(
-            intent.getStringExtra(Constant.CATEGORY_NAME)!!.toString()
+        mainViewModel.getKeyValueBasedProduct(
+            key = intent.getStringExtra(Constant.QUERY_KEY)!!.toString(),
+            value = intent.getStringExtra(Constant.QUERY_VALUE)!!.toString()
         )
             .observe(this, androidx.lifecycle.Observer {
                 pagingAdapter.submitData(lifecycle, it)
             })
 
 
-        initRecyclerViewForCategory(Constant.alphas())
-
         GlobalScope.launch(Dispatchers.Main) {
             mainViewModel.getCartSize()
         }
         mainViewModel.cartSize.observe(this@CategoryBasedProductsActivity, Observer {
             if (it == 0) {
-                tvCartNo.visibility = View.INVISIBLE
+                binding.tbMain.tvCartNo.visibility = View.INVISIBLE
             } else {
-                tvCartNo.visibility = View.VISIBLE
-                tvCartNo.text = it.toString()
+                binding.tbMain.tvCartNo.visibility = View.VISIBLE
+                binding.tbMain.tvCartNo.text = it.toString()
             }
         })
-        clCart.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@CategoryBasedProductsActivity, CartActivity::class.java)
-            startActivity(intent)
-        })
+
 
     }
 
-    private fun initRecyclerViewForCategory(categoryResponse: List<String>) {
-        val recyclerview = findViewById<RecyclerView>(R.id.rvCategory)
-        // this creates a vertical layout Manager
-        recyclerview?.layoutManager =
-            LinearLayoutManager(
-                this@CategoryBasedProductsActivity,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-        val adapter = CategoryAdapter(
-            categoryResponse,
-            this@CategoryBasedProductsActivity,
-            this@CategoryBasedProductsActivity
-        )
-        // Setting the Adapter with the recyclerview
-        recyclerview?.adapter = adapter
-    }
+
 
     private fun intRecyclerView() {
-        rvMain.layoutManager = GridLayoutManager(this, 2)
+        binding.rvMain.layoutManager = GridLayoutManager(this, 2)
         pagingAdapter = CategorizedProductPagingAdapter(
             this@CategoryBasedProductsActivity,
             this@CategoryBasedProductsActivity
         )
-        rvMain.adapter = pagingAdapter
+        binding.rvMain.adapter = pagingAdapter
     }
 
 
-    private fun findView() {
-        clCart = findViewById(R.id.clCart)
-        tvCartNo = findViewById(R.id.tvCartNo)
-        rvMain = findViewById(R.id.rvMain)
-        tvEmpty = findViewById(R.id.tvEmpty)
-        tvToolbar = findViewById(R.id.tvToolbarTitle)
+    private fun initView() {
         if (intent.getStringExtra(Constant.CATEGORY_NAME)!!.toString().length <= 1) {
-            tvToolbar.text = "Products"
+            binding.tbMain.tvToolbarTitle.text = "Products"
         } else {
-            tvToolbar.text = intent.getStringExtra(Constant.CATEGORY_NAME)
+            binding.tbMain.tvToolbarTitle.text = intent.getStringExtra(Constant.CATEGORY_NAME)
         }
-        ivBack = findViewById(R.id.ivBack)
-        clSearch = findViewById(R.id.clSearch)
-        clSearch.setOnClickListener(View.OnClickListener {
+        binding.tbMain.clSearch.setOnClickListener(View.OnClickListener {
             startActivity(Intent(this@CategoryBasedProductsActivity, SearchActivity::class.java))
         })
-        ivBack.setOnClickListener(View.OnClickListener { finish() })
-        /*cvShort.setOnClickListener(View.OnClickListener {
-            ShortBottomSheet().show(supportFragmentManager, "short")
-        })*/
+        binding.tbMain.ivBack.setOnClickListener(View.OnClickListener { finish() })
+        binding.tbMain.clCart.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this@CategoryBasedProductsActivity, CartActivity::class.java)
+            startActivity(intent)
+        })
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -141,7 +101,7 @@ class CategoryBasedProductsActivity : AppCompatActivity(), CategoryView {
         }
     }
 
-    fun getItemClicked(productItem: DesiDataResponseSubListItem) {
+    override fun getItemClicked(productItem: DesiDataResponseSubListItem) {
         val intent = Intent(this@CategoryBasedProductsActivity, ProductActivity::class.java)
         intent.putExtra(
             Constant.IMAGE_URL,
@@ -160,7 +120,7 @@ class CategoryBasedProductsActivity : AppCompatActivity(), CategoryView {
 
 
     @OptIn(DelicateCoroutinesApi::class)
-    suspend fun addToCart(productItem: DesiDataResponseSubListItem,quantity:Int) {
+    override suspend fun addToCart(productItem: DesiDataResponseSubListItem, quantity: Int) {
 
         if (mainViewModel.insertToCart(
                 CartProduct(
@@ -193,15 +153,7 @@ class CategoryBasedProductsActivity : AppCompatActivity(), CategoryView {
         }
     }
 
-    override fun getCategoryClicked(categoryItem: String) {
-        mainViewModel.getCatBasedDesiProduct(
-            categoryItem
-        )
-            .observe(this, androidx.lifecycle.Observer {
-                pagingAdapter.submitData(lifecycle, it)
-            })
 
-    }
 
 }
 

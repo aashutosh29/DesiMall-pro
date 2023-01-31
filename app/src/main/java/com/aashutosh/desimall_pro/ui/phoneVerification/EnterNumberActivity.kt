@@ -54,21 +54,57 @@ class EnterNumberActivity : AppCompatActivity() {
             "phone" to "+9779860858540",
             "date" to dateFormat.format(date),
         )
-        db.collection("user").document("+9779860858540")
-            .set(createUser).addOnSuccessListener {
-                Toast.makeText(this, "Authorization Completed 🥳🥳", Toast.LENGTH_SHORT)
-                    .show()
-                sharedPrefHelper[Constant.VERIFIED_NUM] = true
-                sharedPrefHelper[Constant.PHONE_NUMBER] = "+9779860858540"
-                val intent = Intent(this, DetailsVerificationActivity::class.java)
-                startActivity(intent)
-                finish()
-            }.addOnFailureListener {
-                Toast.makeText(
-                    this,
-                    "User Not Created Retry Again",
-                    Toast.LENGTH_SHORT
-                ).show()
+        db.collection("user").whereEqualTo("phone", "+9779860858540")
+            .limit(1).get().addOnCompleteListener {
+                if (it.result.isEmpty) {
+                    db.collection("user").document("+9779860858540")
+                        .set(createUser).addOnSuccessListener {
+                            Toast.makeText(
+                                this, "Authorization Completed 🥳🥳", Toast.LENGTH_SHORT
+                            ).show()
+                            sharedPrefHelper[Constant.VERIFIED_NUM] = true
+                            sharedPrefHelper[Constant.PHONE_NUMBER] =
+                                "+9779860858540"
+
+                            val i = Intent(
+                                this@EnterNumberActivity,
+                                DetailsVerificationActivity::class.java
+                            )
+                            i.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                            i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                            startActivity(i)
+                            finish()
+                        }.addOnFailureListener {
+
+                            Toast.makeText(
+                                this, "User Not Created Retry Again", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                } else {
+                    sharedPrefHelper[Constant.VERIFIED_NUM] = true
+                    sharedPrefHelper[Constant.EMAIL] =
+                        it.result.documents[0].data!!["email"].toString()
+                    sharedPrefHelper[Constant.ZIP] =
+                        it.result.documents[0].data!!["zip"].toString()
+                    sharedPrefHelper[Constant.NAME] =
+                        it.result.documents[0].data!!["name"].toString()
+                    sharedPrefHelper[Constant.ADDRESS] =
+                        it.result.documents[0].data!!["location"].toString()
+                    sharedPrefHelper[Constant.LAND_MARK] =
+                        it.result.documents[0].data!!["landmark"].toString()
+                    sharedPrefHelper[Constant.PHOTO] =
+                        it.result.documents[0].data!!["photo"].toString()
+                    sharedPrefHelper[Constant.DETAIlS_VERIFED] = true
+
+                    val i = Intent(
+                        this@EnterNumberActivity, HomeActivity::class.java
+                    )
+                    i.flags =
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(i)
+
+                }
             }
     }
 

@@ -1,0 +1,18 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvUnreadChats"
+        android:layout_width="@dimen/_15sdp"
+        android:layout_height="@dimen/_15sdp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:background="@drawable/cart_text_bg"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_7sdp"
+        android:visibility="visible"
+        tools:text="5" />
+</FrameLayout>

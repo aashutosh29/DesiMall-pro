@@ -61,4 +61,5 @@
     <string name="pick_multi_limit">You have more than %1$d images selected…</string>
     <string name="enter_your_detail_address">Enter Your Detail Address</string>
     <string name="enter_your_landmark_address">Enter your landmark address</string>
+    <string name="title_activity_category">CategoryActivity</string>
 </resources>

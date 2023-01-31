@@ -33,9 +33,8 @@
                 android:id="@+id/tvProduct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_4sdp"
                 android:text="A"
-                android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/md_red_600"
                 android:textSize="@dimen/_24sdp"
                 android:textStyle="bold" />

@@ -20,17 +20,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.ProductCategoryAdapter
 import com.aashutosh.desimall_pro.repository.ProductRepository
+import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.categoryWithItsProduct.CategoryBasedProductsActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 
-class CategoryFragment : Fragment() {
-    lateinit var repository: ProductRepository
+class CategoryFragment : Fragment(), CategoryView {
     lateinit var mainViewModel: StoreViewModel
     lateinit var rvMain: RecyclerView
     lateinit var etSearch: EditText
@@ -74,22 +75,32 @@ class CategoryFragment : Fragment() {
         rvMain.adapter = adapter
     }
 
-    fun getCategoryClicked(categoryItem: String) {
-        val intent = Intent(context, CategoryBasedProductsActivity::class.java)
+    override fun getCategoryClicked(categoryItem: String) {
+        val intent = Intent(requireContext(), CategoryBasedProductsActivity::class.java)
 
         intent.putExtra(
             Constant.CATEGORY_NAME, categoryItem
         )
-
+        intent.putExtra(
+            Constant.QUERY_KEY, "subcategory_name"
+        )
+        intent.putExtra(
+            Constant.QUERY_VALUE, categoryItem
+        )
         startActivity(intent)
 
     }
 
+    override fun getCategoryClicked2(categoryItem: String, tvLogo: TextView) {
+        TODO("Not yet implemented")
+    }
 
+
+    @OptIn(DelicateCoroutinesApi::class)
     private fun fetchDataFromServer() {
         mainViewModel = ViewModelProvider(requireActivity())[StoreViewModel::class.java]
         mainViewModel.categoryItem.observe(viewLifecycleOwner, Observer {
-            it?.let { it1 -> initCategoryRecyclerView(it) }
+            it?.let { initCategoryRecyclerView(it) }
             initSearch()
             Log.d(ContentValues.TAG, "fetchDataFromServer: ${it.toString()}");
 

@@ -15,22 +15,24 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
-import com.aashutosh.desimall_pro.ui.categoryWithItsProduct.CategoryBasedProductsActivity
+import com.aashutosh.desimall_pro.ui.categoryWithItsProduct.CategoryBasedProductView
 import com.aashutosh.desimall_pro.utils.Constant
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class CategorizedProductPagingAdapter(
     private val context: Context,
-    private val categoryBasedProductsActivity: CategoryBasedProductsActivity
+    private val categoryBasedProductsView: CategoryBasedProductView
 ) :
     PagingDataAdapter<DesiDataResponseSubListItem, CategorizedProductPagingAdapter.ViewHolder>(
         COMPARATOR
     ) {
 
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var quantity = 1
@@ -56,7 +58,7 @@ class CategorizedProductPagingAdapter(
             holder.tvDiscountPercent.text = "$discount % off"
             holder.tvName.text = productItem.sku_name
             holder.clMain.setOnClickListener(View.OnClickListener {
-                categoryBasedProductsActivity.getItemClicked(productItem)
+                categoryBasedProductsView.getItemClicked(productItem)
             })
             holder.ivPlus.setOnClickListener(View.OnClickListener {
                 if (quantity < 100) {
@@ -73,13 +75,14 @@ class CategorizedProductPagingAdapter(
             })
             holder.ivAddToCart.setOnClickListener(View.OnClickListener {
                 GlobalScope.launch(Dispatchers.Main) {
-                    categoryBasedProductsActivity.addToCart(productItem,quantity)
+                    categoryBasedProductsView.addToCart(productItem, quantity)
                     holder.tvQuantity.text = "1"
                     quantity = 1
                 }
             })
         }
     }
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

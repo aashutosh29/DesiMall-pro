@@ -19,15 +19,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.aashutosh.desimall_pro.R
+import com.aashutosh.desimall_pro.adapter.CategoryAdapter
 import com.aashutosh.desimall_pro.adapter.SearchProductAdapter
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
+import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.bottomSheet.ShortBottomSheet
+import com.aashutosh.desimall_pro.ui.categoryActivity.CategoryActivity
 import com.aashutosh.desimall_pro.ui.productScreen.ProductActivity
 import com.aashutosh.desimall_pro.utils.Constant
+import com.aashutosh.desimall_pro.utils.Constant.Companion.alphas
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -37,7 +42,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), CategoryView {
     private lateinit var mainViewModel: StoreViewModel
     lateinit var pagingAdapter: SearchProductAdapter
     lateinit var viewpager: ViewPager
@@ -52,6 +57,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         initView()
+        initRecyclerViewForCategory(alphas())
         intRecyclerView()
 
     }
@@ -69,6 +75,32 @@ class SearchActivity : AppCompatActivity() {
         transaction.replace(R.id.container, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun getCategoryClicked(categoryItem: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getCategoryClicked2(categoryItem: String, tvLogo: TextView) {
+        val intent = Intent(this@SearchActivity, CategoryActivity::class.java)
+
+        intent.putExtra(
+            Constant.CATEGORY_NAME, categoryItem
+        )
+
+        startActivity(intent)
+
+    }
+
+    private fun initRecyclerViewForCategory(categoryResponse: List<String>) {
+        val recyclerview = this@SearchActivity.findViewById<RecyclerView>(R.id.rvCategory)
+        // this creates a vertical layout Manager
+        recyclerview?.layoutManager =
+            LinearLayoutManager(this@SearchActivity, LinearLayoutManager.HORIZONTAL, false)
+        val adapter =
+            CategoryAdapter(categoryResponse, this@SearchActivity, "nothing")
+        // Setting the Adapter with the recyclerview
+        recyclerview?.adapter = adapter
     }
 
     private fun initView() {

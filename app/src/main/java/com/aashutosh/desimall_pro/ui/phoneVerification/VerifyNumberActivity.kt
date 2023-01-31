@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.databinding.ActivityVerifyNumberBinding
+import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.utils.Constant.Companion.phoneNumberKey
@@ -20,6 +21,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 class VerifyNumberActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVerifyNumberBinding
@@ -189,30 +191,67 @@ class VerifyNumberActivity : AppCompatActivity() {
                         "phone" to task.result?.user?.phoneNumber,
                         "date" to dateFormat.format(date),
                     )
-                    db.collection("user").document(task.result?.user?.phoneNumber!!)
-                        .set(createUser).addOnSuccessListener {
-                            Toast.makeText(this, "Authorization Completed 🥳🥳", Toast.LENGTH_SHORT)
-                                .show()
-                            sharedPrefHelper[Constant.VERIFIED_NUM] = true
-                            sharedPrefHelper[Constant.PHONE_NUMBER] =
-                                task.result?.user?.phoneNumber?.trim()
-                            progressDialog.dismiss()
-                            val i = Intent(
-                                this@VerifyNumberActivity,
-                                DetailsVerificationActivity::class.java
-                            )
-                            i.flags =
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                            i.putExtra(Constant.VERIFY_USER_LOCATION, true)
-                            startActivity(i)
-                            finish()
-                        }.addOnFailureListener {
-                            progressDialog.dismiss()
-                            Toast.makeText(
-                                this,
-                                "User Not Created Retry Again",
-                                Toast.LENGTH_SHORT
-                            ).show()
+
+
+
+                    db.collection("user").whereEqualTo("phone", task.result?.user?.phoneNumber!!)
+                        .limit(1).get().addOnCompleteListener {
+                            if (it.result.isEmpty) {
+                                db.collection("user").document(task.result?.user?.phoneNumber!!)
+                                    .set(createUser).addOnSuccessListener {
+                                        Toast.makeText(
+                                            this, "Authorization Completed 🥳🥳", Toast.LENGTH_SHORT
+                                        ).show()
+                                        sharedPrefHelper[Constant.VERIFIED_NUM] = true
+                                        sharedPrefHelper[Constant.PHONE_NUMBER] =
+                                            task.result?.user?.phoneNumber?.trim()
+                                        progressDialog.dismiss()
+                                        val i = Intent(
+                                            this@VerifyNumberActivity,
+                                            DetailsVerificationActivity::class.java
+                                        )
+                                        i.flags =
+                                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                                        i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                                        startActivity(i)
+                                        finish()
+                                    }.addOnFailureListener {
+                                        progressDialog.dismiss()
+                                        Toast.makeText(
+                                            this, "User Not Created Retry Again", Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                            } else {
+                                sharedPrefHelper[Constant.PHONE_NUMBER] =
+                                    task.result?.user?.phoneNumber?.trim()
+                                sharedPrefHelper[Constant.VERIFIED_NUM] = true
+                                progressDialog.dismiss()
+                                sharedPrefHelper[Constant.EMAIL] =
+                                    it.result.documents[0].data!!["email"].toString()
+                                sharedPrefHelper[Constant.ZIP] =
+                                    it.result.documents[0].data!!["zip"].toString()
+                                sharedPrefHelper[Constant.NAME] =
+                                    it.result.documents[0].data!!["name"].toString()
+                                sharedPrefHelper[Constant.ADDRESS] =
+                                    it.result.documents[0].data!!["location"].toString()
+                                sharedPrefHelper[Constant.LAND_MARK] =
+                                    it.result.documents[0].data!!["landmark"].toString()
+                                sharedPrefHelper[Constant.PHOTO] =
+                                    it.result.documents[0].data!!["photo"].toString()
+                                sharedPrefHelper[Constant.DETAIlS_VERIFED] = true
+
+                                val i = Intent(
+                                    this@VerifyNumberActivity, HomeActivity::class.java
+                                )
+                                i.flags =
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(i)
+
+
+                            }
+                        }
+                        .addOnFailureListener {
+                            Log.d(TAG, "signInWithPhoneAuthCredential: $it")
                         }
 
 

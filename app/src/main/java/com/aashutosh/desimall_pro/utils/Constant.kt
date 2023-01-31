@@ -19,9 +19,12 @@ class Constant {
 
 
         const val ADDRESS = "address"
+        const val PRODUCT = "product"
+        const val CATEGORY = "category"
         const val LAND_MARK = "landmark"
 
         const val LOCATION_CHANGED = "location_changed"
+
         //java
         const val WEB = "web"
         const val APP_NAME = "app_name"
@@ -62,6 +65,8 @@ class Constant {
         const val LOGIN = "user_login"
         const val IS_NOTIFICATION = "is_notification"
         const val CATEGORY_NAME = "category_name"
+        const val QUERY_KEY = "query_key"
+        const val QUERY_VALUE = "query_value"
         const val ID = "id"
         const val IS_VIEW_ALL = "is_view_all"
         const val PRODUCT_PRICE = "product_price"

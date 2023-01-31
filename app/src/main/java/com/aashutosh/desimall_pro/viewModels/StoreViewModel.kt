@@ -56,9 +56,13 @@ class StoreViewModel @Inject constructor(private val repository: ProductReposito
         repository.getProductDetails(productId);
     }
 
-    suspend fun getDesiProduct(branchCode: Int, locationChanged: Boolean) {
-        repository.desiProduct(branchCode, locationChanged)
+    suspend fun getDesiProduct(branchCode: Int): Boolean {
+        return repository.desiProduct(branchCode)
+    }
 
+
+    suspend fun allCategory(): List<DesiCategory> {
+        return repository.allCat()
     }
 
 
@@ -66,14 +70,16 @@ class StoreViewModel @Inject constructor(private val repository: ProductReposito
         return repository.getPagingProduct(productId).cachedIn(viewModelScope)
     }
 
-    suspend fun allCategory(): List<DesiCategory> {
-        return repository.allCat()
-    }
-
 
     fun getCatBasedDesiProduct(value: String): LiveData<PagingData<DesiDataResponseSubListItem>> {
 
         return repository.getDesiCatProduct(value).cachedIn(viewModelScope)
+    }
+
+    fun getKeyValueBasedProduct(
+        key: String, value: String
+    ): LiveData<PagingData<DesiDataResponseSubListItem>> {
+        return repository.getKeyValueProduct(key = key, value = value).cachedIn(viewModelScope)
     }
 
 
@@ -95,12 +101,16 @@ class StoreViewModel @Inject constructor(private val repository: ProductReposito
         return repository.getCartCount()
     }
 
-    suspend fun getAllDesiProduct() {
-        return repository.getAllList(true)
+    suspend fun getFilteredCategoryFromProduct(): Boolean {
+        return repository.filterCategoryFormProduct()
     }
 
-    suspend fun  getBarCodeBasedItem(barcode:String){
+    suspend fun getBarCodeBasedItem(barcode: String) {
         repository.getBarCodeProduct(barcode);
+    }
+
+    suspend fun getIdBasedProduct(sku: String): DesiDataResponseSubListItem {
+        return repository.getProductById(sku)
     }
 
 

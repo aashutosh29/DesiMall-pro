@@ -51,7 +51,7 @@ interface CDSService {
     suspend fun getDesiProduct(
         @Query("TokenId") id: String,
         @Query("Branchcode") branchCode: String
-    ): DesiDataResponse
+    ): Response<DesiDataResponse>
 
     @POST("orders")
     suspend fun createOrder(@Body params: RequestBody): Response<Any>

@@ -15,6 +15,7 @@ import com.aashutosh.desimall_pro.models.category.CategoryResponse
 import com.aashutosh.desimall_pro.models.desimallApi.DesiCategory
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
 import com.aashutosh.desimall_pro.models.product.Products
+import com.aashutosh.desimall_pro.paging.KeyValuePagingSource
 import com.aashutosh.desimall_pro.paging.ProductPagingSource
 import com.aashutosh.desimall_pro.sealed.StateResponse
 import com.google.firebase.firestore.ktx.firestore
@@ -91,11 +92,13 @@ class ProductRepository @Inject constructor(
         ProductPagingSource(databaseHelper, cat, false)
     }).liveData
 
+    fun getKeyValueProduct(
+        key: String,
+        value: String
+    ) = Pager(config = PagingConfig(pageSize = 10, maxSize = 100), pagingSourceFactory = {
+        KeyValuePagingSource(databaseHelper = databaseHelper, key = key, value = value)
+    }).liveData
 
-    suspend fun get5Product(catId: Int) {
-        val result = cdsService.getCategoryBasedProduct5(page = 15, category = catId)
-        productListLiveData.postValue(result.body())
-    }
 
     suspend fun getProductDetails(productId: Int) {
         try {
@@ -106,36 +109,34 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun getAllList(isFirst: Boolean) {
-        if (isFirst) {
-            val productList = databaseHelper.allProduct().getAllList()
-            val catList: ArrayList<String> = ArrayList()
-            for (product in productList) {
-                catList.add(product.subcategory_name)
-            }
-            val catE: ArrayList<DesiCategory> = ArrayList()
-            val catC = catList.distinct()
-            for (cat in catC) {
-                catE.add(DesiCategory(cat))
-
-            }
-            databaseHelper.allProduct().addDesiCategory(catE.sortedBy { it.name })
-            //categoryItem.postValue(catList.distinct() as ArrayList<String>)
+    suspend fun filterCategoryFormProduct(): Boolean {
+        val productList = databaseHelper.allProduct().getAllList()
+        val catList: ArrayList<String> = ArrayList()
+        for (product in productList) {
+            catList.add(product.subcategory_name)
         }
+        val catE: ArrayList<DesiCategory> = ArrayList()
+        val catC = catList.distinct()
+        for (cat in catC) {
+            catE.add(DesiCategory(cat))
+        }
+        return databaseHelper.allProduct().addDesiCategory(catE.sortedBy { it.name })
     }
 
-    suspend fun addCat(cat: List<DesiCategory>) {
-        databaseHelper.allProduct().addDesiCategory(cat)
-    }
 
-    suspend fun desiProduct(branchCode: Int, locationChanged: Boolean) {
-        try {
+    suspend fun desiProduct(branchCode: Int): Boolean {
+        return try {
             val result = cdsService.getDesiProduct("DSM", branchCode.toString())
-            databaseHelper.allProduct().addDesiProduct(result[0])
+            if (result.isSuccessful) {
+                return databaseHelper.allProduct().addDesiProduct(result.body()!![0])
+            } else {
+                false
+            }
+
         } catch (e: Exception) {
             Log.d(TAG, "getDesiProduct: ")
+            false
         }
-
 
     }
 
@@ -182,6 +183,11 @@ class ProductRepository @Inject constructor(
         }
 
 
+    }
+
+    suspend fun getProductById(sku: String): DesiDataResponseSubListItem {
+        val result = databaseHelper.allProduct().getProductBySku(sku)
+        return result[0]
     }
 
     suspend fun getDummyCart(): List<CartProduct> {
