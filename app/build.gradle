@@ -12,13 +12,15 @@ android {
     namespace 'com.aashutosh.desimall_pro'
     compileSdk 33
 
-
+    lintOptions {
+        checkReleaseBuilds false
+    }
     defaultConfig {
-        applicationId "com.jaipur.vaishali.desimall"
+        applicationId "com.desimall.live"
         minSdk 26
         targetSdk 33
-        versionCode 6
-        versionName "2.0"
+        versionCode 10
+        versionName "2.04"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -28,11 +30,15 @@ android {
 
     buildTypes {
         debug {
+            debuggable false
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
+            debuggable true
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -48,15 +54,15 @@ android {
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //coroutine
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -107,9 +113,9 @@ dependencies {
 
     //java firebase
 
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.2'
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
-    implementation 'com.google.android.gms:play-services-auth:20.4.0'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
 
@@ -125,8 +131,6 @@ dependencies {
 
     //country code picker
     implementation 'com.hbb20:ccp:2.6.0'
-    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
-
     implementation 'androidx.browser:browser:1.4.0'
 
 

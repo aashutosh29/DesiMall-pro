@@ -5,12 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.aashutosh.desimall_pro.R
+import com.aashutosh.desimall_pro.models.Ads
+import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
 import com.bumptech.glide.Glide
 
-class ImageSlideAdapter(private val context: Context, private var imageList: ArrayList<String>) :
+class ImageSlideAdapter(
+    private val homeFragment: HomeFragment,
+    private val context: Context,
+    private var imageList: ArrayList<Ads>
+) :
     PagerAdapter() {
     override fun getCount(): Int {
         return imageList.size
@@ -26,8 +33,12 @@ class ImageSlideAdapter(private val context: Context, private var imageList: Arr
                 R.layout.image_slider_item, null
             )
         val ivImages = view.findViewById<ImageView>(R.id.iv_image)
+        val clMain = view.findViewById<ConstraintLayout>(R.id.clMain)
+        clMain.setOnClickListener(View.OnClickListener {
+            homeFragment.getAdsClicked(imageList[position])
+        })
 
-        imageList[position].let {
+        imageList[position].image.let {
             Glide.with(context)
                 .load(it)
                 .error(R.drawable.app_icon)

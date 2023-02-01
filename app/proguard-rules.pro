@@ -16,6 +16,10 @@
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
 
+-keep class com.aashutosh.desimall_pro.database.** { *; }
+-keep class com.aashutosh.desimall_pro.models.**{*;}
+-keep class * extends androidx.room.RoomDatabase
+-dontwarn androidx.room.paging.**
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile

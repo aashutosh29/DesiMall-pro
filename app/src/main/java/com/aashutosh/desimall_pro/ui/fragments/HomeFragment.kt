@@ -11,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,6 +41,7 @@ import com.aashutosh.desimall_pro.utils.Constant.Companion.autoScroll
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import com.bumptech.glide.Glide
 import com.drakeet.multitype.MultiTypeAdapter
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -90,7 +90,7 @@ class HomeFragment : Fragment(), CategoryView {
                 .load(sharedPrefHelper[Constant.PHOTO, ""])
                 .error(R.drawable.ic_profile)
                 .placeholder(R.drawable.ic_profile)
-                .into(binding.ivProfile);
+                .into(binding.ivProfile)
         }
         if (sharedPrefHelper[Constant.NAME, ""] != "") {
             binding.tvLogin.text = sharedPrefHelper[Constant.NAME, ""]
@@ -161,20 +161,54 @@ class HomeFragment : Fragment(), CategoryView {
 
 
     private fun initSlider() {
-        mainViewModel.bannerList.observe(viewLifecycleOwner, Observer {
-            if (it.isEmpty()) {
-                binding.ivDefaultImage.visibility = View.VISIBLE
-            } else {
-                binding.ivDefaultImage.visibility = View.INVISIBLE
-                it.let {
-                    viewPagerAdapter =
-                        ImageSlideAdapter(requireContext(), it as ArrayList<String>)
-                    binding.viewpager.adapter = viewPagerAdapter
-                    binding.viewpager.autoScroll(3000)
-                    binding.indicator.setViewPager(binding.viewpager)
+
+        val db = Firebase.firestore
+        var ads: Ads
+        val adsArrayList: ArrayList<Ads> = arrayListOf()
+        val filteredCatList: ArrayList<Ads> = arrayListOf()
+        db.collection("banner")
+            .orderBy("filter", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                binding.rvAds.visibility = View.VISIBLE
+                for (document in result) {
+                    ads = Ads(
+                        id = document.id,
+                        image = document.data["image"].toString(),
+                        name = document.data["name"].toString(),
+                        type = document.data["type"].toString(),
+                        query_key = document.data["query_key"].toString(),
+                        query_value = document.data["query_value"].toString(),
+                        branch_code = document.data["branch_code"].toString(),
+                        filter = document.data["filter"].toString()
+
+                    )
+                    adsArrayList.add(ads)
                 }
+                for (cat in adsArrayList) {
+                    if (cat.branch_code == sharedPrefHelper[Constant.BRANCH_CODE, ""]) {
+                        filteredCatList.add(cat)
+                    }
+                }
+
+                if (filteredCatList.isEmpty()) {
+                    binding.ivDefaultImage.visibility = View.VISIBLE
+                } else {
+                    binding.ivDefaultImage.visibility = View.INVISIBLE
+                    filteredCatList.let {
+                        viewPagerAdapter =
+                            ImageSlideAdapter(this, requireContext(), filteredCatList)
+                        binding.viewpager.adapter = viewPagerAdapter
+                        binding.viewpager.autoScroll(3000)
+                        binding.indicator.setViewPager(binding.viewpager)
+                    }
+                }
+            }.addOnFailureListener { exception ->
+                binding.rvAds.visibility = View.INVISIBLE
+                Toast.makeText(requireContext(), "Error Loading $exception", Toast.LENGTH_SHORT)
+                    .show()
             }
-        })
+
 
     }
 
@@ -196,6 +230,7 @@ class HomeFragment : Fragment(), CategoryView {
         val adsArrayList: ArrayList<Ads> = arrayListOf()
         val filteredCatList: ArrayList<Ads> = arrayListOf()
         db.collection("ads")
+            .orderBy("filter", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 binding.rvAds.visibility = View.VISIBLE
@@ -207,12 +242,14 @@ class HomeFragment : Fragment(), CategoryView {
                         type = document.data["type"].toString(),
                         query_key = document.data["query_key"].toString(),
                         query_value = document.data["query_value"].toString(),
-                        category_id = document.data["cat"].toString()
+                        branch_code = document.data["branch_code"].toString(),
+                        filter = document.data["filter"].toString()
+
                     )
                     adsArrayList.add(ads)
                 }
                 for (cat in adsArrayList) {
-                    if (cat.category_id == sharedPrefHelper[Constant.BRANCH_CODE, ""]) {
+                    if (cat.branch_code == sharedPrefHelper[Constant.BRANCH_CODE, ""]) {
                         filteredCatList.add(cat)
                     }
                 }

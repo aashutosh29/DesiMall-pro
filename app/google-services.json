@@ -27,8 +27,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_id": "765821840528-541do9po9u4oh9ak5l20mshs53pkap8q.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "765821840528-l80mlpq4vi5thvplkcdb7k6fv6fr20f3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aashutosh.DesiMallPro"
+              }
             }
           ]
         }
@@ -43,6 +50,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "765821840528-nli7hpua69s0amgl7bqea27mqmo2nrtd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.desimall.live",
+            "certificate_hash": "84b16db0d8f464b27828d7f618fec80df7b4972b"
+          }
+        },
+        {
           "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -56,8 +71,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_id": "765821840528-541do9po9u4oh9ak5l20mshs53pkap8q.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "765821840528-l80mlpq4vi5thvplkcdb7k6fv6fr20f3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aashutosh.DesiMallPro"
+              }
             }
           ]
         }
@@ -85,8 +107,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_id": "765821840528-541do9po9u4oh9ak5l20mshs53pkap8q.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "765821840528-l80mlpq4vi5thvplkcdb7k6fv6fr20f3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aashutosh.DesiMallPro"
+              }
             }
           ]
         }
@@ -122,8 +151,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_id": "765821840528-541do9po9u4oh9ak5l20mshs53pkap8q.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "765821840528-l80mlpq4vi5thvplkcdb7k6fv6fr20f3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aashutosh.DesiMallPro"
+              }
             }
           ]
         }
@@ -151,37 +187,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
+              "client_id": "765821840528-541do9po9u4oh9ak5l20mshs53pkap8q.apps.googleusercontent.com",
               "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:765821840528:android:f137c765e6591975c13c15",
-        "android_client_info": {
-          "package_name": "com.test.google"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC2F7iZYrRLm0RxsxO6Qti5fyitYTdgpP0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
+            },
             {
-              "client_id": "765821840528-euhdtdt47glvq164outvi0vl0pq4kjtv.apps.googleusercontent.com",
-              "client_type": 3
+              "client_id": "765821840528-l80mlpq4vi5thvplkcdb7k6fv6fr20f3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aashutosh.DesiMallPro"
+              }
             }
           ]
         }

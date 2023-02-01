@@ -18,7 +18,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.aashutosh.desimall_pro.R
-import com.aashutosh.desimall_pro.adapter.ImageSlideAdapter
+import com.aashutosh.desimall_pro.adapter.ProductImageSlidingAdapter
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.ui.cartActivity.CartActivity
 import com.aashutosh.desimall_pro.utils.Constant
@@ -45,7 +45,7 @@ class ProductActivity : AppCompatActivity() {
 
     @BindView(R.id.ivBack)
     lateinit var ivBack: ImageView
-    lateinit var viewPagerAdapter: ImageSlideAdapter
+    lateinit var viewPagerAdapter: ProductImageSlidingAdapter
     lateinit var indicator: CircleIndicator
 
     @BindView(R.id.viewpager)
@@ -231,7 +231,7 @@ class ProductActivity : AppCompatActivity() {
         } else {
             ivDefaultImage.visibility = View.INVISIBLE
             images.let {
-                viewPagerAdapter = ImageSlideAdapter(this, it)
+                viewPagerAdapter = ProductImageSlidingAdapter(this, it)
                 viewpager.adapter = viewPagerAdapter
                 indicator = findViewById<CircleIndicator>(R.id.indicator)
                 indicator.setViewPager(viewpager)

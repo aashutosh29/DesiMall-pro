@@ -7,6 +7,7 @@ data class Ads(
     val type: String,
     val query_key: String,
     val query_value: String,
-    val category_id:String
+    val branch_code:String,
+    val filter: String
 
 )
