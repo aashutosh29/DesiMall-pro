@@ -9,17 +9,16 @@ import com.facebook.bolts.Task.Companion.delay
 
 class KeyValuePagingSource(
     private val databaseHelper: DatabaseHelper,
-    private val key: String,
-    private val value: String
+    private val query: String
 ) : PagingSource<Int, DesiDataResponseSubListItem>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DesiDataResponseSubListItem> {
         val page = params.key ?: 0
         return try {
             val query = SimpleSQLiteQuery(
-                "SELECT * FROM product WHERE $key = ? LIMIT ${params.loadSize} OFFSET ${(page * params.loadSize)}",
-                arrayOf(value.trim())
-
+                query + " LIMIT ${params.loadSize} OFFSET ${(page * params.loadSize)}"
             )
+
+
             val entities = databaseHelper.allProduct()
                 .getKeyValueBasedProduct(
                     query = query
@@ -51,3 +50,9 @@ class KeyValuePagingSource(
         }
     }
 }
+
+/* val query = SimpleSQLiteQuery(
+                "SELECT * FROM product WHERE $key = ? LIMIT ${params.loadSize} OFFSET ${(page * params.loadSize)}",
+                arrayOf(value.trim())
+
+            )*/

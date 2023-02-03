@@ -108,7 +108,7 @@ class DetailsVerificationActivity : AppCompatActivity() {
 
                 db.collection("user").document(sharedPrefHelper[Constant.PHONE_NUMBER])
                     .update(createUser as Map<String, Any>).addOnSuccessListener {
-                        sharedPrefHelper[Constant.DETAIlS_VERIFED] = true
+                        sharedPrefHelper[Constant.DETAILIlS_VERIFIED] = true
                         sharedPrefHelper[Constant.EMAIL] = binding.etEmail.text.toString()
                         sharedPrefHelper[Constant.ZIP] = binding.etPin.text.toString()
                         sharedPrefHelper[Constant.NAME] = binding.etName.text.toString()

@@ -83,7 +83,7 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
                     i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     i.putExtra(Constant.VERIFY_USER_LOCATION, true)
                     startActivity(i)
-                } else if (!sharedPrefHelper[Constant.DETAIlS_VERIFED, false]) {
+                } else if (!sharedPrefHelper[Constant.DETAILIlS_VERIFIED, false]) {
                     val i = Intent(this@ProceedToCheckOutActivity, DeliveryAddressActivity::class.java)
                     i.putExtra(Constant.VERIFY_USER_LOCATION, true)
                     i.putExtra(Constant.DETAILS, true)

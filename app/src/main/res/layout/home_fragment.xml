@@ -472,11 +472,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="@dimen/_12sdp"
                 android:id="@+id/rvAds"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_12sdp"
-                android:layout_marginVertical="@dimen/_12sdp"
+                android:layout_marginStart="@dimen/_18ssp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clBanner"
                 tools:itemCount="5" />

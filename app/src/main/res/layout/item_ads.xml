@@ -6,32 +6,36 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/_12sdp"
     android:background="@drawable/rounded_cl_search"
-    android:backgroundTint="@color/white">
+    android:backgroundTint="@color/md_red_600">
 
-    <ImageView
-        android:id="@+id/ivAds"
+    <androidx.cardview.widget.CardView
         android:layout_width="@dimen/_125sdp"
-        android:layout_height="@dimen/_125sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:src="@drawable/app_icon"
-        app:layout_constraintDimensionRatio="1:1"
+        android:id="@+id/cvAds"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="@dimen/_125sdp"
+        app:cardCornerRadius="@dimen/_4sdp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivAds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/app_icon"
+
+            />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/tvAds"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:background="@color/md_red_600"
         android:gravity="center"
-        android:paddingVertical="@dimen/_2sdp"
+        android:paddingVertical="@dimen/_1sdp"
         android:text="product"
-
         android:textColor="@color/white"
-        android:textSize="@dimen/_12ssp"
+        android:textSize="@dimen/_10ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivAds" />
+        app:layout_constraintTop_toBottomOf="@id/cvAds" />
 </androidx.constraintlayout.widget.ConstraintLayout>

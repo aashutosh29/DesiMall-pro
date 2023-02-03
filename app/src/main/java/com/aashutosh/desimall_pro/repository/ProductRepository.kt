@@ -93,10 +93,9 @@ class ProductRepository @Inject constructor(
     }).liveData
 
     fun getKeyValueProduct(
-        key: String,
-        value: String
+        query: String
     ) = Pager(config = PagingConfig(pageSize = 10, maxSize = 100), pagingSourceFactory = {
-        KeyValuePagingSource(databaseHelper = databaseHelper, key = key, value = value)
+        KeyValuePagingSource(databaseHelper = databaseHelper, query = query)
     }).liveData
 
 

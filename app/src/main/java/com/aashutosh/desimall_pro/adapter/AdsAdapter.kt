@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.databinding.ItemAdsBinding
-import com.aashutosh.desimall_pro.models.Ads
+import com.aashutosh.desimall_pro.models.Raw
 import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
 import com.bumptech.glide.Glide
 
 class AdsAdapter(
-    private val mList: List<Ads>,
+    private val mList: List<Raw>,
     private val context: Context,
     private val homeFragment: HomeFragment
 ) :
@@ -37,7 +37,11 @@ class AdsAdapter(
         holder.binding.clMain.setOnClickListener(View.OnClickListener {
             homeFragment.getAdsClicked(productItem)
         })
-        holder.binding.tvAds.text = productItem.name.trim()
+        if (productItem.name != "null" && productItem.name.isNotEmpty()) {
+            holder.binding.tvAds.text = productItem.name.trim()
+        } else {
+            holder.binding.tvAds.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int {

@@ -10,13 +10,14 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.models.Ads
+import com.aashutosh.desimall_pro.models.Raw
 import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
 import com.bumptech.glide.Glide
 
 class ImageSlideAdapter(
     private val homeFragment: HomeFragment,
     private val context: Context,
-    private var imageList: ArrayList<Ads>
+    private var imageList: ArrayList<Raw>
 ) :
     PagerAdapter() {
     override fun getCount(): Int {

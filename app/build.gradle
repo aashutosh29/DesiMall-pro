@@ -19,8 +19,8 @@ android {
         applicationId "com.desimall.live"
         minSdk 26
         targetSdk 33
-        versionCode 10
-        versionName "2.04"
+        versionCode 12
+        versionName "2.06"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -30,13 +30,12 @@ android {
 
     buildTypes {
         debug {
-            debuggable false
-            minifyEnabled true
-            shrinkResources true
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
-            debuggable true
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

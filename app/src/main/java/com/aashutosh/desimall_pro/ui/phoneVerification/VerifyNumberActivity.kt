@@ -238,7 +238,7 @@ class VerifyNumberActivity : AppCompatActivity() {
                                     it.result.documents[0].data!!["landmark"].toString()
                                 sharedPrefHelper[Constant.PHOTO] =
                                     it.result.documents[0].data!!["photo"].toString()
-                                sharedPrefHelper[Constant.DETAIlS_VERIFED] = true
+                                sharedPrefHelper[Constant.DETAILIlS_VERIFIED] = true
 
                                 val i = Intent(
                                     this@VerifyNumberActivity, HomeActivity::class.java

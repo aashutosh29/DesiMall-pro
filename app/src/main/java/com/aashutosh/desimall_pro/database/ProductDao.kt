@@ -77,7 +77,7 @@ interface ProductDao {
     ): List<DesiDataResponseSubListItem>
 
 
-    @Query("SELECT * FROM product where sku_name LIKE :search || '%'  LIMIT :limit OFFSET :offset")
+    @Query("SELECT * FROM product where sku_name LIKE '%' || :search || '%'  LIMIT :limit OFFSET :offset")
     suspend fun getSearchedProduct(
         limit: Int, offset: Int, search: String
     ): List<DesiDataResponseSubListItem>

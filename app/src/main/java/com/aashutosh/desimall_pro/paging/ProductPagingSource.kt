@@ -29,7 +29,11 @@ class ProductPagingSource(
 
 
                     val entities = databaseHelper.allProduct()
-                        .getSearchedProduct(params.loadSize, page * params.loadSize, value)
+                        .getSearchedProduct(
+                            params.loadSize,
+                            page * params.loadSize,
+                            value.uppercase().trim()
+                        )
                     if (page != 0) delay(100)
                     LoadResult.Page(
                         data = entities,

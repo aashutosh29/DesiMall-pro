@@ -77,9 +77,9 @@ class StoreViewModel @Inject constructor(private val repository: ProductReposito
     }
 
     fun getKeyValueBasedProduct(
-        key: String, value: String
+        query: String
     ): LiveData<PagingData<DesiDataResponseSubListItem>> {
-        return repository.getKeyValueProduct(key = key, value = value).cachedIn(viewModelScope)
+        return repository.getKeyValueProduct(query = query).cachedIn(viewModelScope)
     }
 
 

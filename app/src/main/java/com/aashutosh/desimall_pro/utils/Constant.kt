@@ -16,39 +16,22 @@ import java.text.DecimalFormat
 
 class Constant {
     companion object {
-
-
-        const val ADDRESS = "address"
-        const val PRODUCT = "product"
-        const val CATEGORY = "category"
-        const val LAND_MARK = "landmark"
-
-        const val LOCATION_CHANGED = "location_changed"
-
-        //java
-        const val WEB = "web"
-        const val APP_NAME = "app_name"
         const val URL = "URL"
         const val BRANCH_NAME = "branch_name"
         const val BRANCH_CODE = "2"
-        const val IS_FAV = "is_fav"
         const val DETAILS = "details"
         const val LOCATION = "location"
         const val ZIP = "zip"
         const val VERIFY_USER_LOCATION = "from_navigator"
         const val USER_SKIPPED = "user_skipped"
-        const val DETAIlS_VERIFED = "details_verified"
+        const val DETAILIlS_VERIFIED = "details_verified"
         const val PHONE_NUMBER = "verified_phone_number"
-        const val DOCUMENT = "document"
         const val LAT_LON = "lat_lon"
         const val LAT = "lat"
         const val LON = "LON"
         const val VERIFIED_LOCATION = "verified_location"
         const val VERIFIED_NUM = "verified_num"
-
         const val phoneNumberKey = "PhoneNumberKey"
-
-        const val FIRST_HOME = "first_home"
         const val MRP_PRICE = "mrp"
         const val CREATE = "create"
         const val CATEGORY_ID = "category_Id"
@@ -66,24 +49,33 @@ class Constant {
         const val IS_NOTIFICATION = "is_notification"
         const val CATEGORY_NAME = "category_name"
         const val QUERY_KEY = "query_key"
+        const val QUERY = "query"
         const val QUERY_VALUE = "query_value"
         const val ID = "id"
-        const val IS_VIEW_ALL = "is_view_all"
         const val PRODUCT_PRICE = "product_price"
         const val PRODUCT_NAME = "product_name"
         const val IMAGE_URL = "image_url"
         const val CLIENT_ID = "ck_32e46804bfe8c984b139a35b6d3e7b6893e43644"
         const val CLIENT_SECRET = "cs_8d6fa97258ec30c830f3f601e0b4b3d082778203"
         const val BASE_URL = "http://103.234.185.42:50/API/"
-        const val BASE_URL_2 = "https://fcm.googleapis.com/fcm/"
         const val DESCRIPTION = "description"
-
-
         const val ORDER_VERIFICATION_PENDING = "0"
-        const val ORDER_VERIFIED = "1"
-        const val ORDER_SHIPPING = "2"
-        const val ORDER_DELIVERED = "3"
+        const val ADDRESS = "address"
+        const val LAND_MARK = "land mark"
 
+
+        /*routing*/
+        const val ROUTE_HOME = "home"
+        const val ROUTE_CART = "cart"
+        const val ROUTE_NOTIFICATION = "notification"
+        const val ROUTE_PROFILE = "profile"
+        const val ROUTE_MY_DETAILS = "my_details"
+        const val ROUTE_DELIVERY_ADDRESS = "delivery_address"
+        const val ROUTE_SEARCH = "search"
+        const val ROUTE_CATEGORY = "category_page"
+        const val ROUTE_PRODUCT_LIST = "category"
+        const val ROUTE_PRODUCT = "product"
+        const val DEFAULT_BRANCH = "all"
 
         fun roundUpDecimal(number: Double): Double {
             val df = DecimalFormat("#,###,##0.00")

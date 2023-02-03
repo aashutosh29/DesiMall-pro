@@ -106,11 +106,9 @@ class CategoryActivity : AppCompatActivity(), CategoryView {
             Constant.CATEGORY_NAME, categoryItem
         )
         intent.putExtra(
-            Constant.QUERY_KEY, "subcategory_name"
+            Constant.QUERY, "SELECT * FROM product WHERE subcategory_name = '$categoryItem'"
         )
-        intent.putExtra(
-            Constant.QUERY_VALUE, categoryItem
-        )
+
         startActivity(intent)
 
     }

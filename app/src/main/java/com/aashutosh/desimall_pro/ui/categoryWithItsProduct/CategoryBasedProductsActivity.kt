@@ -42,8 +42,7 @@ class CategoryBasedProductsActivity : AppCompatActivity(), CategoryBasedProductV
             ViewModelProvider(this@CategoryBasedProductsActivity)[StoreViewModel::class.java]
         intRecyclerView()
         mainViewModel.getKeyValueBasedProduct(
-            key = intent.getStringExtra(Constant.QUERY_KEY)!!.toString(),
-            value = intent.getStringExtra(Constant.QUERY_VALUE)!!.toString()
+            query = intent.getStringExtra(Constant.QUERY)!!.toString(),
         )
             .observe(this, androidx.lifecycle.Observer {
                 pagingAdapter.submitData(lifecycle, it)

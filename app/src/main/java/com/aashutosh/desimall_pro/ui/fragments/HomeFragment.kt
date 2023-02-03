@@ -13,16 +13,13 @@ import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.AdsAdapter
-import com.aashutosh.desimall_pro.adapter.CategoryAdapter
 import com.aashutosh.desimall_pro.adapter.ImageSlideAdapter
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.databinding.HomeFragmentBinding
-import com.aashutosh.desimall_pro.models.Ads
 import com.aashutosh.desimall_pro.models.CartProduct
+import com.aashutosh.desimall_pro.models.Raw
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
 import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.HomeActivity
@@ -30,6 +27,7 @@ import com.aashutosh.desimall_pro.ui.barCodeActivity.BarCodeActivity
 import com.aashutosh.desimall_pro.ui.cartActivity.CartActivity
 import com.aashutosh.desimall_pro.ui.categoryActivity.CategoryActivity
 import com.aashutosh.desimall_pro.ui.categoryWithItsProduct.CategoryBasedProductsActivity
+import com.aashutosh.desimall_pro.ui.deliveryAddress.DeliveryAddressActivity
 import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
 import com.aashutosh.desimall_pro.ui.mapActivity.MapsActivity
 import com.aashutosh.desimall_pro.ui.myProfileActivity.MyProfileActivity
@@ -144,7 +142,7 @@ class HomeFragment : Fragment(), CategoryView {
                 i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 i.putExtra(Constant.VERIFY_USER_LOCATION, true)
                 startActivity(i)
-            } else if (!sharedPrefHelper[Constant.DETAIlS_VERIFED, false]) {
+            } else if (!sharedPrefHelper[Constant.DETAILIlS_VERIFIED, false]) {
                 val i = Intent(requireActivity(), DetailsVerificationActivity::class.java)
                 i.putExtra(Constant.VERIFY_USER_LOCATION, true)
                 i.putExtra(Constant.DETAILS, true)
@@ -163,30 +161,32 @@ class HomeFragment : Fragment(), CategoryView {
     private fun initSlider() {
 
         val db = Firebase.firestore
-        var ads: Ads
-        val adsArrayList: ArrayList<Ads> = arrayListOf()
-        val filteredCatList: ArrayList<Ads> = arrayListOf()
-        db.collection("banner")
-            .orderBy("filter", Query.Direction.DESCENDING)
+        var ads: Raw
+        val adsArrayList: ArrayList<Raw> = arrayListOf()
+        val filteredCatList: ArrayList<Raw> = arrayListOf()
+        db.collection("slider")
+            .orderBy("position", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 binding.rvAds.visibility = View.VISIBLE
                 for (document in result) {
-                    ads = Ads(
-                        id = document.id,
+                    ads = Raw(
                         image = document.data["image"].toString(),
                         name = document.data["name"].toString(),
                         type = document.data["type"].toString(),
-                        query_key = document.data["query_key"].toString(),
-                        query_value = document.data["query_value"].toString(),
+                        query = document.data["query"].toString(),
                         branch_code = document.data["branch_code"].toString(),
-                        filter = document.data["filter"].toString()
+                        position = document.data["position"].toString(),
+                        size = document.data["size"].toString()
 
                     )
                     adsArrayList.add(ads)
                 }
+
                 for (cat in adsArrayList) {
                     if (cat.branch_code == sharedPrefHelper[Constant.BRANCH_CODE, ""]) {
+                        filteredCatList.add(cat)
+                    } else if (cat.branch_code == Constant.DEFAULT_BRANCH) {
                         filteredCatList.add(cat)
                     }
                 }
@@ -212,44 +212,33 @@ class HomeFragment : Fragment(), CategoryView {
 
     }
 
-
-    private fun initRecyclerViewForCategory(categoryResponse: List<String>) {
-        val recyclerview = view?.findViewById<RecyclerView>(R.id.rvCategory)
-        // this creates a vertical layout Manager
-        recyclerview?.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val adapter =
-            context?.let { CategoryAdapter(categoryResponse, this@HomeFragment, "nothing") }
-        // Setting the Adapter with the recyclerview
-        recyclerview?.adapter = adapter
-    }
-
     private fun callDb() {
         val db = Firebase.firestore
-        var ads: Ads
-        val adsArrayList: ArrayList<Ads> = arrayListOf()
-        val filteredCatList: ArrayList<Ads> = arrayListOf()
-        db.collection("ads")
-            .orderBy("filter", Query.Direction.DESCENDING)
+        var ads: Raw
+        val adsArrayList: ArrayList<Raw> = arrayListOf()
+        val filteredCatList: ArrayList<Raw> = arrayListOf()
+        db.collection("raw")
+            .orderBy("position", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 binding.rvAds.visibility = View.VISIBLE
                 for (document in result) {
-                    ads = Ads(
-                        id = document.id,
+                    ads = Raw(
                         image = document.data["image"].toString(),
                         name = document.data["name"].toString(),
                         type = document.data["type"].toString(),
-                        query_key = document.data["query_key"].toString(),
-                        query_value = document.data["query_value"].toString(),
+                        query = document.data["query"].toString(),
                         branch_code = document.data["branch_code"].toString(),
-                        filter = document.data["filter"].toString()
+                        position = document.data["position"].toString(),
+                        size = document.data["size"].toString()
 
                     )
                     adsArrayList.add(ads)
                 }
                 for (cat in adsArrayList) {
                     if (cat.branch_code == sharedPrefHelper[Constant.BRANCH_CODE, ""]) {
+                        filteredCatList.add(cat)
+                    } else if (cat.branch_code == Constant.DEFAULT_BRANCH) {
                         filteredCatList.add(cat)
                     }
                 }
@@ -262,7 +251,7 @@ class HomeFragment : Fragment(), CategoryView {
             }
     }
 
-    private fun initAds(adsArrayList: ArrayList<Ads>) {
+    private fun initAds(adsArrayList: ArrayList<Raw>) {
         binding.rvAds.layoutManager =
             GridLayoutManager(context, 2)
         binding.rvAds.isNestedScrollingEnabled = false
@@ -351,43 +340,95 @@ class HomeFragment : Fragment(), CategoryView {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun getAdsClicked(ads: Ads) {
-        GlobalScope.launch {
-            if (ads.type == Constant.PRODUCT) {
-                val productItem: DesiDataResponseSubListItem =
-                    mainViewModel.getIdBasedProduct(ads.query_value)
-                val intent = Intent(context, ProductActivity::class.java)
-                intent.putExtra(
-                    Constant.IMAGE_URL,
-                    if (productItem.sku == null) " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png"
-                )
-                intent.putExtra(
-                    Constant.PRODUCT_NAME, productItem.sku_name
-                )
-                intent.putExtra(Constant.ID, productItem.sku.toInt())
-                Log.d(TAG, "getItemClicked: ${productItem.sku}")
-                intent.putExtra(Constant.PRODUCT_PRICE, productItem.variant_sale_price.toString())
-                intent.putExtra(Constant.MRP_PRICE, productItem.variant_mrp.toString())
-                intent.putExtra(Constant.DESCRIPTION, productItem.sku_description)
-                startActivity(intent)
+    fun getAdsClicked(ads: Raw) {
 
-            } else if (ads.type == Constant.CATEGORY) {
+        when (ads.type) {
+            Constant.ROUTE_PRODUCT -> {
+                GlobalScope.launch {
+                    val productItem: DesiDataResponseSubListItem =
+                        mainViewModel.getIdBasedProduct(ads.query)
+                    val intent = Intent(context, ProductActivity::class.java)
+                    intent.putExtra(
+                        Constant.IMAGE_URL,
+                        if (productItem.sku == null) " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png"
+                    )
+                    intent.putExtra(
+                        Constant.PRODUCT_NAME, productItem.sku_name
+                    )
+                    intent.putExtra(Constant.ID, productItem.sku.toInt())
+                    Log.d(TAG, "getItemClicked: ${productItem.sku}")
+                    intent.putExtra(
+                        Constant.PRODUCT_PRICE,
+                        productItem.variant_sale_price.toString()
+                    )
+                    intent.putExtra(Constant.MRP_PRICE, productItem.variant_mrp.toString())
+                    intent.putExtra(Constant.DESCRIPTION, productItem.sku_description)
+                    startActivity(intent)
+
+                }
+            }
+            Constant.ROUTE_PRODUCT_LIST -> {
                 val intent = Intent(requireContext(), CategoryBasedProductsActivity::class.java)
 
                 intent.putExtra(
                     Constant.CATEGORY_NAME, ads.name
                 )
                 intent.putExtra(
-                    Constant.QUERY_KEY, ads.query_key
+                    Constant.QUERY, ads.query
                 )
-                intent.putExtra(
-                    Constant.QUERY_VALUE, ads.query_value
-                )
+
 
                 startActivity(intent)
 
             }
+            Constant.ROUTE_CART -> {
+                val intent = Intent(context, CartActivity::class.java)
+                startActivity(intent)
+            }
+            Constant.ROUTE_MY_DETAILS -> {
+                if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
+                    val i = Intent(requireActivity(), EnterNumberActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(i)
+                } else if (!sharedPrefHelper[Constant.VERIFIED_LOCATION, false]) {
+                    val i = Intent(requireActivity(), MapsActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                    startActivity(i)
+                } else if (!sharedPrefHelper[Constant.DETAILIlS_VERIFIED, false]) {
+                    val i = Intent(requireActivity(), DetailsVerificationActivity::class.java)
+                    i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                    i.putExtra(Constant.DETAILS, true)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(i)
+                } else {
+                    val i = Intent(requireActivity(), MyProfileActivity::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(i)
+                }
+            }
+            Constant.ROUTE_DELIVERY_ADDRESS -> {
+                val intent = Intent(context, DeliveryAddressActivity::class.java)
+                startActivity(intent)
+
+            }
+            Constant.ROUTE_CATEGORY -> {
+                val intent = Intent(context, CategoryActivity::class.java)
+
+                intent.putExtra(
+                    Constant.CATEGORY_NAME, "A"
+                )
+
+                startActivity(intent)
+            }
+            Constant.ROUTE_SEARCH -> {
+                val intent = Intent(context, SearchActivity::class.java)
+                intent.putExtra(Constant.IS_SEARCH_FOCUS, true)
+                startActivity(intent)
+
+            }
         }
+
     }
 
 }
