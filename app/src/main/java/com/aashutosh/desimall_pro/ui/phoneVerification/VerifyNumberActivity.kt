@@ -60,6 +60,7 @@ class VerifyNumberActivity : AppCompatActivity() {
 
         binding.btnVerify.setOnClickListener {
             if (binding.etOtp.editText?.text.toString().isNotEmpty()) {
+                Log.d(TAG, "onCreate otp: ${binding.etOtp.editText?.text.toString()}")
                 binding.etOtp.clearFocus()
                 verifyVerificationCode(binding.etOtp.editText?.text.toString())
             } else {
@@ -69,9 +70,7 @@ class VerifyNumberActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnCancel.setOnClickListener {
-            returnToEnterNumberActivity()
-        }
+
 
 
         verificationCallbacks()

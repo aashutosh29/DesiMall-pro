@@ -6,67 +6,120 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        android:layout_margin="64dp"
-        android:src="@drawable/app_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/pbMain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clStoreDetails"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_32sdp"
-        android:layout_marginBottom="@dimen/_16sdp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/ivLogo">
+        android:layout_height="match_parent"
+        android:background="#FFF3E0">
 
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="Store Near You"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_18sdp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/tv2"
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pbMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_32sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            app:indicatorColor="@color/md_red_600"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivMobile" />
 
-        <TextView
-            android:id="@+id/tv2"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/ivDot"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Finding Store Near you"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_18sdp"
-            app:layout_constraintBottom_toTopOf="@id/tv3"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:src="@drawable/dotted"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintTop_toTopOf="parent "
+            app:layout_constraintWidth_percent="0.35" />
+
+        <ImageView
+            android:id="@+id/ivTopImg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/top_left"
+            app:layout_constraintHeight_percent="0.18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent "
+            app:layout_constraintWidth_percent="0.2" />
+
+        <ImageView
+            android:id="@+id/ivBottomLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/left_small_circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.04"
+            android:layout_margin="@dimen/_16sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.1" />
+
+        <ImageView
+            android:id="@+id/ivRightBottom"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/right_bottom_half_circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.18"
+            app:layout_constraintWidth_percent="0.2" />
+
+
+        <ImageView
+            android:id="@+id/ivMobile"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:src="@drawable/mobile_img"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFSNY"
+            app:layout_constraintWidth_percent="0.9" />
+
+        <View
+            android:id="@+id/vTopImgDivider"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivTopImg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivTopImg" />
 
         <TextView
-            android:id="@+id/tv3"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="We are redirecting you to the store now. "
+            android:id="@+id/tvFSNY"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
             android:textAlignment="center"
+            android:text="FINDING STORE NEAR YOU"
+            android:textAllCaps="true"
+            android:textSize="@dimen/_22sdp"
             android:textColor="@color/black"
-            android:textSize="@dimen/_18sdp"
-            android:visibility="gone"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vTopImgDivider"
+            app:layout_constraintWidth_percent="0.6" />
+
+
+        <TextView
+            android:id="@+id/tvWeb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:text="www.livedesimall.in"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <View
         android:id="@+id/vLine"
@@ -75,14 +128,5 @@
         app:layout_constraintHeight_percent="0.7"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/pbMain"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="@dimen/_32sdp"
-        app:indicatorColor="@color/md_red_600"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vLine" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -40,8 +40,6 @@ import kotlin.math.sqrt
 @AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
 class SplashActivity2 : AppCompatActivity(), LocationListener {
-    @BindView(R.id.ivLogo)
-    lateinit var ivLogo: ImageView
 
     @BindView(R.id.pbMain)
     lateinit var pbMain: LinearProgressIndicator
@@ -49,11 +47,9 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
     var storeList: MutableList<Store>? = null
     var alertDialog: AlertDialog? = null
 
-    @BindView(R.id.tv2)
-    lateinit var tv2: TextView
 
-    @BindView(R.id.clStoreDetails)
-    lateinit var clStoreDetails: ConstraintLayout
+
+
     var onStop = false
     var locationManager: LocationManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -400,7 +396,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 }
                 for (i in storeList.indices) {
                     if (minValue == storeList[i].distance) {
-                        clStoreDetails.visibility = View.VISIBLE
+
                         subscribeToTopic(
                             storeList[i].notificationTopic,
                             storeList[i].url,

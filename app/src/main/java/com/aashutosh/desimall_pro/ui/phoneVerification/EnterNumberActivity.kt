@@ -32,6 +32,7 @@ class EnterNumberActivity : AppCompatActivity() {
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(this)
         //validateNumberForTesting()
+
         binding.btnGetOtp.setOnClickListener {
             validateNumber()
         }
@@ -42,7 +43,11 @@ class EnterNumberActivity : AppCompatActivity() {
             i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(i)
         })
+
+
     }
+
+
 
     private fun validateNumberForTesting() {
 

@@ -62,11 +62,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
     List<Store> storeList;
     AlertDialog alertDialog;
 
-    @BindView(R.id.tv2)
-    TextView tv2;
 
-    @BindView(R.id.clStoreDetails)
-    ConstraintLayout clStoreDetails;
     boolean onStop = false;
 
     LocationManager locationManager;
@@ -366,7 +362,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
                 }
                 for (int i = 0; i < storeList.size(); i++) {
                     if (minValue == storeList.get(i).getDistance()) {
-                        clStoreDetails.setVisibility(View.VISIBLE);
+                       // clStoreDetails.setVisibility(View.VISIBLE);
                         subscribeToTopic(storeList.get(i).getNotificationTopic(), storeList.get(i).getUrl(), storeList.get(i).getName());
                         break;
                     }

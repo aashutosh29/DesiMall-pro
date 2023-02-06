@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/md_white_1000">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <!--<androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +60,26 @@
             android:textColor="@color/md_red_600"
             android:textSize="16sp" />
 
-    </RelativeLayout>
+    </RelativeLayout>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clOTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/one_time_verification">
+
+        <Button
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:id="@+id/btNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VERIFY"
+            android:layout_marginBottom="@dimen/_48sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </RelativeLayout>

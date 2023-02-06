@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:layout_width="match_parent"
+    android:background="@drawable/enter_otp">
 
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -14,8 +13,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_baseline_near_me_24"
-        android:tint="@color/md_red_600"
+        android:src="@drawable/pw_verify"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,9 +26,9 @@
         android:layout_margin="8dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="8dp"
-        android:text="Enter A OTP sent to your phone"
+        android:text="Enter OTP here"
         android:textAllCaps="true"
-        android:textColor="@color/md_red_600"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -40,7 +38,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/etOtp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -48,8 +45,8 @@
         android:layout_marginEnd="30dp"
         android:focusableInTouchMode="true"
         android:focusedByDefault="false"
-        android:hint="OTP"
-        android:textColorHint="@color/md_red_600"
+        android:hint="Enter OTP code here"
+        android:textColorHint="@color/md_grey_600"
         app:endIconMode="clear_text"
         app:errorEnabled="true"
         app:hintTextColor="@color/black"
@@ -65,42 +62,47 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnVerify"
-        style="@style/Widget.AppCompat.Button"
+    <TextView
+        android:id="@+id/tvDSWAO"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="30dp"
-        android:text="Verify"
-        android:textAllCaps="false"
+        android:text="Do not share OTP with anybody"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etOtp" />
 
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCancel"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnVerify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="8dp"
-        android:text="Cancel"
+        android:text="Verify"
+        app:layout_constraintEnd_toEndOf="@id/etOtp"
         android:textAllCaps="false"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnVerify"
-        app:layout_constraintEnd_toStartOf="@id/btnVerify"
-        app:layout_constraintTop_toBottomOf="@id/etOtp" />
+        app:layout_constraintStart_toStartOf="@id/etOtp"
+        app:layout_constraintTop_toBottomOf="@id/tvDSWAO" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintHeight_percent="0.36"
+        android:src="@drawable/fruits"
+        app:layout_constraintBottom_toTopOf="@id/tvSkip"
+        app:layout_constraintTop_toBottomOf="@id/btnVerify" />
+
 
     <TextView
         android:id="@+id/tvSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_12sdp"
-        android:text="Skip For Now"
-        android:visibility="invisible"
-        android:textColor="@color/md_red_600"
+        android:text="ENJOY THE FRESHNESS"
+        android:textColor="@color/white"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

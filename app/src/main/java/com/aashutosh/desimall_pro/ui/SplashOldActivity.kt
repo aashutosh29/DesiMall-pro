@@ -1,11 +1,15 @@
 package com.aashutosh.desimall_pro.ui
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.databinding.ActivityFastSplashBinding
 import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
@@ -17,6 +21,7 @@ import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -31,6 +36,7 @@ class SplashOldActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onStart() {
         super.onStart()
@@ -40,13 +46,17 @@ class SplashOldActivity : AppCompatActivity() {
         sharedPrefHelper[Constant.VERIFIED_LOCATION] = true
         mainViewModel =
             ViewModelProvider(this@SplashOldActivity)[StoreViewModel::class.java]
+
         if (sharedPrefHelper[Constant.BRANCH_CODE, ""] == intent.getStringExtra(Constant.BRANCH_CODE)
         ) {
             navigationalRoute()
         } else {
-            sharedPrefHelper[Constant.BRANCH_CODE] =
-                intent.getStringExtra(Constant.BRANCH_CODE)
-            binding.clNewLocation.visibility = View.VISIBLE
+            if (intent.getStringExtra(Constant.BRANCH_CODE) != null) {
+                sharedPrefHelper[Constant.BRANCH_CODE] =
+                    intent.getStringExtra(Constant.BRANCH_CODE)
+
+            }
+            binding.tvLBF.typeWrite(this, "LOADING BEST OFFERS...", 65L)
             GlobalScope.launch {
                 if (mainViewModel.getDesiProduct(
                         intent.getStringExtra(Constant.BRANCH_CODE)!!.toInt(),
@@ -57,6 +67,8 @@ class SplashOldActivity : AppCompatActivity() {
                     }
                 }
             }
+            // binding.clNewLocation.visibility = View.VISIBLE
+
         }
 
     }
@@ -90,6 +102,26 @@ class SplashOldActivity : AppCompatActivity() {
             val i = Intent(this@SplashOldActivity, HomeActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(i)
+        }
+    }
+
+    private fun TextView.typeWrite(
+        lifecycleOwner: LifecycleOwner,
+        text: String,
+        intervalMs: Long,
+    ) {
+        this@typeWrite.text = ""
+        lifecycleOwner.lifecycleScope.launch {
+            val max = 15
+            for (i in 0 until max) {
+                repeat(text.length) {
+                    delay(intervalMs)
+                    Log.d(TAG, "typeWrite: $it")
+                    this@typeWrite.text = text.take(it + 1)
+                }
+                delay(1200)
+
+            }
         }
     }
 
