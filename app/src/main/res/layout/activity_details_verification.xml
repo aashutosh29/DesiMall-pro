@@ -428,6 +428,8 @@
                             android:layout_height="wrap_content"
                             android:background="@null"
                             android:hint=""
+                            android:inputType="number"
+                            android:maxLength="6"
                             android:lines="1"
                             android:maxLines="1"
                             android:padding="@dimen/_9sdp"

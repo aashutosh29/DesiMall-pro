@@ -3,6 +3,7 @@ package com.aashutosh.desimall_pro.splash.test
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -12,17 +13,14 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.aashutosh.desimall_pro.R
+import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.models.java.Store
 import com.aashutosh.desimall_pro.ui.SplashOldActivity
 import com.aashutosh.desimall_pro.utils.Constant
@@ -46,6 +44,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
     var db: FirebaseFirestore? = null
     var storeList: MutableList<Store>? = null
     var alertDialog: AlertDialog? = null
+    lateinit var sharedPreferHelper: SharedPrefHelper
 
 
 
@@ -56,6 +55,8 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         ButterKnife.bind(this)
+        sharedPreferHelper = SharedPrefHelper
+        sharedPreferHelper.init(this)
         initialization()
         checkAllStuff()
 
@@ -174,6 +175,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
     }
 
     private fun startWebView(branchName: String?, branchCode: String?) {
+        sharedPreferHelper[Constant.BRANCH_NAME] = branchName
         val intent = Intent(this@SplashActivity2, SplashOldActivity::class.java)
         intent.putExtra(Constant.BRANCH_NAME, branchName)
         intent.putExtra(Constant.BRANCH_CODE, branchCode)
@@ -213,7 +215,10 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
             } else {
                 Log.w("Aashutosh", "Error getting documents.", task.exception)
             }
-        }.addOnFailureListener { fetchUrlAndSubscribeTopic(ArrayList()) }
+        }.addOnFailureListener {
+            Log.d(TAG, "getDataFromFireBase:$it ")
+            fetchUrlAndSubscribeTopic(ArrayList())
+        }
     }
 
     private fun checkPermissions(): Boolean {

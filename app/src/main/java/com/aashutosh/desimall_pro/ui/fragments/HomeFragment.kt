@@ -66,6 +66,7 @@ class HomeFragment : Fragment(), CategoryView {
         }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -80,6 +81,7 @@ class HomeFragment : Fragment(), CategoryView {
 
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

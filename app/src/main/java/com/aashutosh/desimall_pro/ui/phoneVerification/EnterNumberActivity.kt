@@ -31,7 +31,7 @@ class EnterNumberActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(this)
-        //validateNumberForTesting()
+       // validateNumberForTesting()
 
         binding.btnGetOtp.setOnClickListener {
             validateNumber()
@@ -56,20 +56,20 @@ class EnterNumberActivity : AppCompatActivity() {
         val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
         val date = Date()
         val createUser = hashMapOf(
-            "phone" to "+9779860858540",
+            "phone" to "+9779860858541",
             "date" to dateFormat.format(date),
         )
-        db.collection("user").whereEqualTo("phone", "+9779860858540")
+        db.collection("user").whereEqualTo("phone", "+9779860858541")
             .limit(1).get().addOnCompleteListener {
                 if (it.result.isEmpty) {
-                    db.collection("user").document("+9779860858540")
+                    db.collection("user").document("+9779860858541")
                         .set(createUser).addOnSuccessListener {
                             Toast.makeText(
                                 this, "Authorization Completed 🥳🥳", Toast.LENGTH_SHORT
                             ).show()
                             sharedPrefHelper[Constant.VERIFIED_NUM] = true
                             sharedPrefHelper[Constant.PHONE_NUMBER] =
-                                "+9779860858540"
+                                "+9779860858541"
 
                             val i = Intent(
                                 this@EnterNumberActivity,
@@ -122,7 +122,6 @@ class EnterNumberActivity : AppCompatActivity() {
         }
 
         if (binding.etPhoneNum.editText?.text.toString().count() == 10) {
-
             binding.etPhoneNum.clearFocus()
             val intent = Intent(this, VerifyNumberActivity::class.java).apply {
                 putExtra(phoneNumberKey, binding.etPhoneNum.editText?.text.toString())

@@ -111,6 +111,10 @@ class HomeActivity : AppCompatActivity() {
         itemView.addView(chatBadge)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        loadFragment(HomeFragment())
+    }
 
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()

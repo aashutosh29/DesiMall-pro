@@ -1,6 +1,8 @@
 package com.aashutosh.desimall_pro.ui.phoneVerification
 
+import com.aashutosh.desimall_pro.utils.SMSReceiver
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -12,6 +14,7 @@ import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.utils.Constant.Companion.phoneNumberKey
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -31,11 +34,12 @@ class VerifyNumberActivity : AppCompatActivity() {
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     lateinit var sharedPrefHelper: SharedPrefHelper
-
     private lateinit var progressDialog: AlertDialog
     private var phoneNum: String = "+91"
     private var storedVerificationId: String? = null
     private val TAG = "VerifyNumberActivity"
+    private var intentFilter: IntentFilter? = null
+    private var smsReceiver: SMSReceiver? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,13 +51,17 @@ class VerifyNumberActivity : AppCompatActivity() {
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(this)
 
-
+        //   Log.d("Hash-key-aashutosh : ", AppSignatureHashHelper(this).appSignatures.toString())
+        // Init Sms Retriever >>>>
+        //initSmsListener()
+        //initBroadCast()
         if (intent != null) {
             val num = intent.getStringExtra(phoneNumberKey).toString()
             phoneNum += num
             Log.d(TAG, phoneNum)
             "Authenticate $phoneNum".also { binding.textAuthenticateNum.text = it }
         } else {
+            //test()
             Toast.makeText(this, "Bad Gateway 😒", Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -71,8 +79,6 @@ class VerifyNumberActivity : AppCompatActivity() {
         }
 
 
-
-
         verificationCallbacks()
 
         val options = PhoneAuthOptions.newBuilder(auth)
@@ -83,6 +89,13 @@ class VerifyNumberActivity : AppCompatActivity() {
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
 
+    }
+
+    private fun test() {
+        val num = "9865995429"
+        phoneNum += num
+        Log.d(TAG, phoneNum)
+        "Authenticate $phoneNum".also { binding.textAuthenticateNum.text = it }
     }
 
     private fun initProgressDialog(): AlertDialog {
@@ -288,5 +301,41 @@ class VerifyNumberActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, EnterNumberActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+
+    private fun initBroadCast() {
+        intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+        smsReceiver = SMSReceiver()
+        smsReceiver?.setOTPListener(object : SMSReceiver.OTPReceiveListener {
+            override fun onOTPReceived(otp: String?) {
+                showToast("OTP Received: $otp")
+            }
+        })
+    }
+
+    private fun initSmsListener() {
+        val client = SmsRetriever.getClient(this)
+        client.startSmsRetriever()
+    }
+
+    override fun onResume() {
+        super.onResume()
+       // registerReceiver(smsReceiver, intentFilter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //unregisterReceiver(smsReceiver)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+       // smsReceiver = null
+    }
+
+
+    private fun showToast(msg: String?) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }

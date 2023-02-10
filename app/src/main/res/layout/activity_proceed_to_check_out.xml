@@ -409,7 +409,7 @@
             android:layout_marginEnd="@dimen/_12sdp"
             android:minHeight="0dp"
             android:paddingVertical="@dimen/_12sdp"
-            android:text="Place a order"
+            android:text="Place an order"
             android:textColor="@color/white"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"

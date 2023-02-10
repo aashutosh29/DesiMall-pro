@@ -31,6 +31,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".OrderSuccessActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.categoryActivity.CategoryActivity"
             android:exported="false"
             android:label="@string/title_activity_category"
@@ -41,7 +48,8 @@
         </activity>
         <activity
             android:name=".ui.detailsVerificationPage.DetailsVerificationActivity"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -88,6 +96,15 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name=".utils.SMSReceiver"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".splash.test.SplashActivity2"
             android:exported="true">
@@ -113,6 +130,7 @@
         </activity>
         <activity
             android:name=".ui.deliveryAddress.DeliveryAddressActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -140,8 +158,22 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity android:name=".ui.phoneVerification.EnterNumberActivity" />
-        <activity android:name=".ui.phoneVerification.VerifyNumberActivity" />
+
+
+        <activity
+            android:name=".ui.phoneVerification.VerifyNumberActivity"
+            android:exported="true">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+
+        </activity>
+
+
         <activity
             android:name=".ui.profile.SignIn"
             android:exported="false" />

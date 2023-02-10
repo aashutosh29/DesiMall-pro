@@ -103,7 +103,9 @@ class DetailsVerificationActivity : AppCompatActivity() {
                     "email" to binding.etEmail.text.toString(),
                     "zip" to binding.etPin.text.toString(),
                     "location" to binding.etAddress.text.toString(),
-                    "landmark" to binding.etLandMark.text.toString()
+                    "landmark" to binding.etLandMark.text.toString(),
+                    "branchCode" to sharedPrefHelper[Constant.BRANCH_CODE, ""],
+                    "branchName" to sharedPrefHelper[Constant.BRANCH_NAME, ""]
                 )
 
                 db.collection("user").document(sharedPrefHelper[Constant.PHONE_NUMBER])

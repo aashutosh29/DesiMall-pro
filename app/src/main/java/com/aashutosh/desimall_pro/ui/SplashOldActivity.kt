@@ -34,6 +34,7 @@ class SplashOldActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFastSplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.tvMarquee.isSelected = true
     }
 
 
@@ -42,7 +43,7 @@ class SplashOldActivity : AppCompatActivity() {
         super.onStart()
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(applicationContext)
-        sharedPrefHelper[Constant.BRANCH_NAME] = intent.getStringExtra(Constant.BRANCH_NAME)
+        //sharedPrefHelper[Constant.BRANCH_NAME] = intent.getStringExtra(Constant.BRANCH_NAME)
         sharedPrefHelper[Constant.VERIFIED_LOCATION] = true
         mainViewModel =
             ViewModelProvider(this@SplashOldActivity)[StoreViewModel::class.java]

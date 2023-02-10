@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import butterknife.OnClick
+import com.aashutosh.desimall_pro.OrderSuccessActivity
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.CartAdapter
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
@@ -314,7 +315,7 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
                         startActivity(
                             Intent(
                                 this@ProceedToCheckOutActivity,
-                                HomeActivity::class.java
+                                OrderSuccessActivity::class.java
                             )
                         )
                     }

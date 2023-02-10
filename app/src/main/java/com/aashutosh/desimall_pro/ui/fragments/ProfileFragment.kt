@@ -88,8 +88,28 @@ class ProfileFragment : Fragment() {
             ).show()
         })
         binding.rlDelivery.setOnClickListener(View.OnClickListener {
-            val intent = Intent(context, DeliveryAddressActivity::class.java)
-            startActivity(intent)
+            if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
+                val i = Intent(requireContext(), EnterNumberActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            } else if (!sharedPrefHelper[Constant.VERIFIED_LOCATION, false]) {
+                val i = Intent(requireContext(), MapsActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                startActivity(i)
+            } else if (!sharedPrefHelper[Constant.DETAILIlS_VERIFIED, false]) {
+                val i = Intent(
+                    requireContext(),
+                    DetailsVerificationActivity::class.java
+                )
+                i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                i.putExtra(Constant.DETAILS, true)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            } else {
+                val intent = Intent(context, DeliveryAddressActivity::class.java)
+                startActivity(intent)
+            }
         })
 
         binding.rlOrderHistory.setOnClickListener(View.OnClickListener {
