@@ -19,8 +19,8 @@ android {
         applicationId "com.desimall.live"
         minSdk 26
         targetSdk 33
-        versionCode 12
-        versionName "2.06"
+        versionCode 13
+        versionName "2.07"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
