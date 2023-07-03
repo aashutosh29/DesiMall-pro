@@ -31,7 +31,7 @@ class EnterNumberActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(this)
-        validateNumberForTesting()
+       // validateNumberForTesting()
 
         binding.btnGetOtp.setOnClickListener {
             validateNumber()

@@ -9,11 +9,11 @@
     android:backgroundTint="@color/md_red_600">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/_125sdp"
+        android:layout_width="@dimen/_86sdp"
         android:id="@+id/cvAds"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_height="@dimen/_125sdp"
+        android:layout_height="@dimen/_78sdp"
         app:cardCornerRadius="@dimen/_4sdp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -34,7 +34,7 @@
         android:paddingVertical="@dimen/_1sdp"
         android:text="product"
         android:textColor="@color/white"
-        android:textSize="@dimen/_10ssp"
+        android:textSize="@dimen/_9ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cvAds" />

@@ -268,6 +268,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+
         android:id="@+id/btAddToCart"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -281,6 +282,22 @@
         android:paddingVertical="@dimen/_8sdp"
         android:text="ADD TO CART"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:id="@+id/tvOutOfStock"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_64sdp"
+        android:paddingVertical="@dimen/_8sdp"
+        android:text="Sorry, this product is out of stock, will be available soon."
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

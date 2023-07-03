@@ -197,8 +197,14 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
 
     void startWebView(String gmail, String branchCode) {
         Intent intent = new Intent(SplashActivity.this, SplashOldActivity.class);
-        intent.putExtra(Constant.BRANCH_NAME, gmail);
+//        intent.putExtra(Constant.BRANCH_NAME, gmail);
+//        intent.putExtra(Constant.BRANCH_CODE, branchCode);
+
+             intent.putExtra(Constant.BRANCH_NAME, gmail);
         intent.putExtra(Constant.BRANCH_CODE, branchCode);
+
+        //Gurugram - Hamilton Court
+        //6
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

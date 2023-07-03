@@ -24,6 +24,13 @@ class DetailsVerificationActivity : AppCompatActivity() {
         initView()
     }
 
+    private fun loadPreviousData() {
+        binding.etEmail.setText(sharedPrefHelper[Constant.EMAIL, ""])
+        binding.etPin.setText(sharedPrefHelper[Constant.ZIP, ""])
+        binding.etName.setText(sharedPrefHelper[Constant.NAME, ""])
+        binding.etAddress.setText(sharedPrefHelper[Constant.ADDRESS, ""])
+        binding.etLandMark.setText(sharedPrefHelper[Constant.LAND_MARK, ""])
+    }
     private fun validateData(): Boolean {
         if (!binding.etName.text.toString().trim().contains(" ") || binding.etName.text.toString()
                 .trim().length < 5
@@ -93,7 +100,7 @@ class DetailsVerificationActivity : AppCompatActivity() {
             i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(i)
         })
-
+        loadPreviousData()
         binding.btDetailsConfirm.setOnClickListener(View.OnClickListener {
             if (validateData()) {
                 initProgressDialog().show()

@@ -37,6 +37,15 @@ class ProductPagingAdapter(
         val productItem = getItem(position)
         var quantity = 1
         if (productItem != null) {
+            if(productItem.product_quantity.toInt() == 0 || productItem.Published != "TRUE"){
+                holder.clControl.visibility = View.INVISIBLE
+                holder.ivAddToCart.visibility = View.INVISIBLE
+                holder.tvOutOfStock.visibility = View.VISIBLE
+            }else{
+                holder.clControl.visibility = View.VISIBLE
+                holder.ivAddToCart.visibility = View.VISIBLE
+                holder.tvOutOfStock.visibility = View.INVISIBLE
+            }
             // sets the image to the imageview from our itemHolder class
             Glide.with(context)
                 .load(if (productItem.sku == null) " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png")
@@ -148,6 +157,8 @@ class ProductPagingAdapter(
         val ivPlus: ImageView = itemView.findViewById(R.id.ivPlus)
         val ivMinus: ImageView = itemView.findViewById(R.id.ivMinus)
         val tvQuantity: TextView = itemView.findViewById(R.id.tvQuantity)
+        val clControl : ConstraintLayout = itemView.findViewById(R.id.clControl)
+        val tvOutOfStock : TextView = itemView.findViewById(R.id.tvOutOfStock)
 
 
     }

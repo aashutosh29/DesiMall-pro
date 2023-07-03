@@ -4,174 +4,233 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fast_splash_gradeint"
     tools:context=".ui.SplashOldActivity">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clNewLocation"
+        android:id="@+id/clMain"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_12sdp"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:background="@drawable/fast_splash_gradeint"
+        android:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clNewLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_12sdp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/location_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New location detected"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <TextView
+                android:id="@+id/location_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Getting location based Product for you...."
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/location_textview"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <ProgressBar
+                android:id="@+id/loading_indicator"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/location_name"
+                app:layout_constraintVertical_bias="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/location_textview"
+            android:id="@+id/tvMarquee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:background="@color/black"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Please have patience. It will take some time to load as it is first time."
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLBF"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New location detected"
+            android:layout_marginVertical="@dimen/_12sdp"
+            android:text="LOADING BEST OFFERS..."
             android:textColor="@color/white"
-            android:textSize="@dimen/_14ssp"
+            android:textSize="@dimen/_12sdp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivDesiMallLogo" />
+
+        <ImageView
+            android:id="@+id/ivDesiMallLogo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:src="@drawable/desimall_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMarquee" />
+
+        <ImageView
+            android:id="@+id/ivRedYellow"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bag_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_percent="0.4" />
+
+        <ImageView
+            android:id="@+id/ivVeg"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/clip_path_group"
+            app:layout_constraintBottom_toBottomOf="@id/ivRedYellow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.55"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLBF" />
+
+        <ImageView
+            android:layout_width="101dp"
+            android:layout_height="65dp"
+            android:src="@drawable/fresh"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/vDivider"
+            app:layout_constraintTop_toBottomOf="@id/ivVeg"
+            app:layout_constraintTop_toTopOf="@id/ivVeg" />
+
+        <View
+            android:id="@+id/vDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintWidth_percent="0.5" />
 
-        <TextView
-            android:id="@+id/location_name"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Getting location based Product for you...."
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textColor="@color/white"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/location_textview"
-            app:layout_constraintVertical_bias="0.5" />
+            android:background="@drawable/bottom_section"
+            android:paddingVertical="@dimen/_12sdp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <ProgressBar
-            android:id="@+id/loading_indicator"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/location_name"
-            app:layout_constraintVertical_bias="0.5" />
+
+            <TextView
+                android:id="@+id/tvFD"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_baseline_brightness_1_24"
+                android:drawablePadding="@dimen/_12sdp"
+                android:paddingStart="@dimen/_8sdp"
+                android:text="FREE DELIVERY"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
+
+
+            <TextView
+                android:id="@+id/tvBO"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_baseline_brightness_1_24"
+                android:drawablePadding="@dimen/_12sdp"
+                android:paddingStart="@dimen/_8sdp"
+                android:text="BEST OFFER"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvFD"
+                app:layout_constraintWidth_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <TextView
-        android:layout_marginTop="@dimen/_2sdp"
-        android:id="@+id/tvMarquee"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/clLocation"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black"
-        android:text="Please have patience. It will take some time to load as it is first time."
-        android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:scrollHorizontally="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvLBF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/_12sdp"
-        android:text="LOADING BEST OFFERS..."
-        android:textColor="@color/white"
-        android:textSize="@dimen/_12sdp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivDesiMallLogo" />
-
-    <ImageView
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/ivDesiMallLogo"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_80sdp"
-        android:layout_marginHorizontal="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:src="@drawable/desimall_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMarquee" />
-
-    <ImageView
-        android:id="@+id/ivRedYellow"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/bag_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.4" />
-
-    <ImageView
-        android:id="@+id/ivVeg"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:src="@drawable/clip_path_group"
-        app:layout_constraintBottom_toBottomOf="@id/ivRedYellow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.55"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvLBF" />
-
-    <ImageView
-        android:layout_width="101dp"
-        android:layout_height="65dp"
-        android:src="@drawable/fresh"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/vDivider"
-        app:layout_constraintTop_toBottomOf="@id/ivVeg"
-        app:layout_constraintTop_toTopOf="@id/ivVeg" />
-
-    <View
-        android:id="@+id/vDivider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_section"
-        android:paddingVertical="@dimen/_12sdp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-
-        <TextView
-            android:id="@+id/tvFD"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_baseline_brightness_1_24"
-            android:drawablePadding="@dimen/_12sdp"
-            android:paddingStart="@dimen/_8sdp"
-            android:text="FREE DELIVERY"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/location_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:padding="8dp"
+            android:src="@drawable/baseline_location_off"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.5" />
-
-
+            app:layout_constraintTop_toTopOf="parent" />
         <TextView
-            android:id="@+id/tvBO"
+            android:id="@+id/location_text_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_baseline_brightness_1_24"
-            android:drawablePadding="@dimen/_12sdp"
-            android:paddingStart="@dimen/_8sdp"
-            android:text="BEST OFFER"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvFD"
-            app:layout_constraintWidth_percent="0.5" />
+            android:padding="8dp"
+            android:text="Location Permission not Provided"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/location_icon"/>
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="In order to use the application, you need to grant location permission. If you haven't done so already, please restart the app and provide us with the necessary location permission."
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/location_text_title"/>
+
+        <Button
+            android:id="@+id/restart_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Restart app"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/location_text" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

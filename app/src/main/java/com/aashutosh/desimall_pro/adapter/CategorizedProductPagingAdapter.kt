@@ -35,15 +35,27 @@ class CategorizedProductPagingAdapter(
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         var quantity = 1
         val productItem = getItem(position)
+
         if (productItem != null) {
+            if(productItem.product_quantity.toInt() == 0 || productItem.Published != "TRUE"){
+                holder.clControl.visibility = View.INVISIBLE
+                holder.ivAddToCart.visibility = View.INVISIBLE
+                holder.tvOutOfStock.visibility = View.VISIBLE
+            }else{
+                holder.clControl.visibility = View.VISIBLE
+                holder.ivAddToCart.visibility = View.VISIBLE
+                holder.tvOutOfStock.visibility = View.INVISIBLE
+            }
             // sets the image to the imageview from our itemHolder class
             Glide.with(context)
                 .load(if (productItem.sku == " ") " " else "https://livedesimall.in/ldmimages/" + productItem.sku + ".png")
                 .error(R.drawable.app_icon)
                 .placeholder(R.drawable.app_icon)
-                .into(holder.ivLogo);
+                .into(holder.ivLogo)
+
 
             // sets the text to the textview from our itemHolder class
             holder.tvPrice.text = "₹ ${productItem.variant_sale_price}"
@@ -122,6 +134,8 @@ class CategorizedProductPagingAdapter(
         val ivPlus: ImageView = itemView.findViewById(R.id.ivPlus)
         val ivMinus: ImageView = itemView.findViewById(R.id.ivMinus)
         val tvQuantity: TextView = itemView.findViewById(R.id.tvQuantity)
+        val clControl : ConstraintLayout = itemView.findViewById(R.id.clControl)
+        val tvOutOfStock : TextView = itemView.findViewById(R.id.tvOutOfStock)
 
     }
 }

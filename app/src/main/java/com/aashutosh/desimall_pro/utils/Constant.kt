@@ -18,7 +18,7 @@ class Constant {
     companion object {
         const val URL = "URL"
         const val BRANCH_NAME = "branch_name"
-        const val BRANCH_CODE = "2"
+        const val BRANCH_CODE = "branch_code"
         const val DETAILS = "details"
         const val LOCATION = "location"
         const val ZIP = "zip"
@@ -58,10 +58,13 @@ class Constant {
         const val CLIENT_ID = "ck_32e46804bfe8c984b139a35b6d3e7b6893e43644"
         const val CLIENT_SECRET = "cs_8d6fa97258ec30c830f3f601e0b4b3d082778203"
         const val BASE_URL = "http://103.234.185.42:50/API/"
+        const val API_BASE_URL = "https://api.livedesimall.com/"
         const val DESCRIPTION = "description"
         const val ORDER_VERIFICATION_PENDING = "0"
         const val ADDRESS = "address"
         const val LAND_MARK = "land mark"
+        const val  PRODUCT_SERVER_QTY = "product server quantity"
+        const val  PRODUCT_PUBLISHED = "product published"
 
 
         /*routing*/

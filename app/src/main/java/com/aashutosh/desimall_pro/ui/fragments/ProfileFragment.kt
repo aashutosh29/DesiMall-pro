@@ -133,7 +133,7 @@ class ProfileFragment : Fragment() {
         binding.rlContactUs.setOnClickListener(View.OnClickListener {
             val browserIntent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("http://keybrains.xyz/contact")
+                Uri.parse("https://livedesimall.in/contact-2/")
             )
             startActivity(browserIntent)
         })
@@ -142,7 +142,7 @@ class ProfileFragment : Fragment() {
         binding.rlHelps.setOnClickListener(View.OnClickListener {
             val browserIntent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("http://keybrains.xyz/contact")
+                Uri.parse("https://livedesimall.in/contact-2/")
             )
             startActivity(browserIntent)
         })

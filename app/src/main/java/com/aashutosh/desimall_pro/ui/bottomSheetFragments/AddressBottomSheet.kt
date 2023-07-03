@@ -38,8 +38,18 @@ class AddressBottomSheet : BottomSheetDialogFragment() {
         binding = BottomSheetAddressBinding.inflate(inflater, container, false)
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(requireContext())
+        loadPreviousData()
         this.isCancelable = false
         return binding.root
+
+    }
+
+    private fun loadPreviousData() {
+        binding.etEmail.setText(sharedPrefHelper[Constant.EMAIL, ""])
+        binding.etPin.setText(sharedPrefHelper[Constant.ZIP, ""])
+        binding.etName.setText(sharedPrefHelper[Constant.NAME, ""])
+        binding.etAddress.setText(sharedPrefHelper[Constant.ADDRESS, ""])
+        binding.etLandMark.setText(sharedPrefHelper[Constant.LAND_MARK, ""])
     }
 
     private fun validateData(): Boolean {

@@ -79,7 +79,7 @@ class OrderListAdapter(
                     detail[1],
                     detail[2],
                     "",
-                    detail[3].toInt(),
+                    detail[3].toDouble().toInt(),
                     detail[4].toDouble(),
                     detail[5].toDouble()
                 )

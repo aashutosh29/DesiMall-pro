@@ -167,7 +167,7 @@ class HomeFragment : Fragment(), CategoryView {
         val adsArrayList: ArrayList<Raw> = arrayListOf()
         val filteredCatList: ArrayList<Raw> = arrayListOf()
         db.collection("slider")
-            .orderBy("position", Query.Direction.DESCENDING)
+            .orderBy("position", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
                 binding.rvAds.visibility = View.VISIBLE
@@ -255,7 +255,7 @@ class HomeFragment : Fragment(), CategoryView {
 
     private fun initAds(adsArrayList: ArrayList<Raw>) {
         binding.rvAds.layoutManager =
-            GridLayoutManager(context, 2)
+            GridLayoutManager(context, 3)
         binding.rvAds.isNestedScrollingEnabled = false
         val adapter =
             context?.let { AdsAdapter(adsArrayList, requireContext(), this@HomeFragment) }
@@ -286,6 +286,8 @@ class HomeFragment : Fragment(), CategoryView {
         intent.putExtra(Constant.ID, productItem.sku.toInt())
         Log.d(TAG, "getItemClicked: ${productItem.sku}")
         intent.putExtra(Constant.PRODUCT_PRICE, productItem.variant_sale_price.toString())
+        intent.putExtra(Constant.PRODUCT_SERVER_QTY,productItem.product_quantity.toString())
+        intent.putExtra(Constant.PRODUCT_PUBLISHED,productItem.Published)
         intent.putExtra(Constant.MRP_PRICE, productItem.variant_mrp.toString())
         intent.putExtra(Constant.DESCRIPTION, productItem.sku_description)
         startActivity(intent)
@@ -359,10 +361,9 @@ class HomeFragment : Fragment(), CategoryView {
                     )
                     intent.putExtra(Constant.ID, productItem.sku.toInt())
                     Log.d(TAG, "getItemClicked: ${productItem.sku}")
-                    intent.putExtra(
-                        Constant.PRODUCT_PRICE,
-                        productItem.variant_sale_price.toString()
-                    )
+                    intent.putExtra(Constant.PRODUCT_PRICE, productItem.variant_sale_price.toString())
+                    intent.putExtra(Constant.PRODUCT_PUBLISHED,productItem.Published)
+                    intent.putExtra(Constant.PRODUCT_SERVER_QTY,productItem.product_quantity.toString())
                     intent.putExtra(Constant.MRP_PRICE, productItem.variant_mrp.toString())
                     intent.putExtra(Constant.DESCRIPTION, productItem.sku_description)
                     startActivity(intent)

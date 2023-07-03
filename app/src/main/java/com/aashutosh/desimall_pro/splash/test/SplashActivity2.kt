@@ -115,10 +115,12 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 ) { _, _ -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
                     .setNegativeButton(
                         "Cancel"
-                    ) { _, _ ->
+                    )
+                    //real web-view
+                    { _, _ ->
                         startWebView(
                             Constant.BRANCH_NAME,
-                            branchCode = ""
+                            branchCode = "In order to use the application, you need to grant location permission. If you haven't done so already, please restart the app and provide us with the necessary location permission."
                         )
                     }.show()
             false
@@ -414,7 +416,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 }
             }
         } else {
-
+           // real web-view
             //code must not come here
             startWebView(Constant.BRANCH_NAME, branchCode = "")
         }

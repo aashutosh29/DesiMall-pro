@@ -36,6 +36,8 @@ class VerifyNumberActivity : AppCompatActivity() {
     lateinit var sharedPrefHelper: SharedPrefHelper
     private lateinit var progressDialog: AlertDialog
     private var phoneNum: String = "+91"
+    private var nepaliNum: String = "+977"
+
     private var storedVerificationId: String? = null
     private val TAG = "VerifyNumberActivity"
     private var intentFilter: IntentFilter? = null
@@ -51,6 +53,8 @@ class VerifyNumberActivity : AppCompatActivity() {
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(this)
 
+        //should comment this line while testing
+       // phoneNum = nepaliNum
         //   Log.d("Hash-key-aashutosh : ", AppSignatureHashHelper(this).appSignatures.toString())
         // Init Sms Retriever >>>>
         //initSmsListener()
@@ -203,12 +207,13 @@ class VerifyNumberActivity : AppCompatActivity() {
                         "phone" to task.result?.user?.phoneNumber,
                         "date" to dateFormat.format(date),
                     )
+                    Log.d(TAG, "phoneNumber aja: ${task.result?.user?.phoneNumber!!} ")
 
-
+                    //db.collection("user").document( task.result?.user?.phoneNumber!!)
 
                     db.collection("user").whereEqualTo("phone", task.result?.user?.phoneNumber!!)
-                        .limit(1).get().addOnCompleteListener {
-                            if (it.result.isEmpty) {
+                        .get().addOnCompleteListener {
+                            if (it.result.isEmpty ||  it.result.documents[0].data!!["name"].toString().isEmpty() ) {
                                 db.collection("user").document(task.result?.user?.phoneNumber!!)
                                     .set(createUser).addOnSuccessListener {
                                         Toast.makeText(
@@ -253,11 +258,14 @@ class VerifyNumberActivity : AppCompatActivity() {
                                 sharedPrefHelper[Constant.DETAILIlS_VERIFIED] = true
 
                                 val i = Intent(
-                                    this@VerifyNumberActivity, HomeActivity::class.java
+                                    this@VerifyNumberActivity,
+                                    DetailsVerificationActivity::class.java
                                 )
                                 i.flags =
                                     Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                                i.putExtra(Constant.VERIFY_USER_LOCATION, true)
                                 startActivity(i)
+                                finish()
 
 
                             }

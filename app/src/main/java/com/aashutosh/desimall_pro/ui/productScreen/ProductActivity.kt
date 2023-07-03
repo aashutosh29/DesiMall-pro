@@ -81,6 +81,13 @@ class ProductActivity : AppCompatActivity() {
 
     @BindView(R.id.tvDetails)
     lateinit var tvDetails: TextView
+    @BindView(R.id.clControl)
+
+    lateinit var clControl : ConstraintLayout
+
+    @BindView(R.id.tvOutOfStock)
+    lateinit var  tvOutOfStock : TextView
+
 
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -110,7 +117,15 @@ class ProductActivity : AppCompatActivity() {
             ) {
                 tvMrp.visibility = View.GONE
             }
-
+            if(intent.getStringExtra(Constant.PRODUCT_SERVER_QTY)!!.toDouble().toInt() == 0 || intent.getStringExtra(Constant.PRODUCT_PUBLISHED) != "TRUE"){
+                clControl.visibility = View.INVISIBLE
+                btAddToCart.visibility = View.INVISIBLE
+                tvOutOfStock.visibility = View.VISIBLE
+            }else{
+                clControl.visibility = View.VISIBLE
+                btAddToCart.visibility = View.VISIBLE
+                tvOutOfStock.visibility = View.INVISIBLE
+            }
 
 
             if (intent.getStringExtra(Constant.PRODUCT_PRICE)!!.toDouble() < 1000) {
