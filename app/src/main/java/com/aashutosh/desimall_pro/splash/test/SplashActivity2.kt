@@ -179,8 +179,12 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
     private fun startWebView(branchName: String?, branchCode: String?) {
         sharedPreferHelper[Constant.BRANCH_NAME] = branchName
         val intent = Intent(this@SplashActivity2, SplashOldActivity::class.java)
-        intent.putExtra(Constant.BRANCH_NAME, branchName)
-        intent.putExtra(Constant.BRANCH_CODE, branchCode)
+        //        intent.putExtra(Constant.BRANCH_NAME, gmail);
+        //        intent.putExtra(Constant.BRANCH_CODE, branchCode);
+        intent.putExtra(Constant.BRANCH_NAME, "Gurugram - Hamilton Court")
+        intent.putExtra(Constant.BRANCH_CODE, "6")
+        //intent.putExtra(Constant.BRANCH_NAME, branchName)
+       // intent.putExtra(Constant.BRANCH_CODE, branchCode)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

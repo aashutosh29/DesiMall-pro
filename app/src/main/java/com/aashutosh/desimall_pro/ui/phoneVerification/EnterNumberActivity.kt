@@ -46,30 +46,48 @@ class EnterNumberActivity : AppCompatActivity() {
 
 
     }
+    private fun validateNumber() {
 
+        if (binding.etPhoneNum.editText?.text.toString().isEmpty()) {
+            binding.etPhoneNum.error = "Enter your Phone Number"
+            binding.etPhoneNum.requestFocus()
+            return
+        }
 
+        if (binding.etPhoneNum.editText?.text.toString().count() == 10) {
+            binding.etPhoneNum.clearFocus()
+            val intent = Intent(this, VerifyNumberActivity::class.java).apply {
+                putExtra(phoneNumberKey, binding.etPhoneNum.editText?.text.toString())
+            }
+            startActivity(intent)
+            finish()
 
-    private fun validateNumberForTesting() {
+        } else {
+            Toast.makeText(this, "Enter 10 digit number", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /* private fun validateNumberForTesting() {
 
 
         val db = Firebase.firestore
         val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
         val date = Date()
         val createUser = hashMapOf(
-            "phone" to "+9779860858541",
+            "phone" to "+9779860858540",
             "date" to dateFormat.format(date),
         )
-        db.collection("user").whereEqualTo("phone", "+9779860858541")
+        db.collection("user").whereEqualTo("phone", "+9779860858540")
             .limit(1).get().addOnCompleteListener {
                 if (it.result.isEmpty) {
-                    db.collection("user").document("+9779860858541")
+                    db.collection("user").document("+9779860858540")
                         .set(createUser).addOnSuccessListener {
                             Toast.makeText(
                                 this, "Authorization Completed 🥳🥳", Toast.LENGTH_SHORT
                             ).show()
                             sharedPrefHelper[Constant.VERIFIED_NUM] = true
                             sharedPrefHelper[Constant.PHONE_NUMBER] =
-                                "+9779860858541"
+                                "+9779860858540"
 
                             val i = Intent(
                                 this@EnterNumberActivity,
@@ -111,27 +129,7 @@ class EnterNumberActivity : AppCompatActivity() {
 
                 }
             }
-    }
+    }*/
 
-    private fun validateNumber() {
-
-        if (binding.etPhoneNum.editText?.text.toString().isEmpty()) {
-            binding.etPhoneNum.error = "Enter your Phone Number"
-            binding.etPhoneNum.requestFocus()
-            return
-        }
-
-        if (binding.etPhoneNum.editText?.text.toString().count() == 10) {
-            binding.etPhoneNum.clearFocus()
-            val intent = Intent(this, VerifyNumberActivity::class.java).apply {
-                putExtra(phoneNumberKey, binding.etPhoneNum.editText?.text.toString())
-            }
-            startActivity(intent)
-            finish()
-
-        } else {
-            Toast.makeText(this, "Enter 10 digit number", Toast.LENGTH_SHORT).show()
-        }
-    }
 
 }

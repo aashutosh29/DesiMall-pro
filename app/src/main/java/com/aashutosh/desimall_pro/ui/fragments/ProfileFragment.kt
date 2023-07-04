@@ -117,13 +117,7 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         })
 
-        binding.rlPromoCard.setOnClickListener(View.OnClickListener {
-            Toast.makeText(
-                context,
-                "Promo card will be available soon ",
-                Toast.LENGTH_SHORT
-            ).show()
-        })
+
         binding.ivBack.setOnClickListener(View.OnClickListener {
 
             val intent = Intent(context, HomeActivity::class.java)

@@ -37,7 +37,6 @@ class VerifyNumberActivity : AppCompatActivity() {
     private lateinit var progressDialog: AlertDialog
     private var phoneNum: String = "+91"
     private var nepaliNum: String = "+977"
-
     private var storedVerificationId: String? = null
     private val TAG = "VerifyNumberActivity"
     private var intentFilter: IntentFilter? = null
@@ -54,7 +53,7 @@ class VerifyNumberActivity : AppCompatActivity() {
         sharedPrefHelper.init(this)
 
         //should comment this line while testing
-       // phoneNum = nepaliNum
+       phoneNum = nepaliNum
         //   Log.d("Hash-key-aashutosh : ", AppSignatureHashHelper(this).appSignatures.toString())
         // Init Sms Retriever >>>>
         //initSmsListener()
@@ -63,7 +62,9 @@ class VerifyNumberActivity : AppCompatActivity() {
             val num = intent.getStringExtra(phoneNumberKey).toString()
             phoneNum += num
             Log.d(TAG, phoneNum)
-            "Authenticate $phoneNum".also { binding.textAuthenticateNum.text = it }
+            "Authenticate $phoneNum".also {
+                binding.textAuthenticateNum.text = it
+            }
         } else {
             //test()
             Toast.makeText(this, "Bad Gateway 😒", Toast.LENGTH_SHORT).show()
@@ -191,7 +192,7 @@ class VerifyNumberActivity : AppCompatActivity() {
 
     }
 
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+   /* private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
 
@@ -227,6 +228,7 @@ class VerifyNumberActivity : AppCompatActivity() {
                                             this@VerifyNumberActivity,
                                             DetailsVerificationActivity::class.java
                                         )
+
                                         i.flags =
                                             Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                                         i.putExtra(Constant.VERIFY_USER_LOCATION, true)
@@ -294,7 +296,105 @@ class VerifyNumberActivity : AppCompatActivity() {
 
                 }
             }
-    }
+    }*/
+   private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+       auth.signInWithCredential(credential)
+           .addOnCompleteListener(this) { task ->
+
+               if (task.isSuccessful) {
+                   initProgressDialog().show()
+                   // Sign in success, update UI with the signed-in user's information
+                   Log.d(TAG, "signInWithCredential:success")
+                   val db = Firebase.firestore
+                   val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+                   val date = Date()
+                   val createUser = hashMapOf(
+                       "phone" to task.result?.user?.phoneNumber,
+                       "date" to dateFormat.format(date),
+                   )
+                   Log.d(TAG, "phoneNumber aja: ${task.result?.user?.phoneNumber!!} ")
+
+                   //db.collection("user").document( task.result?.user?.phoneNumber!!)
+
+                   db.collection("user").whereEqualTo("phone", task.result?.user?.phoneNumber!!)
+                       .get().addOnCompleteListener {
+                           if (it.result.isEmpty ||  it.result.documents[0].data!!["name"].toString().isEmpty() ) {
+                               db.collection("user").document(task.result?.user?.phoneNumber!!)
+                                   .set(createUser).addOnSuccessListener {
+                                       Toast.makeText(
+                                           this, "Authorization Completed 🥳🥳", Toast.LENGTH_SHORT
+                                       ).show()
+                                       sharedPrefHelper[Constant.VERIFIED_NUM] = true
+                                       sharedPrefHelper[Constant.PHONE_NUMBER] =
+                                           task.result?.user?.phoneNumber?.trim()
+                                       progressDialog.dismiss()
+                                       val i = Intent(
+                                           this@VerifyNumberActivity,
+                                           DetailsVerificationActivity::class.java
+                                       )
+
+                                       i.flags =
+                                           Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                                       i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                                       startActivity(i)
+                                       finish()
+                                   }.addOnFailureListener {
+                                       progressDialog.dismiss()
+                                       Toast.makeText(
+                                           this, "User Not Created Retry Again", Toast.LENGTH_SHORT
+                                       ).show()
+                                   }
+                           } else {
+                               sharedPrefHelper[Constant.PHONE_NUMBER] =
+                                   task.result?.user?.phoneNumber?.trim()
+                               sharedPrefHelper[Constant.VERIFIED_NUM] = true
+                               progressDialog.dismiss()
+                               sharedPrefHelper[Constant.PASSWORD] =
+                                   it.result.documents[0].data!!["password"].toString()
+                               sharedPrefHelper[Constant.NAME] =
+                                   it.result.documents[0].data!!["name"].toString()
+                               sharedPrefHelper[Constant.PHOTO] =
+                                   it.result.documents[0].data!!["photo"].toString()
+                               sharedPrefHelper[Constant.DETAILIlS_VERIFIED] = true
+
+                               val i = Intent(
+                                   this@VerifyNumberActivity,
+                                   DetailsVerificationActivity::class.java
+                               )
+                               i.flags =
+                                   Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                               i.putExtra(Constant.VERIFY_USER_LOCATION, true)
+                               startActivity(i)
+                               finish()
+
+
+                           }
+                       }
+                       .addOnFailureListener {
+                           Log.d(TAG, "signInWithPhoneAuthCredential: $it")
+                       }
+
+
+               } else {
+
+                   // Sign in failed, display a message and update the UI
+                   Log.w(TAG, "signInWithCredential:failure", task.exception)
+                   if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                       // The verification code entered was invalid
+                       Toast.makeText(
+                           this,
+                           "The verification code entered was invalid 🥺",
+                           Toast.LENGTH_SHORT
+                       ).show()
+                   } else {
+                       // Update UI
+                       Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
+                   }
+                   returnToEnterNumberActivity()
+
+               }
+           }
+   }
 
     private fun verifyVerificationCode(code: String) {
 

@@ -54,7 +54,6 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
 
-
             mainViewModel.getCartSize()
 
         }
