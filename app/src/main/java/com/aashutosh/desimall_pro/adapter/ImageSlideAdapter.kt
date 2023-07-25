@@ -11,11 +11,12 @@ import androidx.viewpager.widget.ViewPager
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.models.Ads
 import com.aashutosh.desimall_pro.models.Raw
+import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
 import com.bumptech.glide.Glide
 
 class ImageSlideAdapter(
-    private val homeFragment: HomeFragment,
+    private val homeFragment: CategoryView,
     private val context: Context,
     private var imageList: ArrayList<Raw>
 ) :

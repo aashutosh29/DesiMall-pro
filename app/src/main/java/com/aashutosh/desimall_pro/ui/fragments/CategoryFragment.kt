@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.ProductCategoryAdapter
+import com.aashutosh.desimall_pro.models.Raw
 import com.aashutosh.desimall_pro.repository.ProductRepository
 import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.categoryWithItsProduct.CategoryBasedProductsActivity
@@ -92,6 +93,10 @@ class CategoryFragment : Fragment(), CategoryView {
     }
 
     override fun getCategoryClicked2(categoryItem: String, tvLogo: TextView) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAdsClicked(ads: Raw) {
         TODO("Not yet implemented")
     }
 

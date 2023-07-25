@@ -17,18 +17,16 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.aashutosh.desimall_pro.R;
 import com.aashutosh.desimall_pro.models.java.Store;
-import com.aashutosh.desimall_pro.ui.SplashOldActivity;
+import com.aashutosh.desimall_pro.ui.ProductDownloadingActivity;
 import com.aashutosh.desimall_pro.utils.Constant;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -196,7 +194,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
     }
 
     void startWebView(String gmail, String branchCode) {
-        Intent intent = new Intent(SplashActivity.this, SplashOldActivity.class);
+        Intent intent = new Intent(SplashActivity.this, ProductDownloadingActivity.class);
 //        intent.putExtra(Constant.BRANCH_NAME, gmail);
 //        intent.putExtra(Constant.BRANCH_CODE, branchCode);
 

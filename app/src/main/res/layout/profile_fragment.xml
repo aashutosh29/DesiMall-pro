@@ -335,9 +335,10 @@
                     android:layout_height="1dp"
                     android:background="#40B5B3B3" />
 
+
                 <RelativeLayout
                     android:id="@+id/rlLogout"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"

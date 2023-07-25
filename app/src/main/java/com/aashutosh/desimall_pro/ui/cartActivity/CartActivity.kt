@@ -17,12 +17,15 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.CartAdapter
+import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.models.CartProduct
 import com.aashutosh.desimall_pro.models.DeliveryDetails
 import com.aashutosh.desimall_pro.ui.CartInterface
 import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.deliveryAddress.DeliveryAddressActivity
 import com.aashutosh.desimall_pro.ui.proceedToCheckOut.ProceedToCheckOutActivity
+import com.aashutosh.desimall_pro.utils.Constant
+import com.aashutosh.desimall_pro.utils.Constant.Companion.BRANCH_CODE
 import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpDecimal
 import com.aashutosh.desimall_pro.utils.Constant.Companion.roundUpString
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
@@ -68,10 +71,11 @@ class CartActivity : AppCompatActivity(), CartInterface {
 
     @BindView(R.id.llEmpty)
     lateinit var llEmpty: LinearLayout
+    lateinit var sharedPreferHelper: SharedPrefHelper
 
     var deliveryDetails: List<DeliveryDetails> = arrayListOf()
 
-
+    //tbCheckOut
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
@@ -79,6 +83,13 @@ class CartActivity : AppCompatActivity(), CartInterface {
         mainViewModel = ViewModelProvider(this)[StoreViewModel::class.java]
         checkDB()
         initRecyclerView()
+        sharedPreferHelper = SharedPrefHelper
+        sharedPreferHelper.init(this)
+
+        if (sharedPreferHelper[Constant.BRANCH_NAME, ""] == Constant.BRANCH_NAME){
+            tbCheckOut.text = "Delivery not available in your area. "
+            tbCheckOut.isEnabled = false
+        }
 
     }
 
@@ -88,9 +99,6 @@ class CartActivity : AppCompatActivity(), CartInterface {
             deliveryDetails = mainViewModel.getProfileDetails()
         }
     }
-
-
-
 
 
     override suspend fun deleteProduct(cartProduct: CartProduct) {
@@ -149,7 +157,7 @@ class CartActivity : AppCompatActivity(), CartInterface {
                 tvDeliveryCharge.text = "₹ 50"
                 total += 50
                 tvTotal.text = "₹ ${roundUpString(total.toString())}"
-            }else{
+            } else {
                 tvDeliveryCharge.text = "free"
                 tvTotal.text = "₹ ${roundUpString(total.toString())}"
             }

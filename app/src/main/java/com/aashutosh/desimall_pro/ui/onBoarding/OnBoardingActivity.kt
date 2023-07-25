@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.databinding.ActivityOnBoardingBinding
-import com.aashutosh.desimall_pro.ui.SplashOldActivity
+import com.aashutosh.desimall_pro.ui.ProductDownloadingActivity
 import com.aashutosh.desimall_pro.utils.Constant
 
 class OnBoardingActivity : AppCompatActivity() {
@@ -34,7 +34,7 @@ class OnBoardingActivity : AppCompatActivity() {
         binding.btNext.setOnClickListener {
             finish()
             val intent =
-                Intent(applicationContext, SplashOldActivity::class.java)
+                Intent(applicationContext, ProductDownloadingActivity::class.java)
             intent.putExtra(Constant.BRANCH_CODE, sharedPrefHelper[Constant.BRANCH_CODE, ""])
             startActivity(intent)
             // Animatoo.animateSlideLeft(this)

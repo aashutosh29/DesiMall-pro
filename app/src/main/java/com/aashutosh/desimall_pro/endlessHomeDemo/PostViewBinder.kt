@@ -43,7 +43,7 @@ class PostViewBinder(
         val clMain: CardView = itemView.findViewById(R.id.clMain)
         val tvMrp: TextView = itemView.findViewById(R.id.tvMrp)
         val tvDiscountPercent: TextView = itemView.findViewById(R.id.tvDiscountPercent)
-        val ivAddToCart: ImageView = itemView.findViewById(R.id.ivAddToCart)
+        val ivAddToCart: TextView = itemView.findViewById(R.id.ivAddToCart)
 
         fun setData(post: ProductItem, context: Context, homeFragment: HomeFragment) {
 

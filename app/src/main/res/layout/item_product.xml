@@ -14,11 +14,11 @@
         android:background="@color/white">
 
         <ImageView
-            android:layout_marginTop="@dimen/_8sdp"
             android:id="@+id/ivProduct"
             android:layout_width="match_parent"
-            android:scaleType="fitCenter"
             android:layout_height="@dimen/_80sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:scaleType="fitCenter"
             android:src="@drawable/app_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +56,8 @@
                 android:id="@+id/tvName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:alpha="0.87"
                 android:layout_marginHorizontal="@dimen/_8sdp"
+                android:alpha="0.87"
                 android:gravity="center"
                 android:text="n/a"
                 android:textColor="@color/black"
@@ -68,10 +68,10 @@
 
 
             <TextView
-                android:layout_marginHorizontal="@dimen/_8sdp"
                 android:id="@+id/tvPrice"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_8sdp"
                 android:alpha="0.87"
                 android:gravity="center"
                 android:text="n/a"
@@ -86,8 +86,8 @@
                 android:id="@+id/tvMrp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:alpha="0.87"
                 android:layout_marginHorizontal="@dimen/_14sdp"
+                android:alpha="0.87"
                 android:gravity="center"
                 android:text="n/a"
                 android:textColor="@color/black"
@@ -100,31 +100,31 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tvOutOfStock"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_6sdp"
-        android:text="OUT OF STOCK"
-        android:textColor="@color/app_primary_text_color_red"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/clBody">
+        <TextView
+            android:id="@+id/tvOutOfStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_6sdp"
+            android:text="OUT OF STOCK"
+            android:textColor="@color/app_primary_text_color_red"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clBody">
 
-    </TextView>
+        </TextView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clControl"
-
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_6sdp"
             android:background="@drawable/rounded_cl_search"
             android:backgroundTint="#E8F5E9"
-            android:layout_margin="@dimen/_6sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ivAddToCart"
+            app:layout_constraintBottom_toTopOf="@id/ivAddToCart"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/clBody">
 
@@ -165,16 +165,24 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
+        <TextView
             android:id="@+id/ivAddToCart"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_6sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
             android:background="@drawable/rounded_cl_search"
             android:backgroundTint="@color/md_red_600"
+            android:gravity="center"
+            android:textAllCaps="true"
             android:padding="@dimen/_5sdp"
             android:src="@drawable/ic_add_to_cart"
+            android:text="Add to cart"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clControl" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

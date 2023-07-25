@@ -41,11 +41,11 @@ class CategorizedProductPagingAdapter(
 
         if (productItem != null) {
             if(productItem.product_quantity.toInt() == 0 || productItem.Published != "TRUE"){
-                holder.clControl.visibility = View.INVISIBLE
+                //holder.clControl.visibility = View.INVISIBLE
                 holder.ivAddToCart.visibility = View.INVISIBLE
                 holder.tvOutOfStock.visibility = View.VISIBLE
             }else{
-                holder.clControl.visibility = View.VISIBLE
+               // holder.clControl.visibility = View.VISIBLE
                 holder.ivAddToCart.visibility = View.VISIBLE
                 holder.tvOutOfStock.visibility = View.INVISIBLE
             }
@@ -129,7 +129,7 @@ class CategorizedProductPagingAdapter(
         val clMain: CardView = itemView.findViewById(R.id.clMain)
         val tvMrp: TextView = itemView.findViewById(R.id.tvMrp)
         val tvDiscountPercent: TextView = itemView.findViewById(R.id.tvDiscountPercent)
-        val ivAddToCart: ImageView = itemView.findViewById(R.id.ivAddToCart)
+        val ivAddToCart: TextView = itemView.findViewById(R.id.ivAddToCart)
         val clDiscount: ConstraintLayout = itemView.findViewById(R.id.clDiscount)
         val ivPlus: ImageView = itemView.findViewById(R.id.ivPlus)
         val ivMinus: ImageView = itemView.findViewById(R.id.ivMinus)

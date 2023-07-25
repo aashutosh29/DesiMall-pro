@@ -15,6 +15,7 @@ import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.CategoryAdapter
 import com.aashutosh.desimall_pro.adapter.ProductCategoryAdapter
 import com.aashutosh.desimall_pro.databinding.ActivityCategoryBinding
+import com.aashutosh.desimall_pro.models.Raw
 import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.categoryWithItsProduct.CategoryBasedProductsActivity
 import com.aashutosh.desimall_pro.ui.searchActivity.SearchActivity
@@ -131,6 +132,10 @@ class CategoryActivity : AppCompatActivity(), CategoryView {
         initCategoryRecyclerView(cat)
 
 
+    }
+
+    override fun getAdsClicked(ads: Raw) {
+        TODO("Not yet implemented")
     }
 
 

@@ -42,10 +42,10 @@
     <string name="title">Select Your City</string>
     <string name="change">Change</string>
     <string name="confirm_location_and_proceed">Confirm location and Proceed</string>
-    <string name="enter_your_name">Enter Your Full Name</string>
-    <string name="enter_you_email_address">Enter you Email Address</string>
-    <string name="confirm_details_and_proceed">Confirm details and proceed</string>
-    <string name="enter_your_zip_code">Enter your area zip code</string>
+    <string name="enter_your_name">Your Full Name</string>
+    <string name="enter_you_email_address">Email ID</string>
+    <string name="confirm_details_and_proceed">Create an account</string>
+    <string name="enter_your_zip_code">ZIP CODE</string>
     <!--package com.aashutosh.desimall_pro.ui.myProfileActivity-->
     <string name="file_provider" translatable="false">com.aashutosh.desimall_pro.fileprovider</string>
     <string name="pick_single">Please select your image</string>
@@ -59,7 +59,8 @@
         <item quantity="other">Please select %1$d more images…</item>
     </plurals>
     <string name="pick_multi_limit">You have more than %1$d images selected…</string>
-    <string name="enter_your_detail_address">Enter Your Detail Address</string>
-    <string name="enter_your_landmark_address">Enter your landmark address</string>
+    <string name="enter_your_detail_address">Location</string>
+    <string name="enter_your_landmark_address">Land Mark</string>
     <string name="title_activity_category">CategoryActivity</string>
+    <string name="sorry_we_do_not_serve_your_location_at_the_moment_and_there_are_no_nearby_stores_do_you_still_want_to_continue">Sorry. We do not serve your location at the moment and there are no nearby stores. Do you still want to continue?</string>
 </resources>

@@ -333,7 +333,7 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
                     this@ProceedToCheckOutActivity, "error -> $e", Toast.LENGTH_SHORT
                 ).show()
 
-                Log.w(TAG, "Error adding document", e)
+                Log.w(TAG, "Error placing order", e)
             }
         }
 

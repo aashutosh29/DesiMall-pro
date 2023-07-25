@@ -16,13 +16,20 @@ import java.text.DecimalFormat
 
 class Constant {
     companion object {
+        const val COUNTRY_CODE = "+91"
+        const val  FETCHING_SUCCEED = "fetching_succeed"
+        const val IS_FOR_DETAILS_VERIFICATION = "is_for_details_verification"
+        const val  IS_FORGET_PASSWORD = "is_forget_password"
+        const val LOGIN_SUCCESS ="SUCCESS_LOGIN"
+        const val VERIFY_USER_LOCATION = "from_navigator"
+        const val NO_FIRST_TIME = "no_first_time"
         const val URL = "URL"
-        const val BRANCH_NAME = "branch_name"
+        const val BRANCH_NAME = "live desi mall"
         const val BRANCH_CODE = "branch_code"
         const val DETAILS = "details"
         const val LOCATION = "location"
         const val ZIP = "zip"
-        const val VERIFY_USER_LOCATION = "from_navigator"
+
         const val USER_SKIPPED = "user_skipped"
         const val DETAILIlS_VERIFIED = "details_verified"
         const val PHONE_NUMBER = "verified_phone_number"
@@ -57,15 +64,29 @@ class Constant {
         const val IMAGE_URL = "image_url"
         const val CLIENT_ID = "ck_32e46804bfe8c984b139a35b6d3e7b6893e43644"
         const val CLIENT_SECRET = "cs_8d6fa97258ec30c830f3f601e0b4b3d082778203"
-        const val BASE_URL = "http://103.234.185.42:50/API/"
-        const val API_BASE_URL = "https://api.livedesimall.com/"
+        const val BASE_URL = "http://mobileappkaps.efacto.in/API/"
+        const val LOCATION_API = "https://nominatim.openstreetmap.org/reverse/"
         const val DESCRIPTION = "description"
         const val ORDER_VERIFICATION_PENDING = "0"
         const val ADDRESS = "address"
         const val LAND_MARK = "land mark"
         const val  PRODUCT_SERVER_QTY = "product server quantity"
         const val  PRODUCT_PUBLISHED = "product published"
+        const val ADDRESS_FULL_DETAILS = "address_full_details"
 
+
+        /*new*/
+        const val  USER_CITY = "city"
+        const val USER_STATE= "state"
+        const val USER_POSTAL_CODE ="user_postal_code"
+
+
+        /*home*/
+        const val  HOME = "home"
+        const val CART = "cart"
+        const val NOTIFICATION = "Notification"
+        const val  PROFILE = "profile"
+        const val  ORDER_HISTORY = "order_history"
 
         /*routing*/
         const val ROUTE_HOME = "home"

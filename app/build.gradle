@@ -16,8 +16,8 @@ android {
         applicationId "com.desimall.live"
         minSdk 26
         targetSdk 33
-        versionCode 15
-        versionName "2.09"
+        versionCode 16
+        versionName "2.091"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -114,9 +114,12 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-firestore-ktx:24.4.2'
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.1.1'
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
+
+
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
 
     implementation 'com.sun.mail:android-mail:1.6.4'
 
@@ -131,6 +134,10 @@ dependencies {
     //country code picker
     implementation 'com.hbb20:ccp:2.6.0'
     implementation 'androidx.browser:browser:1.4.0'
+
+
+
+
 
 
 

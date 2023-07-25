@@ -26,6 +26,7 @@ import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.adapter.CategoryAdapter
 import com.aashutosh.desimall_pro.adapter.SearchProductAdapter
 import com.aashutosh.desimall_pro.models.CartProduct
+import com.aashutosh.desimall_pro.models.Raw
 import com.aashutosh.desimall_pro.models.desimallApi.DesiDataResponseSubListItem
 import com.aashutosh.desimall_pro.ui.CategoryView
 import com.aashutosh.desimall_pro.ui.bottomSheet.ShortBottomSheet
@@ -90,6 +91,10 @@ class SearchActivity : AppCompatActivity(), CategoryView {
 
         startActivity(intent)
 
+    }
+
+    override fun getAdsClicked(ads: Raw) {
+        TODO("Not yet implemented")
     }
 
     private fun initRecyclerViewForCategory(categoryResponse: List<String>) {

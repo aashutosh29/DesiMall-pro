@@ -15,9 +15,12 @@ import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.databinding.ActivityHomeBinding
 import com.aashutosh.desimall_pro.ui.cartActivity.CartActivity
+import com.aashutosh.desimall_pro.ui.cloneHomeFragment.CloneHomeFragment
 import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
 import com.aashutosh.desimall_pro.ui.fragments.NotificationFragment
 import com.aashutosh.desimall_pro.ui.fragments.ProfileFragment
+import com.aashutosh.desimall_pro.ui.orderHistoryActivity.OrderHistoryActivity
+import com.aashutosh.desimall_pro.ui.searchActivity.HomeView
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -30,7 +33,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(),HomeView {
     private lateinit var mainViewModel: StoreViewModel
     lateinit var sharedPrefHelper: SharedPrefHelper
     lateinit var binding: ActivityHomeBinding
@@ -121,6 +124,30 @@ class HomeActivity : AppCompatActivity() {
         transaction.replace(R.id.container, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onIconClicked(id: String) {
+        when (id) {
+            Constant.HOME -> {
+                val intent = Intent(this@HomeActivity, CloneHomeFragment::class.java)
+                startActivity(intent)
+            }
+            Constant.CART -> {
+                val intent = Intent(this@HomeActivity, CartActivity::class.java)
+                startActivity(intent)
+            }
+            Constant.NOTIFICATION -> {
+                loadFragment(NotificationFragment())
+            }
+            Constant.PROFILE -> {
+                loadFragment(ProfileFragment())
+            }
+            Constant.ORDER_HISTORY ->{
+                val intent = Intent(this@HomeActivity, OrderHistoryActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
     }
 
 }

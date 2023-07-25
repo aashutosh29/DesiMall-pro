@@ -16,6 +16,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <application
         android:name=".utils.SimpleStore"
@@ -30,6 +33,27 @@
         android:theme="@style/Theme.SimpleStore"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity
+            android:name=".Navigator"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.cloneHomeFragment.CloneHomeFragment"
+            />
+        <activity
+            android:name=".ui.RequestForFetchingLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".ui.PasswordActivity"
+            android:exported="false" />
         <activity
             android:name=".OrderSuccessActivity"
             android:exported="false">
@@ -94,26 +118,15 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
-        <receiver
-            android:name=".utils.SMSReceiver"
-            android:exported="true"
-            android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
-            </intent-filter>
-        </receiver>
-
+        </service> <!-- <receiver android:name=".utils.SmsBroadCastReceiver" android:exported="true" -->
+        <!-- android:permission="com.google.android.gms.auth.api.phone.permission.SEND"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
         <activity
-            android:name=".splash.test.SplashActivity2"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".splash.test.FindNearestStoreActivity"
+            android:exported="true" />
         <activity
             android:name=".ui.proceedToCheckOut.ProceedToCheckOutActivity"
             android:exported="false">
@@ -130,8 +143,8 @@
         </activity>
         <activity
             android:name=".ui.deliveryAddress.DeliveryAddressActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -158,22 +171,20 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity android:name=".ui.phoneVerification.EnterNumberActivity" />
-
-
         <activity
             android:name=".ui.phoneVerification.VerifyNumberActivity"
             android:exported="true">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
 
         </activity>
-
-
         <activity
             android:name=".ui.profile.SignIn"
             android:exported="false" />
@@ -232,7 +243,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".ui.SplashOldActivity">
+        <activity android:name=".ui.ProductDownloadingActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

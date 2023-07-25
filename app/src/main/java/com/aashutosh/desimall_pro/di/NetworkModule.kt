@@ -1,9 +1,9 @@
 package com.aashutosh.desimall_pro.di
 
-import com.aashutosh.desimall_pro.api.APIService
+import com.aashutosh.desimall_pro.api.LocationAPI
 import com.aashutosh.desimall_pro.api.CDSService
-import com.aashutosh.desimall_pro.utils.Constant.Companion.API_BASE_URL
 import com.aashutosh.desimall_pro.utils.Constant.Companion.BASE_URL
+import com.aashutosh.desimall_pro.utils.Constant.Companion.LOCATION_API
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,16 +27,16 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    @Named("apiRetrofit")
+    @Named("locationRetrofit")
     fun getAPIRetrofit(): Retrofit {
-        return Retrofit.Builder().baseUrl(API_BASE_URL)
+        return Retrofit.Builder().baseUrl(LOCATION_API)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
     @Singleton
     @Provides
-    fun getAPIService(@Named("apiRetrofit") retrofit: Retrofit): APIService {
-        return retrofit.create(APIService::class.java)
+    fun getAPIService(@Named("locationRetrofit") retrofit: Retrofit): LocationAPI {
+        return retrofit.create(LocationAPI::class.java)
     }
 
     @Singleton

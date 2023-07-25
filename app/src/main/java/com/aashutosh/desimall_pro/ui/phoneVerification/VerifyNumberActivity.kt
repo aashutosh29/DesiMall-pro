@@ -1,6 +1,5 @@
 package com.aashutosh.desimall_pro.ui.phoneVerification
 
-import com.aashutosh.desimall_pro.utils.SMSReceiver
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -10,38 +9,43 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.databinding.ActivityVerifyNumberBinding
-import com.aashutosh.desimall_pro.ui.HomeActivity
-import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
+import com.aashutosh.desimall_pro.ui.LoginActivity
+import com.aashutosh.desimall_pro.ui.PasswordActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.utils.Constant.Companion.phoneNumberKey
+
+import com.aashutosh.desimall_pro.utils.SmsBroadCastReceiver
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
-
 class VerifyNumberActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityVerifyNumberBinding
-
-
     private lateinit var auth: FirebaseAuth
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
-    lateinit var sharedPrefHelper: SharedPrefHelper
+    private lateinit var sharedPrefHelper: SharedPrefHelper
     private lateinit var progressDialog: AlertDialog
-    private var phoneNum: String = "+91"
-    private var nepaliNum: String = "+977"
-
+    private var phoneNum: String = Constant.COUNTRY_CODE
     private var storedVerificationId: String? = null
     private val TAG = "VerifyNumberActivity"
-    private var intentFilter: IntentFilter? = null
-    private var smsReceiver: SMSReceiver? = null
+    private var isForgetPass: Boolean = false
+
+
+    private val REQUEST_USER_CONSENT = 200
+    var smsBroadCastReceiver: SmsBroadCastReceiver? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,23 +53,17 @@ class VerifyNumberActivity : AppCompatActivity() {
         binding = ActivityVerifyNumberBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
+        isForgetPass = intent.getBooleanExtra(Constant.IS_FORGET_PASSWORD, false)
         auth.useAppLanguage()
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(this)
 
-        //should comment this line while testing
-       // phoneNum = nepaliNum
-        //   Log.d("Hash-key-aashutosh : ", AppSignatureHashHelper(this).appSignatures.toString())
-        // Init Sms Retriever >>>>
-        //initSmsListener()
-        //initBroadCast()
         if (intent != null) {
             val num = intent.getStringExtra(phoneNumberKey).toString()
             phoneNum += num
             Log.d(TAG, phoneNum)
             "Authenticate $phoneNum".also { binding.textAuthenticateNum.text = it }
         } else {
-            //test()
             Toast.makeText(this, "Bad Gateway 😒", Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -82,7 +80,6 @@ class VerifyNumberActivity : AppCompatActivity() {
             }
         }
 
-
         verificationCallbacks()
 
         val options = PhoneAuthOptions.newBuilder(auth)
@@ -91,19 +88,79 @@ class VerifyNumberActivity : AppCompatActivity() {
             .setActivity(this)                 // Activity (for callback binding)
             .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
             .build()
+      //  registerBroadCastReceiver()
+
+      //  startSmartUserConsent()
+
         PhoneAuthProvider.verifyPhoneNumber(options)
+
 
     }
 
-    private fun test() {
-        val num = "9865995429"
-        phoneNum += num
-        Log.d(TAG, phoneNum)
-        "Authenticate $phoneNum".also { binding.textAuthenticateNum.text = it }
+    private fun startSmartUserConsent() {
+        val client = SmsRetriever.getClient(this)
+        client.startSmsUserConsent(null)
+    }
+
+    private fun registerBroadCastReceiver() {
+        smsBroadCastReceiver = SmsBroadCastReceiver()
+        smsBroadCastReceiver!!.smsBroadCastReceiverListener =
+            object : SmsBroadCastReceiver.SmsBroadCastReceiverListener {
+                override fun onSuccess(otp: Intent?) {
+                    startActivityForResult(intent, REQUEST_USER_CONSENT)
+                }
+
+                override fun onFailure() {
+                    Toast.makeText(
+                        this@VerifyNumberActivity,
+                        "Error while fetching OTP",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            }
+        val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+        registerReceiver(smsBroadCastReceiver, intentFilter)
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+        if (smsBroadCastReceiver != null) {
+            unregisterReceiver(smsBroadCastReceiver)
+        }
+    }
+
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_USER_CONSENT) {
+            if (resultCode == RESULT_OK && data != null) {
+                val message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE)
+                fillOTP(message)
+            }
+        }
+    }*/
+
+    private fun fillOTP(message: String?) {
+        if (message != null) {
+            val otpPattern = Regex("\\d{6}")
+            val matchResult = otpPattern.find(message)
+            val otp = matchResult?.value
+            if (!otp.isNullOrBlank()) {
+                binding.etOtp.editText?.setText(otp)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (smsBroadCastReceiver != null) {
+            unregisterReceiver(smsBroadCastReceiver)
+        }
     }
 
     private fun initProgressDialog(): AlertDialog {
-        progressDialog = Constant.setProgressDialog(this, "Registering User")
+        progressDialog = Constant.setProgressDialog(this, "Validating number")
         progressDialog.setCancelable(false) // blocks UI interaction
         return progressDialog
     }
@@ -113,14 +170,7 @@ class VerifyNumberActivity : AppCompatActivity() {
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                // This callback will be invoked in two situations:
-                // 1 - Instant verification. In some cases the phone number can be instantly
-                //     verified without needing to send or enter a verification code.
-                // 2 - Auto-retrieval. On some devices Google Play services can automatically
-                //     detect the incoming verification SMS and perform verification without
-                //     user action.
                 Log.d(TAG, "onVerificationCompleted:$credential")
-
                 val code = credential.smsCode
                 if (code != null) {
                     verifyVerificationCode(code)
@@ -128,10 +178,7 @@ class VerifyNumberActivity : AppCompatActivity() {
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
-                // This callback is invoked in an invalid request for verification is made,
-                // for instance if the the phone number format is not valid.
                 Log.w(TAG, "onVerificationFailed", e)
-
                 when (e) {
                     is FirebaseAuthInvalidCredentialsException -> {
                         // Invalid request
@@ -139,9 +186,9 @@ class VerifyNumberActivity : AppCompatActivity() {
                             this@VerifyNumberActivity,
                             "Invalid request", Toast.LENGTH_SHORT
                         ).show()
-                        returnToEnterNumberActivity()
-
+                        returnToLoginActivity()
                     }
+
                     is FirebaseTooManyRequestsException -> {
                         // The SMS quota for the project has been exceeded
                         Toast.makeText(
@@ -149,9 +196,9 @@ class VerifyNumberActivity : AppCompatActivity() {
                             "The SMS quota for the project has been exceeded",
                             Toast.LENGTH_SHORT
                         ).show()
-                        returnToEnterNumberActivity()
-
+                        returnToLoginActivity()
                     }
+
                     else -> {
                         Log.d(TAG, "newNew: " + e.message.toString())
                         // Show a message and update the UI
@@ -160,7 +207,7 @@ class VerifyNumberActivity : AppCompatActivity() {
                             e.message.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
-                        returnToEnterNumberActivity()
+                        returnToLoginActivity()
                     }
                 }
             }
@@ -169,37 +216,43 @@ class VerifyNumberActivity : AppCompatActivity() {
                 verificationId: String,
                 token: PhoneAuthProvider.ForceResendingToken
             ) {
-                // The SMS verification code has been sent to the provided phone number, we
-                // now need to ask the user to enter the code and then construct a credential
-                // by combining the code with a verification ID.
-                Log.d(TAG, "onCodeSent:$verificationId")
-
-                // Save verification ID and resending token so we can use them later
                 storedVerificationId = verificationId
                 resendToken = token
-
                 Toast.makeText(
                     this@VerifyNumberActivity,
                     "OTP sent to $phoneNum",
                     Toast.LENGTH_SHORT
                 ).show()
-
                 super.onCodeSent(verificationId, resendToken)
-
             }
         }
-
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
-
                 if (task.isSuccessful) {
+                    sharedPrefHelper[Constant.PHONE_NUMBER] =
+                        task.result?.user?.phoneNumber?.trim()
+                    if (isForgetPass){
+                        Toast.makeText(
+                            this, "Authorized", Toast.LENGTH_SHORT
+                        ).show()
+                        val i = Intent(
+                            this@VerifyNumberActivity,
+                            PasswordActivity::class.java
+                        )
+                        i.putExtra(Constant.IS_FORGET_PASSWORD, isForgetPass)
+                        i.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
+                        finish()
+                    }
+                    else{
+
                     initProgressDialog().show()
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
-
                     val db = Firebase.firestore
                     val dateFormat: DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
                     val date = Date()
@@ -207,76 +260,31 @@ class VerifyNumberActivity : AppCompatActivity() {
                         "phone" to task.result?.user?.phoneNumber,
                         "date" to dateFormat.format(date),
                     )
-                    Log.d(TAG, "phoneNumber aja: ${task.result?.user?.phoneNumber!!} ")
-
-                    //db.collection("user").document( task.result?.user?.phoneNumber!!)
-
-                    db.collection("user").whereEqualTo("phone", task.result?.user?.phoneNumber!!)
-                        .get().addOnCompleteListener {
-                            if (it.result.isEmpty ||  it.result.documents[0].data!!["name"].toString().isEmpty() ) {
-                                db.collection("user").document(task.result?.user?.phoneNumber!!)
-                                    .set(createUser).addOnSuccessListener {
-                                        Toast.makeText(
-                                            this, "Authorization Completed 🥳🥳", Toast.LENGTH_SHORT
-                                        ).show()
-                                        sharedPrefHelper[Constant.VERIFIED_NUM] = true
-                                        sharedPrefHelper[Constant.PHONE_NUMBER] =
-                                            task.result?.user?.phoneNumber?.trim()
-                                        progressDialog.dismiss()
-                                        val i = Intent(
-                                            this@VerifyNumberActivity,
-                                            DetailsVerificationActivity::class.java
-                                        )
-                                        i.flags =
-                                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                                        i.putExtra(Constant.VERIFY_USER_LOCATION, true)
-                                        startActivity(i)
-                                        finish()
-                                    }.addOnFailureListener {
-                                        progressDialog.dismiss()
-                                        Toast.makeText(
-                                            this, "User Not Created Retry Again", Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                            } else {
-                                sharedPrefHelper[Constant.PHONE_NUMBER] =
-                                    task.result?.user?.phoneNumber?.trim()
-                                sharedPrefHelper[Constant.VERIFIED_NUM] = true
-                                progressDialog.dismiss()
-                                sharedPrefHelper[Constant.EMAIL] =
-                                    it.result.documents[0].data!!["email"].toString()
-                                sharedPrefHelper[Constant.ZIP] =
-                                    it.result.documents[0].data!!["zip"].toString()
-                                sharedPrefHelper[Constant.NAME] =
-                                    it.result.documents[0].data!!["name"].toString()
-                                sharedPrefHelper[Constant.ADDRESS] =
-                                    it.result.documents[0].data!!["location"].toString()
-                                sharedPrefHelper[Constant.LAND_MARK] =
-                                    it.result.documents[0].data!!["landmark"].toString()
-                                sharedPrefHelper[Constant.PHOTO] =
-                                    it.result.documents[0].data!!["photo"].toString()
-                                sharedPrefHelper[Constant.DETAILIlS_VERIFIED] = true
-
-                                val i = Intent(
-                                    this@VerifyNumberActivity,
-                                    DetailsVerificationActivity::class.java
-                                )
-                                i.flags =
-                                    Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                                i.putExtra(Constant.VERIFY_USER_LOCATION, true)
-                                startActivity(i)
-                                finish()
-
-
-                            }
+                    db.collection("user").document(task.result?.user?.phoneNumber!!)
+                        .set(createUser).addOnSuccessListener {
+                            Toast.makeText(
+                                this, "Authorized", Toast.LENGTH_SHORT
+                            ).show()
+                            sharedPrefHelper[Constant.PHONE_NUMBER] =
+                                task.result?.user?.phoneNumber?.trim()
+                            progressDialog.dismiss()
+                            val i = Intent(
+                                this@VerifyNumberActivity,
+                                PasswordActivity::class.java
+                            )
+                            i.putExtra(Constant.IS_FORGET_PASSWORD, isForgetPass)
+                            i.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(i)
+                            finish()
+                        }.addOnFailureListener {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                this, "User Not Created Retry Again", Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        .addOnFailureListener {
-                            Log.d(TAG, "signInWithPhoneAuthCredential: $it")
-                        }
-
-
+                    }
                 } else {
-
                     // Sign in failed, display a message and update the UI
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
@@ -290,60 +298,21 @@ class VerifyNumberActivity : AppCompatActivity() {
                         // Update UI
                         Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
-                    returnToEnterNumberActivity()
-
+                    returnToLoginActivity()
                 }
             }
     }
 
     private fun verifyVerificationCode(code: String) {
-
         //creating the credential
         val credential = PhoneAuthProvider.getCredential(storedVerificationId!!, code)
         //signing the user
         signInWithPhoneAuthCredential(credential)
-
     }
 
-    private fun returnToEnterNumberActivity() {
-        val intent = Intent(applicationContext, EnterNumberActivity::class.java)
+    private fun returnToLoginActivity() {
+        val intent = Intent(applicationContext, LoginActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-
-    private fun initBroadCast() {
-        intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
-        smsReceiver = SMSReceiver()
-        smsReceiver?.setOTPListener(object : SMSReceiver.OTPReceiveListener {
-            override fun onOTPReceived(otp: String?) {
-                showToast("OTP Received: $otp")
-            }
-        })
-    }
-
-    private fun initSmsListener() {
-        val client = SmsRetriever.getClient(this)
-        client.startSmsRetriever()
-    }
-
-    override fun onResume() {
-        super.onResume()
-       // registerReceiver(smsReceiver, intentFilter)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //unregisterReceiver(smsReceiver)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-       // smsReceiver = null
-    }
-
-
-    private fun showToast(msg: String?) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }

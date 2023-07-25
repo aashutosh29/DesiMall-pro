@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.databinding.ItemAdsBinding
 import com.aashutosh.desimall_pro.models.Raw
-import com.aashutosh.desimall_pro.ui.fragments.HomeFragment
+import com.aashutosh.desimall_pro.ui.CategoryView
+import com.aashutosh.desimall_pro.ui.cloneHomeFragment.CloneHomeFragment
 import com.bumptech.glide.Glide
 
 class AdsAdapter(
     private val mList: List<Raw>,
     private val context: Context,
-    private val homeFragment: HomeFragment
+    private val homeFragment: CategoryView
 ) :
     RecyclerView.Adapter<AdsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

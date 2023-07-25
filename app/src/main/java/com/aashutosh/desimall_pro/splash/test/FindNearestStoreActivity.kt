@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +23,7 @@ import butterknife.ButterKnife
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.models.java.Store
-import com.aashutosh.desimall_pro.ui.SplashOldActivity
+import com.aashutosh.desimall_pro.ui.ProductDownloadingActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -37,29 +38,35 @@ import kotlin.math.sqrt
 
 @AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
-class SplashActivity2 : AppCompatActivity(), LocationListener {
+class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
 
     @BindView(R.id.pbMain)
     lateinit var pbMain: LinearProgressIndicator
+
+    @BindView(R.id.tvFSNY)
+    lateinit var tvFSNY : TextView
+    var isForDetailsVerification : Boolean = false
     var db: FirebaseFirestore? = null
     var storeList: MutableList<Store>? = null
     var alertDialog: AlertDialog? = null
     lateinit var sharedPreferHelper: SharedPrefHelper
-
-
-
-
     var onStop = false
     var locationManager: LocationManager? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         ButterKnife.bind(this)
+        isForDetailsVerification = intent.getBooleanExtra(Constant.IS_FOR_DETAILS_VERIFICATION, false)
         sharedPreferHelper = SharedPrefHelper
         sharedPreferHelper.init(this)
         initialization()
         checkAllStuff()
 
+        if (isForDetailsVerification){
+            tvFSNY.text = "Loading Details"
+        }
     }
 
     private fun checkAllStuff() {
@@ -118,9 +125,9 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                     )
                     //real web-view
                     { _, _ ->
-                        startWebView(
+                        startActivity(
                             Constant.BRANCH_NAME,
-                            branchCode = "In order to use the application, you need to grant location permission. If you haven't done so already, please restart the app and provide us with the necessary location permission."
+                            branchCode = "2"
                         )
                     }.show()
             false
@@ -153,13 +160,13 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         println("fetching failed")
-                        startWebView(name, branchCode)
+                        startActivity(name, branchCode)
                     }
                     val token = task.result
                     Log.d("TAG", "onComplete: $token")
-                    startWebView(name, branchCode)
+                    startActivity(name, branchCode)
                 }).addOnFailureListener {
-                    startWebView(
+                    startActivity(
                         name,
                         branchCode
                     )
@@ -169,22 +176,39 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                     msg = "Failed"
                 }
             }).addOnFailureListener {
-            startWebView(
+            startActivity(
                 name,
                 branchCode
             )
         }
     }
+//here
+    private fun startActivity(branchName: String?, branchCode: String?) {
 
-    private fun startWebView(branchName: String?, branchCode: String?) {
+            if (isForDetailsVerification){
+                sharedPreferHelper[Constant.BRANCH_NAME] = branchName
+                sharedPreferHelper[Constant.BRANCH_CODE] = branchCode
+                val intent = Intent(this@FindNearestStoreActivity, ProductDownloadingActivity::class.java)
+                intent.putExtra(Constant.BRANCH_NAME, branchName)
+                intent.putExtra(Constant.BRANCH_CODE, branchCode)
+                intent.putExtra(Constant.IS_FOR_DETAILS_VERIFICATION,isForDetailsVerification)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            else{
         sharedPreferHelper[Constant.BRANCH_NAME] = branchName
-        val intent = Intent(this@SplashActivity2, SplashOldActivity::class.java)
+        sharedPreferHelper[Constant.BRANCH_CODE] = branchCode
+        sharedPreferHelper[Constant.NO_FIRST_TIME] = true
+        val intent = Intent(this@FindNearestStoreActivity, ProductDownloadingActivity::class.java)
         intent.putExtra(Constant.BRANCH_NAME, branchName)
         intent.putExtra(Constant.BRANCH_CODE, branchCode)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+                startActivity(intent)
+    }
     }
 
     private fun getDataFromFireBase(location: Location?) {
@@ -248,7 +272,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 R.string.ok
             ) { // Request permission
                 ActivityCompat.requestPermissions(
-                    this@SplashActivity2,
+                    this@FindNearestStoreActivity,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     REQUEST_PERMISSIONS_REQUEST_CODE
                 )
@@ -259,7 +283,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
             ActivityCompat.requestPermissions(
-                this@SplashActivity2,
+                this@FindNearestStoreActivity,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_PERMISSIONS_REQUEST_CODE
             )
@@ -290,7 +314,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                     R.string.ok
                 ) { // Request permission
                     ActivityCompat.requestPermissions(
-                        this@SplashActivity2,
+                        this@FindNearestStoreActivity,
                         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                         REQUEST_PERMISSIONS_REQUEST_CODE
                     )
@@ -323,7 +347,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 LocationManager.GPS_PROVIDER,
                 0L,
                 0f,
-                this@SplashActivity2
+                this@FindNearestStoreActivity
             )
             var myLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             if (myLocation == null) {
@@ -339,6 +363,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
                 Toast.makeText(this, "Waiting to get location for first time", Toast.LENGTH_SHORT)
                     .show()
             } else {
+                sharedPreferHelper[Constant.LAT_LON] = myLocation.latitude.toString()+"_"+myLocation.longitude.toString()
                 getDataFromFireBase(myLocation)
             }
         }
@@ -418,7 +443,7 @@ class SplashActivity2 : AppCompatActivity(), LocationListener {
         } else {
            // real web-view
             //code must not come here
-            startWebView(Constant.BRANCH_NAME, branchCode = "")
+            startActivity(Constant.BRANCH_NAME, branchCode = "2")
         }
     }
 

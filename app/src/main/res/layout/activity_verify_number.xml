@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@drawable/enter_otp">
+    >
 
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -28,7 +28,7 @@
         android:layout_marginEnd="8dp"
         android:text="Enter OTP here"
         android:textAllCaps="true"
-        android:textColor="@color/white"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -67,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Do not share OTP with anybody"
-        android:textColor="@color/white"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="@dimen/_12sdp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,6 +85,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvDSWAO" />
 
     <ImageView
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +98,7 @@
 
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
