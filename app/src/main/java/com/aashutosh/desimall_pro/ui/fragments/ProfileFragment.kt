@@ -111,7 +111,8 @@ class ProfileFragment : Fragment() {
             ).show()
         })
         binding.rlDelivery.setOnClickListener(View.OnClickListener {
-            if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
+            Toast.makeText(requireContext(),"Available soon",Toast.LENGTH_SHORT).show()
+            /*if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
                 val i = Intent(requireContext(), EnterNumberActivity::class.java)
                 i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(i)
@@ -132,7 +133,7 @@ class ProfileFragment : Fragment() {
             } else {
                 val intent = Intent(context, DeliveryAddressActivity::class.java)
                 startActivity(intent)
-            }
+            }*/
         })
 
         binding.rlOrderHistory.setOnClickListener(View.OnClickListener {

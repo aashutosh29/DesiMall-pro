@@ -168,18 +168,7 @@ class CartActivity : AppCompatActivity(), CartInterface {
 
     @OnClick(R.id.tbCheckOut)
     fun tbCheckOutClicked() {
-
-        if (deliveryDetails.isEmpty()) {
-            startActivity(
-                Intent(
-                    this@CartActivity,
-                    DeliveryAddressActivity::class.java
-                )
-            )
-        } else {
             startActivity(Intent(this@CartActivity, ProceedToCheckOutActivity::class.java))
-
-        }
     }
 
     override fun onResume() {

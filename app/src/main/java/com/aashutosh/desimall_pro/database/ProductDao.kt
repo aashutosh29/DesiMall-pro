@@ -1,5 +1,6 @@
 package com.aashutosh.desimall_pro.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.aashutosh.desimall_pro.models.desimallApi.DesiCategory
@@ -76,7 +77,8 @@ interface ProductDao {
         limit: Int, offset: Int, alpha: String
     ): List<DesiDataResponseSubListItem>
 
-
+    @Query("SELECT * FROM product ")
+    fun getAllListLiveData(): LiveData<List<DesiDataResponseSubListItem>>
     @Query("SELECT * FROM product where sku_name LIKE '%' || :search || '%'  LIMIT :limit OFFSET :offset")
     suspend fun getSearchedProduct(
         limit: Int, offset: Int, search: String

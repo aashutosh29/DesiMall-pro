@@ -62,6 +62,7 @@ class CloneHomeFragment : AppCompatActivity(), CategoryView {
     private lateinit var binding: HomeFragmentBinding // Change the binding class to the appropriate activity layout binding.
     private lateinit var sharedPrefHelper: SharedPrefHelper
     private lateinit var viewPagerAdapter: ImageSlideAdapter
+    private lateinit var progressDialog: AlertDialog
 
     @VisibleForTesting
     internal lateinit var items: MutableList<Any>
@@ -154,7 +155,11 @@ class CloneHomeFragment : AppCompatActivity(), CategoryView {
 
 
     }
-
+    private fun initProgressDialog(): AlertDialog {
+        progressDialog = Constant.setProgressDialog(this, "Fetching Category")
+        progressDialog.setCancelable(false) // blocks UI interaction
+        return progressDialog
+    }
 
     private fun showEnableNotificationDialog() {
         val builder = AlertDialog.Builder(this@CloneHomeFragment)
@@ -183,6 +188,7 @@ class CloneHomeFragment : AppCompatActivity(), CategoryView {
 
 
     private fun initSlider() {
+
         val db = Firebase.firestore
         var ads: Raw
         val adsArrayList: ArrayList<Raw> = arrayListOf()
@@ -192,6 +198,7 @@ class CloneHomeFragment : AppCompatActivity(), CategoryView {
             .get()
             .addOnSuccessListener { result ->
                 binding.rvAds.visibility = View.VISIBLE
+
                 for (document in result) {
                     ads = Raw(
                         image = document.data["image"].toString(),
@@ -227,6 +234,7 @@ class CloneHomeFragment : AppCompatActivity(), CategoryView {
                     }
                 }
             }.addOnFailureListener { exception ->
+
                 binding.rvAds.visibility = View.INVISIBLE
                 Toast.makeText(this@CloneHomeFragment, "Error Loading $exception", Toast.LENGTH_SHORT)
                     .show()
@@ -237,6 +245,7 @@ class CloneHomeFragment : AppCompatActivity(), CategoryView {
 
     //tung
     private fun callDb() {
+        initProgressDialog().show()
         val db = Firebase.firestore
         var ads: Raw
         val adsArrayList: ArrayList<Raw> = arrayListOf()
@@ -246,6 +255,7 @@ class CloneHomeFragment : AppCompatActivity(), CategoryView {
             .get()
             .addOnSuccessListener { result ->
                 binding.rvAds.visibility = View.VISIBLE
+                progressDialog.dismiss()
                 for (document in result) {
                     ads = Raw(
                         image = document.data["image"].toString(),
@@ -269,6 +279,7 @@ class CloneHomeFragment : AppCompatActivity(), CategoryView {
 
                 initAds(filteredCatList)
             }.addOnFailureListener { exception ->
+                progressDialog.dismiss()
                 binding.rvAds.visibility = View.INVISIBLE
                 Toast.makeText(this@CloneHomeFragment, "Error Loading $exception", Toast.LENGTH_SHORT)
                     .show()

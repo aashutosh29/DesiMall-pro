@@ -53,8 +53,7 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
     @BindView(R.id.ivLogo)
     ImageView ivLogo;
 
-    @BindView(R.id.pbMain)
-    LinearProgressIndicator pbMain;
+
 
     FirebaseFirestore db;
     List<Store> storeList;
@@ -157,9 +156,9 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    pbMain.setProgress(40, true);
+                    //pbMain.setProgress(40, true);
                 } else {
-                    pbMain.setProgress(40);
+                   // pbMain.setProgress(40);
                 }
                 FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -224,9 +223,9 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
                     }
                     fetchUrlAndSubscribeTopic(shortestStoreList(location));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        pbMain.setProgress(30, true);
+                       // pbMain.setProgress(30, true);
                     } else {
-                        pbMain.setProgress(30);
+                        //pbMain.setProgress(30);
                     }
 
                 } else {
@@ -310,9 +309,9 @@ public class SplashActivity extends AppCompatActivity implements LocationListene
             myLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            pbMain.setProgress(10, true);
+           // pbMain.setProgress(10, true);
         } else {
-            pbMain.setProgress(10);
+            //pbMain.setProgress(10);
         }
         if (myLocation == null) {
             Toast.makeText(this, "Waiting to get location for first time", Toast.LENGTH_SHORT).show();

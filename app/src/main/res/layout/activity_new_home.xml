@@ -41,8 +41,8 @@
 
                     <ImageView
                         android:id="@+id/ivCat"
-                        android:layout_width="@dimen/_48sdp"
-                        android:layout_height="@dimen/_48sdp"
+                        android:layout_width="67dp"
+                        android:layout_height="59dp"
                         android:scaleType="fitXY"
                         android:src="@drawable/white_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -96,146 +96,13 @@
                         android:textColor="@color/label_main"
                         android:textSize="@dimen/_12sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/ivClear"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/ivSearch"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/ivClear"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_9sdp"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_clear_black_24dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvVerify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:padding="@dimen/_8sdp"
-                    android:shape="ring"
-                    android:thicknessRatio="1.9"
-                    android:visibility="gone"
-                    app:cardCornerRadius="40dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/ivVerify"
-                        android:layout_width="@dimen/_12sdp"
-                        android:layout_height="@dimen/_12sdp"
-                        android:background="@color/md_blue_600"
-                        android:src="@drawable/ic_baseline_check_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clCart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_4sdp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <ImageView
-                        android:id="@+id/ivCart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_cart"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvCartNo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/cart_text_bg"
-                        android:gravity="center"
-                        android:paddingHorizontal="@dimen/_6sdp"
-                        android:paddingVertical="2dp"
-                        android:text="9"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_8sdp"
-                        app:layout_constraintBottom_toTopOf="@id/ivCart"
-                        app:layout_constraintEnd_toEndOf="@id/ivCart"
-                        app:layout_constraintStart_toEndOf="@id/ivCart"
-                        app:layout_constraintTop_toTopOf="@id/ivCart" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clNoti"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_4sdp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/clCart"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <ImageView
-                        android:id="@+id/ivNoti"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_noti"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvNotiNo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/cart_text_bg"
-                        android:gravity="center"
-                        android:paddingHorizontal="@dimen/_6sdp"
-                        android:paddingVertical="2dp"
-                        android:text="9"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_8sdp"
-                        android:visibility="invisible"
-                        app:layout_constraintBottom_toTopOf="@id/ivNoti"
-                        app:layout_constraintEnd_toEndOf="@id/ivNoti"
-                        app:layout_constraintStart_toEndOf="@id/ivNoti"
-                        app:layout_constraintTop_toTopOf="@id/ivNoti" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clBarCode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_8sdp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/clNoti"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <ImageView
-                        android:id="@+id/ivBarCode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_baseline_qr_code_scanner_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/llProfile"
@@ -321,76 +188,6 @@
                 app:layout_constraintTop_toBottomOf="@id/clTop">
 
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clCategory"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <LinearLayout
-                        android:id="@+id/ll"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:background="@color/app_background"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_8sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-
-                        <TextView
-                            android:id="@+id/tvCategory"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Category"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/_12sdp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvViewAll"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="All Categories"
-                            android:textColor="@color/md_red_600"
-                            app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
-                    </LinearLayout>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvCategory"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginHorizontal="@dimen/_12sdp"
-                        android:layout_marginTop="@dimen/_6sdp"
-                        android:orientation="horizontal"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ll"
-                        tools:itemCount="5" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvAds"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_12sdp"
-                    android:layout_marginStart="@dimen/_18ssp"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/clBanner"
-                    tools:itemCount="5" />
-
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvCat"
                     android:layout_width="match_parent"
@@ -469,7 +266,7 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="8dp"
                                     android:fontFamily="@font/poppins_bold"
-                                    android:text="LDM Products"
+                                    android:text="In house"
                                     android:textColor="#000000"
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
@@ -911,13 +708,5 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <ProgressBar
-        android:id="@+id/pbLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

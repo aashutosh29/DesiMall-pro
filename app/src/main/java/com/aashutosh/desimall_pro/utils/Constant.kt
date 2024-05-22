@@ -6,15 +6,36 @@ import android.os.Handler
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.viewpager.widget.ViewPager
+import com.aashutosh.desimall_pro.R
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
 class Constant {
+     fun updateViews(tv2: TextView, ivImg: ImageView, handler: Handler, currentIndex: Int) {
+        val dataList: List<Pair<String, Int>> = listOf(
+            "Live Desi Mall in house products are pure." to R.drawable.one,
+            "A2 ghee has higher nutritional values" to R.drawable.two,
+            "Pure Honey is an anti-inflammatory, antioxidant and antibacterial agent" to R.drawable.three,
+            "Cinnamon is loaded with antioxidants and reduces inflammation" to R.drawable.four
+            // Add more pairs as needed
+        )
+
+        val (text, imageResId) = dataList[currentIndex]
+        tv2.text = text
+        ivImg.setImageResource(imageResId)
+
+        // Move to the next index
+        val nextIndex = (currentIndex + 1) % dataList.size
+
+        // Schedule the next update after 10 seconds
+        handler.postDelayed({ updateViews(tv2, ivImg, handler, nextIndex) }, 10000)
+    }
     companion object {
         const val COUNTRY_CODE = "+91"
         const val  FETCHING_SUCCEED = "fetching_succeed"
@@ -65,20 +86,21 @@ class Constant {
         const val CLIENT_ID = "ck_32e46804bfe8c984b139a35b6d3e7b6893e43644"
         const val CLIENT_SECRET = "cs_8d6fa97258ec30c830f3f601e0b4b3d082778203"
         const val BASE_URL = "http://mobileappkaps.efacto.in/API/"
-        const val LOCATION_API = "https://nominatim.openstreetmap.org/reverse/"
+        const val LOCATION_API = "https://nominatim.openstreetmap.org/"
         const val DESCRIPTION = "description"
         const val ORDER_VERIFICATION_PENDING = "0"
         const val ADDRESS = "address"
         const val LAND_MARK = "land mark"
         const val  PRODUCT_SERVER_QTY = "product server quantity"
         const val  PRODUCT_PUBLISHED = "product published"
-        const val ADDRESS_FULL_DETAILS = "address_full_details"
+
 
 
         /*new*/
         const val  USER_CITY = "city"
         const val USER_STATE= "state"
-        const val USER_POSTAL_CODE ="user_postal_code"
+        const val ADDRESS_FULL_DETAILS = "address_full_details"
+
 
 
         /*home*/
@@ -159,6 +181,7 @@ class Constant {
             }
             return dialog
         }
+        // 
 
         fun alphas(): List<String> {
             val alphabet: ArrayList<String> = arrayListOf()
@@ -237,6 +260,9 @@ class Constant {
 
         const val SPAN_COUNT = 2
     }
+
+
+
 }
 
 

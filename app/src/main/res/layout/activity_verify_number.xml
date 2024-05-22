@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    >
+    android:layout_height="match_parent">
 
-
-    <com.google.android.material.imageview.ShapeableImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/img_msg_icon"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/pw_verify"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_170sdp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/animation_otp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,22 +23,54 @@
         android:layout_margin="8dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="8dp"
-        android:text="Enter OTP here"
-        android:textAllCaps="true"
+        android:text="OTP Verification"
+        android:textAllCaps="false"
+
         android:textColor="@color/colorPrimaryText"
-        android:textSize="20sp"
+        android:textSize="@dimen/_16sdp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_msg_icon" />
 
+    <LinearLayout
+        android:id="@+id/llPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textAuthenticateNum">
+
+        <TextView
+            android:id="@+id/tvDSWAO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter OTP sent to "
+            android:textColor="@color/colorPrimaryText"
+
+
+            />
+
+        <TextView
+            android:id="@+id/tvNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:text="+91-99999999"
+            android:textColor="@color/colorPrimaryText"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/etOtp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="@dimen/_12sdp"
         android:layout_marginEnd="30dp"
         android:focusableInTouchMode="true"
         android:focusedByDefault="false"
@@ -50,7 +79,7 @@
         app:endIconMode="clear_text"
         app:errorEnabled="true"
         app:hintTextColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/textAuthenticateNum">
+        app:layout_constraintTop_toBottomOf="@id/llPhoneNumber">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -62,54 +91,58 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tvDSWAO"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Do not share OTP with anybody"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="@dimen/_12sdp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etOtp" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/btnVerify"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Verify"
-        app:layout_constraintEnd_toEndOf="@id/etOtp"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="@id/etOtp"
-        app:layout_constraintTop_toBottomOf="@id/tvDSWAO" />
-
-    <ImageView
-        android:visibility="gone"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintHeight_percent="0.36"
-        android:src="@drawable/fruits"
-        app:layout_constraintBottom_toTopOf="@id/tvSkip"
-        app:layout_constraintTop_toBottomOf="@id/btnVerify" />
-
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/tvSkip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
         android:layout_marginBottom="@dimen/_12sdp"
-        android:text="ENJOY THE FRESHNESS"
+        android:background="@drawable/rounded_cl_search"
+        android:backgroundTint="@color/md_red_600"
+        android:text="Verify"
+        android:textAllCaps="true"
         android:textColor="@color/white"
-        android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/_12sdp"
+       app:layout_constraintTop_toBottomOf="@id/layoutResendOTP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/layoutResendOTP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@id/etOtp"
+        app:layout_constraintStart_toStartOf="@id/etOtp"
+        app:layout_constraintTop_toBottomOf="@id/etOtp">
+
+        <TextView
+            android:id="@+id/tvTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.67"
+            android:text="Don't Receive OTP ?"
+            android:textColor="@color/app_primary_text_color"
+            android:textSize="@dimen/_12sdp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/btnResendOTP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="4dp"
+            android:padding="@dimen/_8sdp"
+            android:text="Resend OTP"
+            android:textAllCaps="true"
+            android:textColor="@color/md_red_600"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -80,7 +80,7 @@ class PasswordActivity : AppCompatActivity() {
 
                                 sharedPrefHelper[Constant.LOGIN_SUCCESS] = true
 
-                                val i = Intent(this@PasswordActivity, FindNearestStoreActivity::class.java)
+                                val i = Intent(this@PasswordActivity, RequestForFetchingLocationActivity::class.java)
                                 i.putExtra(Constant.IS_FOR_DETAILS_VERIFICATION,true)
                                 startActivity(i)
 //                            val i = Intent(this@PasswordActivity, DetailsVerificationActivity::class.java)

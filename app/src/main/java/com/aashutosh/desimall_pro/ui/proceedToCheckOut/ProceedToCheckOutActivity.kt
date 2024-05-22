@@ -50,7 +50,6 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
     lateinit var progressDialog: AlertDialog
     lateinit var cartAdapter: CartAdapter
     lateinit var binding: ActivityProceedToCheckOutBinding
-    var deliveryDetails: List<DeliveryDetails> = arrayListOf()
     var cartProductList: List<CartProduct> = arrayListOf()
     lateinit var sharedPrefHelper: SharedPrefHelper
     private lateinit var mainViewModel: StoreViewModel
@@ -67,55 +66,6 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
         mainViewModel = ViewModelProvider(this)[StoreViewModel::class.java]
         initView()
         initRecyclerView()
-        GlobalScope.launch(Dispatchers.Main) {
-            deliveryDetails = mainViewModel.getProfileDetails()
-            if (deliveryDetails.isNotEmpty()) {
-                binding.tvAddress.text = deliveryDetails[0].address
-                binding.tvName.text = deliveryDetails[0].name
-                binding.tvContact.text = deliveryDetails[0].mobileNum
-            }
-            else {
-                if (!sharedPrefHelper[Constant.VERIFIED_NUM, false]) {
-                    val i = Intent(this@ProceedToCheckOutActivity, EnterNumberActivity::class.java)
-                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(i)
-                } else if (!sharedPrefHelper[Constant.VERIFIED_LOCATION, false]) {
-                    val i = Intent(this@ProceedToCheckOutActivity, MapsActivity::class.java)
-                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    i.putExtra(Constant.VERIFY_USER_LOCATION, true)
-                    startActivity(i)
-                } else if (!sharedPrefHelper[Constant.DETAILIlS_VERIFIED, false]) {
-                    val i = Intent(this@ProceedToCheckOutActivity, DeliveryAddressActivity::class.java)
-                    i.putExtra(Constant.VERIFY_USER_LOCATION, true)
-                    i.putExtra(Constant.DETAILS, true)
-                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(i)
-                } else {
-                    GlobalScope.launch(Dispatchers.Main) {
-                        if (mainViewModel.createDelivery(
-                                DeliveryDetails(
-                                    5,
-                                    name = sharedPrefHelper[Constant.NAME, ""],
-                                    mobileNum = sharedPrefHelper[Constant.PHONE_NUMBER, ""],
-                                    address = sharedPrefHelper[Constant.LAT_LON],
-                                    landMark = "n/a",
-                                    zipCode = sharedPrefHelper[Constant.ZIP,""]
-                                )
-                            ) > 1
-                        ) {
-                            val newDeliveryDetails: List<DeliveryDetails> = mainViewModel.getProfileDetails()
-                            binding.tvAddress.text = newDeliveryDetails[0].address
-                            binding.tvName.text = newDeliveryDetails[0].name
-                            binding.tvContact.text = newDeliveryDetails[0].mobileNum
-
-                        }
-
-                    }
-
-
-                }
-            }
-        }
     }
 
 
@@ -215,26 +165,26 @@ class ProceedToCheckOutActivity : AppCompatActivity(), CartInterface {
     private fun btOrder() {
         initProgressDialog().show()
         val billing = Billing(
-            address_1 = deliveryDetails[0].address,
-            address_2 = deliveryDetails[0].landMark,
+            address_1 = sharedPrefHelper[Constant.ADDRESS],
+            address_2 = sharedPrefHelper[Constant.ADDRESS_FULL_DETAILS],
             city = "",
             country = "India",
             email = "ldmjaipur@gmail.com",
-            first_name = deliveryDetails[0].name.split(" ")[0],
-            last_name = deliveryDetails[0].name.split(" ")[1],
-            phone = deliveryDetails[0].mobileNum,
-            postcode = deliveryDetails[0].zipCode,
+            first_name = sharedPrefHelper[Constant.NAME,""].split(" ")[0],
+            last_name = sharedPrefHelper[Constant.NAME,""].split(" ")[1],
+            phone = sharedPrefHelper[Constant.PHONE_NUMBER,""],
+            postcode = sharedPrefHelper[Constant.ZIP,""],
             state = ""
         )
 
         val shipping = Shipping(
-            address_1 = deliveryDetails[0].address,
-            address_2 = deliveryDetails[0].landMark,
+            address_1 = sharedPrefHelper[Constant.ADDRESS],
+            address_2 = sharedPrefHelper[Constant.ADDRESS_FULL_DETAILS],
             city = "",
             country = "India",
-            first_name = deliveryDetails[0].name.split(" ")[0],
-            last_name = deliveryDetails[0].name.split(" ")[1],
-            postcode = deliveryDetails[0].zipCode,
+            first_name = sharedPrefHelper[Constant.NAME,""].split(" ")[0],
+            last_name = sharedPrefHelper[Constant.NAME,""].split(" ")[1],
+            postcode = sharedPrefHelper[Constant.ZIP,""],
             state = ""
         )
         val lineItemList = arrayListOf<LineItem>()

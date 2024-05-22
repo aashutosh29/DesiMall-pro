@@ -11,6 +11,8 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.helper.widget.MotionEffect
@@ -54,6 +56,8 @@ class MyProfileActivity : AppCompatActivity(), BottomSheetImagePicker.OnImagesSe
         binding.tvPhoneNumber.text = sharedPrefHelper[Constant.PHONE_NUMBER, ""]
         binding.tvAddress.text = sharedPrefHelper[Constant.ADDRESS, ""]
         binding.tvLandMark.text = sharedPrefHelper[Constant.LAND_MARK, ""]
+        binding.tvPostalCode.text = sharedPrefHelper[Constant.ZIP, ""]
+        binding.tvAddressDetails.text = sharedPrefHelper[Constant.ADDRESS_FULL_DETAILS, ""]
         binding.tvEditLocation.setOnClickListener(View.OnClickListener {
             val i = Intent(this@MyProfileActivity, MapsActivity::class.java)
             i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -68,18 +72,46 @@ class MyProfileActivity : AppCompatActivity(), BottomSheetImagePicker.OnImagesSe
             .load(sharedPrefHelper[Constant.PHOTO, ""])
             .error(R.drawable.ic_baseline_lock_24)
             .into(binding.ivImage)
+        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the
+            // photo picker.
+            if (uri != null) {
+                initProgressDialog().show()
+                uriArrayList = arrayListOf()
+                this.uriArrayList.add(uri)
 
+                GlobalScope.launch {
+                    uploadImage(
+                        Compressor.compress(
+                            this@MyProfileActivity,
+                            File(getRealPathFromUri(this@MyProfileActivity, uriArrayList[0])!!)
+                        ).toUri()
+                    )
+                }
+                Log.d("PhotoPicker", "Selected URI: $uri")
+            } else {
+                Log.d("PhotoPicker", "No media selected")
+            }
+        }
         binding.tvEditPhoto.setOnClickListener(View.OnClickListener {
-            BottomSheetImagePicker.Builder(getString(R.string.file_provider))
+           /* BottomSheetImagePicker.Builder(getString(R.string.file_provider))
                 .cameraButton(ButtonType.Button)            //style of the camera link (Button in header, Image tile, None)
                 .galleryButton(ButtonType.Button)           //style of the gallery link
                 .singleSelectTitle(R.string.pick_single)    //header text
                 .peekHeight(R.dimen.peekHeight)             //peek height of the bottom sheet
                 .columnSize(R.dimen.columnSize)             //size of the columns (will be changed a little to fit)
                 .requestTag("single")                       //tag can be used if multiple pickers are used
-                .show(supportFragmentManager)
+                .show(supportFragmentManager)*/
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         })
+
+
+
     }
+
+
+
+
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onImagesSelected(uris: List<Uri>, tag: String?) {

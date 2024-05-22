@@ -3,6 +3,7 @@ package com.aashutosh.desimall_pro.ui.detailsVerificationPage
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.databinding.ActivityDetailsVerificationBinding
 import com.aashutosh.desimall_pro.sealed.StateResponse
+import com.aashutosh.desimall_pro.ui.HomeActivity
 import com.aashutosh.desimall_pro.ui.RequestForFetchingLocationActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.viewModels.LocationViewModel
@@ -29,6 +31,7 @@ class DetailsVerificationActivity : AppCompatActivity() {
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(this)
         loadPreviousData()
+        goToUserInput()
         val locationViewModel: LocationViewModel by viewModels()
 
         val latLongPair = getLatitudeAndLongitude(sharedPrefHelper[Constant.LAT_LON, ""])
@@ -37,7 +40,6 @@ class DetailsVerificationActivity : AppCompatActivity() {
             val latitude = latLongPair.first
             val longitude = latLongPair.second
             locationViewModel.fetchLocation(latitude, longitude)
-
         // Observe the location response
         locationViewModel.locationResponse.observe(this) { stateResponse ->
             when (stateResponse) {
@@ -84,6 +86,15 @@ class DetailsVerificationActivity : AppCompatActivity() {
         initView()
     }
 
+    private  fun switchToAskVerification(){
+        binding.svMain.visibility = View.GONE
+        binding.llAskUser.visibility = View.VISIBLE
+    }
+    private fun goToUserInput(){
+        binding.svMain.visibility = View.VISIBLE
+        binding.llAskUser.visibility = View.GONE
+    }
+
 
     private fun loadPreviousData() {
         binding.etEmail.setText(sharedPrefHelper[Constant.EMAIL, ""])
@@ -91,7 +102,6 @@ class DetailsVerificationActivity : AppCompatActivity() {
         binding.etName.setText(sharedPrefHelper[Constant.NAME, ""])
         binding.etAddress.setText(sharedPrefHelper[Constant.ADDRESS, ""])
         binding.etLandMark.setText(sharedPrefHelper[Constant.LAND_MARK, ""])
-
         /*newly added*/
         binding.etCity.setText(sharedPrefHelper[Constant.USER_CITY,""])
         binding.etState.setText(sharedPrefHelper[Constant.USER_STATE,""])
@@ -151,7 +161,14 @@ class DetailsVerificationActivity : AppCompatActivity() {
 
 
     private fun initView() {
-        binding.btDetailsConfirm.setOnClickListener(View.OnClickListener {
+        binding.ivBack.setOnClickListener(View.OnClickListener {
+            goToUserInput()
+        })
+        binding.btnModifyData.setOnClickListener(View.OnClickListener {
+            goToUserInput()
+        })
+
+        binding.btnSignUP.setOnClickListener(View.OnClickListener {
             if (validateData()) {
                 initProgressDialog().show()
                 val db = Firebase.firestore
@@ -178,13 +195,12 @@ class DetailsVerificationActivity : AppCompatActivity() {
                         sharedPrefHelper[Constant.ADDRESS] = binding.etAddress.text.toString()
                         sharedPrefHelper[Constant.LAND_MARK] = binding.etLandMark.text.toString()
                         sharedPrefHelper[Constant.USER_CITY] = binding.etCity.text.toString()
-                        sharedPrefHelper[Constant.USER_STATE] = binding.etCity.text.toString()
+                        sharedPrefHelper[Constant.USER_STATE] = binding.etState.text.toString()
                         sharedPrefHelper[Constant.ADDRESS_FULL_DETAILS] = binding.etAddressDetails.text.toString()
-
                         Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT)
                             .show()
                         progressDialog.dismiss()
-                        val i = Intent(this@DetailsVerificationActivity, RequestForFetchingLocationActivity::class.java)
+                        val i = Intent(this@DetailsVerificationActivity, HomeActivity::class.java)
                         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(i)
                     }.addOnFailureListener {
@@ -197,7 +213,18 @@ class DetailsVerificationActivity : AppCompatActivity() {
                             .show()
                     }
             }
-
+        })
+        binding.btDetailsConfirm.setOnClickListener(View.OnClickListener {
+            if (validateData()){
+                binding.tvEmailValue.text = binding.etEmail.text.toString()
+                binding.tvPinValue.text = binding.etPin.text.toString()
+                binding.tvNameValue.text = binding.etName.text.toString()
+                binding.tvAddressValue.text = binding.etAddress.text.toString()
+                binding.tvCityValue.text = binding.etCity.text.toString()
+                binding.tvStateValue.text = binding.etState.text.toString()
+                binding.tvAddressDetailsValue.text = binding.etAddressDetails.text.toString()
+                switchToAskVerification()
+            }
         })
     }
 }

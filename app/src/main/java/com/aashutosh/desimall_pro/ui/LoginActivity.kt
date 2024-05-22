@@ -110,7 +110,13 @@ class LoginActivity : AppCompatActivity() {
                             sharedPrefHelper[Constant.ADDRESS] = userData["location"].toString()
                             sharedPrefHelper[Constant.LAND_MARK] = userData["landmark"].toString()
                             sharedPrefHelper[Constant.PHOTO] = userData["photo"].toString()
-                            sharedPrefHelper[Constant.PHONE_NUMBER] = binding.etPhoneNumber.text.toString()
+                            sharedPrefHelper[Constant.PHONE_NUMBER] =userData["phone"].toString()
+                            sharedPrefHelper[Constant.ADDRESS_FULL_DETAILS] = userData["fullAddress"].toString()
+
+                            //Important details
+                            sharedPrefHelper[Constant.BRANCH_NAME] = userData["branchName"]?.toString()?.trim() ?: "live desi mall"
+                            sharedPrefHelper[Constant.BRANCH_CODE] = userData["branchCode"]?.toString()?.trim() ?: "2"
+
                         }
 
                         val message = "Sign-in successful!\nPhone number: $phoneNumber"
@@ -121,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
                         sharedPrefHelper[Constant.DETAILIlS_VERIFIED] = true
 
                         // Start the next activity after successful login
-                        val i = Intent(this@LoginActivity, RequestForFetchingLocationActivity::class.java)
+                        val i = Intent(this@LoginActivity, HomeActivity::class.java)
                         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(i)
                     } else {

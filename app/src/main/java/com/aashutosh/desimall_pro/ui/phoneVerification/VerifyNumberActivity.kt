@@ -3,10 +3,13 @@ package com.aashutosh.desimall_pro.ui.phoneVerification
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
 import com.aashutosh.desimall_pro.databinding.ActivityVerifyNumberBinding
 import com.aashutosh.desimall_pro.ui.LoginActivity
@@ -15,6 +18,7 @@ import com.aashutosh.desimall_pro.utils.Constant
 import com.aashutosh.desimall_pro.utils.Constant.Companion.phoneNumberKey
 
 import com.aashutosh.desimall_pro.utils.SmsBroadCastReceiver
+import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -42,11 +46,13 @@ class VerifyNumberActivity : AppCompatActivity() {
     private var storedVerificationId: String? = null
     private val TAG = "VerifyNumberActivity"
     private var isForgetPass: Boolean = false
-
-
     private val REQUEST_USER_CONSENT = 200
     var smsBroadCastReceiver: SmsBroadCastReceiver? = null
-
+    private companion object {
+        const val TIMER_DURATION = 60000L // 1 minute in milliseconds
+        const val TIMER_INTERVAL = 1000L // 1 second in milliseconds
+    }
+    private var otpTimer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,17 +64,29 @@ class VerifyNumberActivity : AppCompatActivity() {
         sharedPrefHelper = SharedPrefHelper
         sharedPrefHelper.init(this)
 
+
+        // get phone number as intent and set it in global variable
         if (intent != null) {
             val num = intent.getStringExtra(phoneNumberKey).toString()
             phoneNum += num
             Log.d(TAG, phoneNum)
-            "Authenticate $phoneNum".also { binding.textAuthenticateNum.text = it }
+            phoneNum.also { binding.tvNum.text = it }
         } else {
             Toast.makeText(this, "Bad Gateway 😒", Toast.LENGTH_SHORT).show()
             finish()
         }
+        sendOTPtoUser()
+        startOTPTimer()
+        binding.btnResendOTP.setOnClickListener {
+            // Handle resend OTP functionality here
+            // For example, you can call a method to resend the OTP
+            // and then restart the timer again.
+            sendOTPtoUser()
+            startOTPTimer()
+        }
 
         binding.btnVerify.setOnClickListener {
+            binding.tvNum.text = phoneNum
             if (binding.etOtp.editText?.text.toString().isNotEmpty()) {
                 Log.d(TAG, "onCreate otp: ${binding.etOtp.editText?.text.toString()}")
                 binding.etOtp.clearFocus()
@@ -80,6 +98,9 @@ class VerifyNumberActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun sendOTPtoUser(){
         verificationCallbacks()
 
         val options = PhoneAuthOptions.newBuilder(auth)
@@ -88,13 +109,30 @@ class VerifyNumberActivity : AppCompatActivity() {
             .setActivity(this)                 // Activity (for callback binding)
             .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
             .build()
-      //  registerBroadCastReceiver()
-
-      //  startSmartUserConsent()
 
         PhoneAuthProvider.verifyPhoneNumber(options)
 
+    }
 
+    private fun startOTPTimer() {
+        // Show the Resend OTP button and hide the Verify button
+        binding.btnResendOTP.visibility = View.GONE
+
+        // Start the timer
+        otpTimer = object : CountDownTimer(TIMER_DURATION, TIMER_INTERVAL) {
+            override fun onTick(millisUntilFinished: Long) {
+                // Update the text on the Resend OTP button with the remaining time
+                val secondsRemaining = millisUntilFinished / 1000
+                val timerText = "Resend OTP in ${secondsRemaining / 60}:${String.format("%02d", secondsRemaining % 60)}"
+                binding.tvTimer.text = timerText
+            }
+
+            override fun onFinish() {
+                // When the timer finishes, hide the Resend OTP button and show the Verify button again
+                binding.btnResendOTP.visibility = View.VISIBLE
+                binding.tvTimer.text = "Don't Receive OTP ?"
+            }
+        }.start()
     }
 
     private fun startSmartUserConsent() {
@@ -186,7 +224,7 @@ class VerifyNumberActivity : AppCompatActivity() {
                             this@VerifyNumberActivity,
                             "Invalid request", Toast.LENGTH_SHORT
                         ).show()
-                        returnToLoginActivity()
+                      //  returnToLoginActivity()
                     }
 
                     is FirebaseTooManyRequestsException -> {
@@ -196,18 +234,18 @@ class VerifyNumberActivity : AppCompatActivity() {
                             "The SMS quota for the project has been exceeded",
                             Toast.LENGTH_SHORT
                         ).show()
-                        returnToLoginActivity()
+                       // returnToLoginActivity()
                     }
 
                     else -> {
-                        Log.d(TAG, "newNew: " + e.message.toString())
+                        Log.d(TAG, "error: " + e.message.toString())
                         // Show a message and update the UI
                         Toast.makeText(
                             this@VerifyNumberActivity,
                             e.message.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
-                        returnToLoginActivity()
+                      //  returnToLoginActivity()
                     }
                 }
             }
@@ -298,7 +336,7 @@ class VerifyNumberActivity : AppCompatActivity() {
                         // Update UI
                         Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
-                    returnToLoginActivity()
+                   // returnToLoginActivity()
                 }
             }
     }
@@ -310,9 +348,7 @@ class VerifyNumberActivity : AppCompatActivity() {
         signInWithPhoneAuthCredential(credential)
     }
 
-    private fun returnToLoginActivity() {
-        val intent = Intent(applicationContext, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
+    private fun showToast(message:String) {
+       Toast.makeText(this@VerifyNumberActivity,message,Toast.LENGTH_SHORT).show()
     }
 }

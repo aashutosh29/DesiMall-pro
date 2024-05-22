@@ -13,24 +13,28 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.widget.TextView
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import butterknife.BindView
-import butterknife.ButterKnife
+import androidx.lifecycle.ViewModelProvider
 import com.aashutosh.desimall_pro.R
 import com.aashutosh.desimall_pro.database.SharedPrefHelper
+import com.aashutosh.desimall_pro.databinding.ActivitySplashBinding
 import com.aashutosh.desimall_pro.models.java.Store
-import com.aashutosh.desimall_pro.ui.ProductDownloadingActivity
+import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
 import com.aashutosh.desimall_pro.utils.Constant
+import com.aashutosh.desimall_pro.viewModels.StoreViewModel
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -40,14 +44,11 @@ import kotlin.math.sqrt
 @SuppressLint("CustomSplashScreen")
 class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
 
-    @BindView(R.id.pbMain)
-    lateinit var pbMain: LinearProgressIndicator
+    private lateinit var mainViewModel: StoreViewModel
 
-    @BindView(R.id.tvFSNY)
-    lateinit var tvFSNY : TextView
-    var isForDetailsVerification : Boolean = false
+    lateinit var binding: ActivitySplashBinding
     var db: FirebaseFirestore? = null
-    var storeList: MutableList<Store>? = null
+    private var storeList: MutableList<Store>? = null
     var alertDialog: AlertDialog? = null
     lateinit var sharedPreferHelper: SharedPrefHelper
     var onStop = false
@@ -56,16 +57,36 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
-        ButterKnife.bind(this)
-        isForDetailsVerification = intent.getBooleanExtra(Constant.IS_FOR_DETAILS_VERIFICATION, false)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         sharedPreferHelper = SharedPrefHelper
         sharedPreferHelper.init(this)
+        mainViewModel = ViewModelProvider(this@FindNearestStoreActivity)[StoreViewModel::class.java]
+
         initialization()
         checkAllStuff()
 
-        if (isForDetailsVerification){
-            tvFSNY.text = "Loading Details"
+
+    }
+
+    private fun defaultStoreContinueYN() {
+        binding.cvYes.setOnClickListener(View.OnClickListener {
+            startDownloadingProduct()
+            proceedToDetailsVerification()
+        })
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun startDownloadingProduct() {
+        GlobalScope.launch(Dispatchers.Main) {
+            if (mainViewModel.getDesiProduct(
+                    sharedPreferHelper[Constant.BRANCH_CODE, ""].toInt()
+                )
+            ) {
+                if (mainViewModel.getFilteredCategoryFromProduct()) {
+                    Log.d(TAG, "startDownloadingProduct:  product downloaded successfully")
+                }
+            }
         }
     }
 
@@ -125,9 +146,10 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
                     )
                     //real web-view
                     { _, _ ->
-                        startActivity(
+                        startActivity1(
                             Constant.BRANCH_NAME,
-                            branchCode = "2"
+                            branchCode = "2",
+                            createLocation()
                         )
                     }.show()
             false
@@ -148,27 +170,29 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
         url: String,
         name: String,
         branchName: String,
-        branchCode: String
+        branchCode: String,
+        location: Location?
     ) {
         FirebaseMessaging.getInstance().subscribeToTopic(notificationTopic).addOnCompleteListener(
             OnCompleteListener { task ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    pbMain.setProgress(80, true)
+                    //    binding.pbMain.setProgress(80, true)
                 } else {
-                    pbMain.progress = 80
+                    //    binding.pbMain.progress = 80
                 }
                 FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         println("fetching failed")
-                        startActivity(name, branchCode)
+                        startActivity1(name, branchCode, location)
                     }
                     val token = task.result
                     Log.d("TAG", "onComplete: $token")
-                    startActivity(name, branchCode)
+                    startActivity1(name, branchCode, location)
                 }).addOnFailureListener {
-                    startActivity(
+                    startActivity1(
                         name,
-                        branchCode
+                        branchCode,
+                        location
                     )
                 }
                 var msg = "Successful"
@@ -176,45 +200,46 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
                     msg = "Failed"
                 }
             }).addOnFailureListener {
-            startActivity(
+            startActivity1(
                 name,
-                branchCode
+                branchCode,
+                location
             )
         }
     }
-//here
-    private fun startActivity(branchName: String?, branchCode: String?) {
 
-            if (isForDetailsVerification){
-                sharedPreferHelper[Constant.BRANCH_NAME] = branchName
-                sharedPreferHelper[Constant.BRANCH_CODE] = branchCode
-                val intent = Intent(this@FindNearestStoreActivity, ProductDownloadingActivity::class.java)
-                intent.putExtra(Constant.BRANCH_NAME, branchName)
-                intent.putExtra(Constant.BRANCH_CODE, branchCode)
-                intent.putExtra(Constant.IS_FOR_DETAILS_VERIFICATION,isForDetailsVerification)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+    //here
+    private fun startActivity1(branchName: String?, branchCode: String?, location: Location?) {
+        if (branchCode.isNullOrEmpty()) {
+            sharedPreferHelper[Constant.BRANCH_NAME] = "Jaipur Vaishali"
+            sharedPreferHelper[Constant.BRANCH_CODE] = "2"
+        } else {
+            sharedPreferHelper[Constant.BRANCH_NAME] = branchName
+            sharedPreferHelper[Constant.BRANCH_CODE] = branchCode
+            sharedPreferHelper[Constant.LAT_LON] =
+                location?.latitude.toString() + "_" + location?.longitude.toString()
+            if (branchName == Constant.BRANCH_NAME) {
+                defaultStoreContinueYN()
+                binding.clFindingStoreNearYou.visibility = View.GONE
+                binding.clLocationNotFound.visibility = View.VISIBLE
+            } else {
+                startDownloadingProduct()
+                proceedToDetailsVerification()
             }
-            else{
-        sharedPreferHelper[Constant.BRANCH_NAME] = branchName
-        sharedPreferHelper[Constant.BRANCH_CODE] = branchCode
-        sharedPreferHelper[Constant.NO_FIRST_TIME] = true
-        val intent = Intent(this@FindNearestStoreActivity, ProductDownloadingActivity::class.java)
-        intent.putExtra(Constant.BRANCH_NAME, branchName)
-        intent.putExtra(Constant.BRANCH_CODE, branchCode)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+        }
     }
+
+    private fun proceedToDetailsVerification() {
+        val i = Intent(this@FindNearestStoreActivity, DetailsVerificationActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(i)
     }
 
     private fun getDataFromFireBase(location: Location?) {
         if (locationManager != null) locationManager!!.removeUpdates(this)
         db!!.collection("stores").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
+
                 storeList = ArrayList()
                 var store: Store
                 for (document in task.result) {
@@ -232,18 +257,18 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
                     (storeList as ArrayList<Store>).add(store)
                     Log.d("proAss", document.id + " =>" + document.data)
                 }
-                fetchUrlAndSubscribeTopic(shortestStoreList(location))
+                fetchUrlAndSubscribeTopic(shortestStoreList(location), location)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    pbMain.setProgress(30, true)
+                    // binding.pbMain.setProgress(30, true)
                 } else {
-                    pbMain.progress = 30
+                    // binding.pbMain.progress = 30
                 }
             } else {
                 Log.w("Aashutosh", "Error getting documents.", task.exception)
             }
         }.addOnFailureListener {
             Log.d(TAG, "getDataFromFireBase:$it ")
-            fetchUrlAndSubscribeTopic(ArrayList())
+            fetchUrlAndSubscribeTopic(ArrayList(), location)
         }
     }
 
@@ -344,26 +369,27 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
             //final change will be NETWORK_PROVIDER
             locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
             locationManager!!.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
+                LocationManager.NETWORK_PROVIDER,
                 0L,
                 0f,
                 this@FindNearestStoreActivity
             )
-            var myLocation = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            var myLocation =
+                locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
             if (myLocation == null) {
                 myLocation =
                     locationManager!!.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                pbMain.setProgress(10, true)
+                //   binding.pbMain.setProgress(10, true)
             } else {
-                pbMain.progress = 10
+                //   binding.pbMain.progress = 10
             }
             if (myLocation == null) {
                 Toast.makeText(this, "Waiting to get location for first time", Toast.LENGTH_SHORT)
                     .show()
             } else {
-                sharedPreferHelper[Constant.LAT_LON] = myLocation.latitude.toString()+"_"+myLocation.longitude.toString()
+
                 getDataFromFireBase(myLocation)
             }
         }
@@ -410,7 +436,7 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
         return dist / 1000
     }
 
-    private fun fetchUrlAndSubscribeTopic(storeList: List<Store>) {
+    private fun fetchUrlAndSubscribeTopic(storeList: List<Store>, location: Location?) {
         Log.d(ContentValues.TAG, "size of store: " + storeList.size)
         if (storeList.isNotEmpty()) {
             if (storeList.size <= 1) {
@@ -419,7 +445,8 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
                     storeList[0].url,
                     storeList[0].name,
                     storeList[0].gmail,
-                    storeList[0].branchCode
+                    storeList[0].branchCode,
+                    location
                 )
             } else {
                 var minValue = storeList[0].distance
@@ -434,17 +461,29 @@ class FindNearestStoreActivity : AppCompatActivity(), LocationListener {
                             storeList[i].url,
                             storeList[i].name,
                             storeList[i].gmail,
-                            storeList[i].branchCode
+                            storeList[i].branchCode,
+                            location
                         )
                         break
                     }
                 }
             }
         } else {
-           // real web-view
+            // real web-view
             //code must not come here
-            startActivity(Constant.BRANCH_NAME, branchCode = "2")
+            startActivity1(Constant.BRANCH_NAME, branchCode = "2", createLocation())
         }
+    }
+
+    private fun createLocation(): Location {
+        val latitude = 26.920901342078967
+        val longitude = 75.73448665553502
+
+        val location = Location("provider")
+        location.latitude = latitude
+        location.longitude = longitude
+
+        return location
     }
 
     override fun onPause() {

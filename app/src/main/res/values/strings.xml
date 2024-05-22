@@ -63,4 +63,5 @@
     <string name="enter_your_landmark_address">Land Mark</string>
     <string name="title_activity_category">CategoryActivity</string>
     <string name="sorry_we_do_not_serve_your_location_at_the_moment_and_there_are_no_nearby_stores_do_you_still_want_to_continue">Sorry. We do not serve your location at the moment and there are no nearby stores. Do you still want to continue?</string>
+    <string name="is_the_provided_information_correct">Is the provided information correct?</string>
 </resources>

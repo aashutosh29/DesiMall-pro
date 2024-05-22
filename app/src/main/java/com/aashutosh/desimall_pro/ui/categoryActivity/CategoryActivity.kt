@@ -49,10 +49,10 @@ class CategoryActivity : AppCompatActivity(), CategoryView {
 
         mainViewModel.categoryItem.observe(this, Observer {
             it?.let { initCategoryRecyclerView(it) }
-            Log.d(ContentValues.TAG, "fetchDataFromServer: $it");
 
         })
     }
+    
 
     private fun initRecyclerViewForCategory(categoryResponse: List<String>, clickedItem: String) {
         val recyclerview = findViewById<RecyclerView>(R.id.rvCategory)

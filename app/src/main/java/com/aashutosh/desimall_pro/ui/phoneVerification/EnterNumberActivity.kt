@@ -94,7 +94,7 @@ class EnterNumberActivity : AppCompatActivity() {
             }
     }
 
-    private fun checkPhoneNumberExists(phoneNumber: String) {
+   /* private fun checkPhoneNumberExists(phoneNumber: String) {
         // Show the loading indicator before starting the Firestore operation
         initProgressDialog().show()
         // Check if the user exists with the provided phone number
@@ -131,7 +131,58 @@ class EnterNumberActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-    }
+    }*/
+   private fun checkPhoneNumberExists(phoneNumber: String) {
+       // Show the loading indicator before starting the Firestore operation
+       initProgressDialog().show()
+       // Check if the user exists with the provided phone number
+       val firestore = FirebaseFirestore.getInstance()
+       val userCollection = firestore.collection("user")
+       val docReference = userCollection.document(Constant.COUNTRY_CODE + phoneNumber)
+
+       docReference.get()
+           .addOnCompleteListener { task ->
+               progressDialog.dismiss()
+
+               if (task.isSuccessful) {
+                   val documentSnapshot: DocumentSnapshot? = task.result
+                   if (documentSnapshot != null && documentSnapshot.exists()) {
+                       // Document with the provided phone number already exists
+                       val hasPassword = documentSnapshot.contains("password") &&
+                               documentSnapshot.get("password") != null
+
+                       if (hasPassword) {
+                           Toast.makeText(this, "Phone number already registered", Toast.LENGTH_SHORT).show()
+                       } else {
+                           // Password field is not available, allow user to create an account
+                           val intent = Intent(this, VerifyNumberActivity::class.java).apply {
+                               putExtra(phoneNumberKey, binding.etPhoneNum.editText?.text.toString())
+                           }
+                           intent.putExtra(Constant.IS_FORGET_PASSWORD, isForgetPass)
+                           startActivity(intent)
+                           finish()
+                       }
+                   } else {
+                        // Document does not exist, phone number is available
+                       // Allow user to create an account
+                       val intent = Intent(this, VerifyNumberActivity::class.java).apply {
+                           putExtra(phoneNumberKey, binding.etPhoneNum.editText?.text.toString())
+                       }
+                       intent.putExtra(Constant.IS_FORGET_PASSWORD, isForgetPass)
+                       startActivity(intent)
+                       finish()
+                   }
+               } else {
+                   // Handle network error
+                   Toast.makeText(
+                       this,
+                       "Network error: ${task.exception?.message}",
+                       Toast.LENGTH_SHORT
+                   ).show()
+               }
+           }
+   }
+
     private fun validateNumber() {
         if (binding.etPhoneNum.editText?.text.toString().isEmpty()) {
             binding.etPhoneNum.error = "Enter your Phone Number"

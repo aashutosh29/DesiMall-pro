@@ -7,137 +7,64 @@
     android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clFindingStoreNearYou"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFF3E0"
+        android:background="#f3f3f3"
         android:visibility="visible">
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/pbMain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_32sdp"
-            android:layout_marginTop="@dimen/_12sdp"
-            app:indicatorColor="@color/md_red_600"
-            app:layout_constraintEnd_toEndOf="parent"
+
+        <com.airbnb.lottie.LottieAnimationView
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivMobile" />
-
-        <ImageView
-            android:id="@+id/ivDot"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:src="@drawable/dotted"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.05"
-            app:layout_constraintTop_toTopOf="parent "
-            app:layout_constraintWidth_percent="0.35" />
-
-        <ImageView
-            android:id="@+id/ivTopImg"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/top_left"
-            app:layout_constraintHeight_percent="0.18"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent "
-            app:layout_constraintWidth_percent="0.2" />
-
-        <ImageView
-            android:id="@+id/ivBottomLeft"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/_16sdp"
-            android:src="@drawable/left_small_circle"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHeight_percent="0.04"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.1" />
-
-        <ImageView
-            android:id="@+id/ivRightBottom"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/right_bottom_half_circle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.18"
-            app:layout_constraintWidth_percent="0.2" />
-
-
-        <ImageView
-            android:id="@+id/ivMobile"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
-            android:src="@drawable/mobile_img"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvFSNY"
-            app:layout_constraintWidth_percent="0.9" />
-
-        <View
-            android:id="@+id/vTopImgDivider"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toBottomOf="@id/ivTopImg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ivTopImg" />
+            android:id="@+id/image_onboarding"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:scaleType="centerCrop"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/animation_location" />
 
         <TextView
-            android:id="@+id/tvFSNY"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:text="FINDING STORE NEAR YOU"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_22sdp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vTopImgDivider"
-            app:layout_constraintWidth_percent="0.6" />
-
-
-        <TextView
-            android:id="@+id/tvWeb"
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_16sdp"
-            android:text="www.livedesimall.in"
+            android:text="Detecting your location"
+            android:textAllCaps="true"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/_16sdp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:visibility="gone"
         android:id="@+id/clLocationNotFound"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/ivLocation"
-            android:src="@drawable/baseline_location_on_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            android:src="@drawable/baseline_location_on_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -150,16 +77,17 @@
             android:text="@string/sorry_we_do_not_serve_your_location_at_the_moment_and_there_are_no_nearby_stores_do_you_still_want_to_continue"
             android:textColor="@color/colorPrimaryText"
             android:textStyle="bold"
-           app:layout_constraintTop_toBottomOf="@id/ivLocation"/>
+            app:layout_constraintTop_toBottomOf="@id/ivLocation" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cvYes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_32sdp"
+            android:layout_marginTop="@dimen/_12sdp"
             android:visibility="visible"
             app:cardCornerRadius="@dimen/_4sdp"
             app:cardElevation="0dp"
-            android:layout_marginTop="@dimen/_12sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSub">
@@ -197,7 +125,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/md_red_600">
+                android:background="@color/md_red_600"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

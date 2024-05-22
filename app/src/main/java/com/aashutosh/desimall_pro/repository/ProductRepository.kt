@@ -58,6 +58,8 @@ class ProductRepository @Inject constructor(
     val productDetailsResponse: MutableLiveData<DesiDataResponseSubListItem?>
         get() = productDetailsLiveData
 
+
+
     suspend fun getCategory(page: Int) {
         try {
             categoryLiveData.postValue(StateResponse.Loading())
@@ -183,7 +185,7 @@ class ProductRepository @Inject constructor(
 
 
     }
-
+    val allProductsLiveData: LiveData<List<DesiDataResponseSubListItem>> = databaseHelper.allProduct().getAllListLiveData()
     suspend fun getProductById(sku: String): DesiDataResponseSubListItem {
         val result = databaseHelper.allProduct().getProductBySku(sku)
         return result[0]

@@ -56,9 +56,16 @@ class StoreViewModel @Inject constructor(private val repository: ProductReposito
         repository.getProductDetails(productId);
     }
 
+
+
+
+
     suspend fun getDesiProduct(branchCode: Int): Boolean {
+
         return repository.desiProduct(branchCode)
     }
+
+
 
 
     suspend fun allCategory(): List<DesiCategory> {
@@ -81,7 +88,7 @@ class StoreViewModel @Inject constructor(private val repository: ProductReposito
     ): LiveData<PagingData<DesiDataResponseSubListItem>> {
         return repository.getKeyValueProduct(query = query).cachedIn(viewModelScope)
     }
-
+    val allProductsLiveData: LiveData<List<DesiDataResponseSubListItem>> = repository.allProductsLiveData
 
     fun getDesiSearch(keyword: String): LiveData<PagingData<DesiDataResponseSubListItem>> {
 

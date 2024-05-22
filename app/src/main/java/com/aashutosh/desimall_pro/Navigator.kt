@@ -11,6 +11,10 @@ import com.aashutosh.desimall_pro.ui.RequestForFetchingLocationActivity
 import com.aashutosh.desimall_pro.ui.detailsVerificationPage.DetailsVerificationActivity
 import com.aashutosh.desimall_pro.utils.Constant
 import com.facebook.login.Login
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
+
+@AndroidEntryPoint
 
 class Navigator : AppCompatActivity() {
     lateinit var binding: ActivityNavigatorBinding
@@ -24,32 +28,27 @@ class Navigator : AppCompatActivity() {
         navigationalRoute()
     }
     private fun navigationalRoute() {
-        if (!sharedPrefHelper[Constant.NO_FIRST_TIME, false] ) {
-            val i = Intent(this@Navigator, LoginActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(i)
-        }
-       else if   (sharedPrefHelper[Constant.FETCHING_SUCCEED,false] && sharedPrefHelper[Constant.LOGIN_SUCCESS, false] && sharedPrefHelper[Constant.DETAILIlS_VERIFIED,false]){
-            val i = Intent(this@Navigator, HomeActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(i)
-        }
-        else if (sharedPrefHelper[Constant.LOGIN_SUCCESS, false] && sharedPrefHelper[Constant.DETAILIlS_VERIFIED,false]){
-            val i = Intent(this@Navigator, RequestForFetchingLocationActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(i)
-        }
-        else if (!sharedPrefHelper[Constant.DETAILIlS_VERIFIED,false]){
-            val i = Intent(this@Navigator, DetailsVerificationActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(i)
-        }
 
-        else{
-            val i = Intent(this@Navigator, LoginActivity::class.java)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(i)
+//        testing route
+        val testing = false
+        if (testing) {
+
+        } else {
+
+
+            if (sharedPrefHelper[Constant.LOGIN_SUCCESS, false] && sharedPrefHelper[Constant.DETAILIlS_VERIFIED, false]) {
+                val i = Intent(this@Navigator, HomeActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            } else if (sharedPrefHelper[Constant.LOGIN_SUCCESS, false]) {
+                val i = Intent(this@Navigator, DetailsVerificationActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            } else {
+                val i = Intent(this@Navigator, LoginActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(i)
+            }
         }
     }
-
 }

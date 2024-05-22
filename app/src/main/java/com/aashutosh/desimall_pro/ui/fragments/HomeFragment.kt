@@ -155,7 +155,17 @@ class HomeFragment : Fragment(), CategoryView {
                         }
 
                         "Discounts" -> {
-                            // Handle Discounts click
+                            val ads = Raw(
+                                image = "https://firebasestorage.googleapis.com/v0/b/desi-mall-fc808.appspot.com/o/banner%2Flive%20desi%20mall%20products.png?alt=media&token=d7cc3aaa-a3fb-4477-9777-4e57109d52f4",
+                                name = "Discount",
+                                type = "category",
+                                query = "SELECT * FROM product WHERE (variant_mrp - variant_sale_price) / variant_mrp * 100 > 30 ORDER BY ((variant_mrp - variant_sale_price) / variant_mrp * 100) DESC",
+                                branch_code = "all",
+                                position = "",
+                                size = ""
+
+                            )
+                            getAdsClicked(ads)
                         }
                     }
                 }
@@ -414,7 +424,7 @@ class HomeFragment : Fragment(), CategoryView {
 
     }
 
-    //tung
+
     private fun callDb() {
         val db = Firebase.firestore
         var ads: Raw

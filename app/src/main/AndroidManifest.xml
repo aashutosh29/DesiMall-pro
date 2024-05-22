@@ -31,6 +31,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SimpleStore"
+        android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
@@ -97,7 +98,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCUv2fbdlv58etw4imT6bW-gx_UGTAKnJE" />
 
-        <activity android:name=".ui.myProfileActivity.MyProfileActivity" />
+        <activity
+            android:exported="true"
+            android:name=".ui.myProfileActivity.MyProfileActivity" />
         <activity
             android:name=".ui.mapActivity.MapsActivity"
             android:exported="false"
